@@ -12,9 +12,12 @@
     "test": "vitest"
   },
   "dependencies": {
+    "@babel/parser": "^7.29.3",
+    "@babel/traverse": "^7.29.0",
     "@vue/compiler-sfc": "^3.5.13",
     "cac": "^6.7.14",
     "chalk": "^5.4.1",
+    "cosmiconfig": "^9.0.1",
     "fast-glob": "^3.3.3",
     "ora": "^8.2.0"
   },

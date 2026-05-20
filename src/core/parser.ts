@@ -1,14 +1,38 @@
-import fs from 'node:fs/promises'
+import fs from 'node:fs/promises';
 
-import { parse } from '@vue/compiler-sfc'
+import { parse as parseSFC, type SFCDescriptor } from '@vue/compiler-sfc';
 
-export async function parseVueFile(filePath: string) {
-  const source = await fs.readFile(filePath, 'utf-8')
+import { parse as parseScript } from '@babel/parser';
 
-  const parsed = parse(source)
+export interface ParsedVueFile {
+    source: string;
 
-  return {
-    source,
-    descriptor: parsed.descriptor
-  }
+    descriptor: SFCDescriptor;
+
+    scriptAst: unknown | null;
+}
+
+export async function parseVueFile(filePath: string): Promise<ParsedVueFile> {
+    const source = await fs.readFile(filePath, 'utf-8');
+
+    const { descriptor } = parseSFC(source);
+
+    const scriptContent =
+        descriptor.scriptSetup?.content ?? descriptor.script?.content ?? '';
+    console.log(scriptContent);
+    let scriptAst: unknown | null = null;
+
+    if (scriptContent) {
+        scriptAst = parseScript(scriptContent, {
+            sourceType: 'module',
+
+            plugins: ['typescript', 'jsx'],
+        });
+    }
+
+    return {
+        source,
+        descriptor,
+        scriptAst,
+    };
 }

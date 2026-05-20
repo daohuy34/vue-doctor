@@ -1,13 +1,18 @@
-import type { RuleContext } from './context'
-import type { Issue, Severity } from './issue'
+import type { RuleContext } from './context';
+import type { Issue, Severity } from './issue';
 
 export interface Rule {
-  name: string
+    name: string;
 
-  meta: {
-    severity: Severity
-    category: string
-  }
+    meta: {
+        severity: Severity;
 
-  check(context: RuleContext): Promise<Issue[]>
+        category: string;
+
+        description: string;
+
+        recommended: boolean;
+    };
+
+    check(context: RuleContext): Promise<Issue[]>;
 }
