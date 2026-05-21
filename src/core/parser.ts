@@ -19,7 +19,7 @@ export async function parseVueFile(filePath: string): Promise<ParsedVueFile> {
 
     const scriptContent =
         descriptor.scriptSetup?.content ?? descriptor.script?.content ?? '';
-    console.log(scriptContent);
+        
     let scriptAst: unknown | null = null;
 
     if (scriptContent) {

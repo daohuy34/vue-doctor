@@ -2,9 +2,12 @@ import ora from 'ora';
 
 import { scanProject } from '../../core/scanner';
 import { runEngine } from '../../core/engine';
-import { stylishReporter } from '../../reporters/stylish';
+import { reporters } from '../../reporters'
 
-export async function checkCommand() {
+export async function checkCommand(options: {
+    reporter?: string
+  }) {
+    
     const spinner = ora('Scanning project...').start();
 
     try {
@@ -16,7 +19,12 @@ export async function checkCommand() {
 
         spinner.stop();
 
-        stylishReporter(issues);
+        const reporter =
+        reporters[
+            options.reporter as keyof typeof reporters
+        ] ?? reporters.stylish
+
+        reporter(issues)
 
         const hasWarnings = issues.some(
             (issue) => issue.severity === 'warning',
