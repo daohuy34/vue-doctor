@@ -1,22 +1,33 @@
 import { execSync } from 'node:child_process'
 
 export function getChangedFiles() {
-  const output = execSync(
-    'git diff --name-only HEAD~1',
-    {
-      encoding: 'utf-8'
-    }
-  )
+  try {
+    // GitHub Actions / CI safe
+    const output = execSync(
+      'git diff --name-only origin/main...HEAD',
+      { encoding: 'utf-8' }
+    )
 
+    return parseFiles(output)
+  } catch (e) {
+    // fallback for shallow clone / no base
+    const output = execSync(
+      'git diff --name-only HEAD',
+      { encoding: 'utf-8' }
+    )
+
+    return parseFiles(output)
+  }
+}
+
+function parseFiles(output: string) {
   return output
     .split('\n')
-    .map((file) => file.trim())
+    .map(f => f.trim())
     .filter(Boolean)
-    .filter((file) => {
-      return (
-        file.endsWith('.vue') ||
-        file.endsWith('.ts') ||
-        file.endsWith('.js')
-      )
-    })
+    .filter(f =>
+      f.endsWith('.vue') ||
+      f.endsWith('.ts') ||
+      f.endsWith('.js')
+    )
 }
