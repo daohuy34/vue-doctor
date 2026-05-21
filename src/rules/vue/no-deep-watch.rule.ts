@@ -10,7 +10,7 @@ export const noDeepWatchRule: Rule = {
     meta: {
         severity: 'warning',
         category: 'vue',
-        description: 'Detect console usage inside Vue components.',
+        description: 'Avoid using deep watch as it may cause performance issues.',
 
         recommended: true,
     },
