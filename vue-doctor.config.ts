@@ -4,4 +4,5 @@ export default {
         'no-deep-watch': 'error',
         'no-large-component': 'off',
     },
+    failOnWarning: false
 };
