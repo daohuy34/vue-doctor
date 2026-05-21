@@ -10,4 +10,6 @@ export interface Issue {
   file: string
   line?: number
   column?: number
+
+  fingerprint?: string
 }

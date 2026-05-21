@@ -6,10 +6,13 @@ import type { Issue } from '../types/issue';
 
 import { parseVueFile } from './parser';
 
-export async function runEngine(files: string[]) {
+import { scanProject } from './scanner'
+import { createFingerprint } from '../utils/fingerprint';
+
+export async function runEngine(targetFiles?: string[]) {
     const config = await loadConfig();
     const issues: Issue[] = [];
-
+    const files = await scanProject(targetFiles)
     for (const file of files) {
         const parsed = await parseVueFile(file);
 
@@ -34,6 +37,8 @@ export async function runEngine(files: string[]) {
                     if (override) {
                         issue.severity = override;
                     }
+
+                    issue.fingerprint = createFingerprint(issue)
 
                     return issue;
                 })

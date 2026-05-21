@@ -8,6 +8,11 @@ cli
   .command('check', 'Run project analysis')
 
   .option(
+    '--changed',
+    'Analyze changed files only'
+  )
+
+  .option(
     '--reporter <type>',
     'Reporter type',
     {

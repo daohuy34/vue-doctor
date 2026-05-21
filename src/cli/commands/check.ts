@@ -4,18 +4,40 @@ import { scanProject } from '../../core/scanner';
 import { runEngine } from '../../core/engine';
 import { reporters } from '../../reporters'
 
+import { getChangedFiles } from '../../utils/git'
+
 export async function checkCommand(options: {
-    reporter?: string
+    options: {
+        reporter?: string
+        changed?: boolean
+    }
   }) {
     
     const spinner = ora('Scanning project...').start();
+
+    let targetFiles: string[] | undefined
+
+    if (options.changed) {
+        targetFiles = getChangedFiles()
+    }
+
+    if (
+        options.changed &&
+        (!targetFiles || !targetFiles.length)
+    ) {
+        console.log(
+            '✔ No changed files found'
+        )
+
+        process.exit(0)
+    }
 
     try {
         const files = await scanProject();
 
         spinner.text = `Analyzing ${files.length} files...`;
 
-        const issues = await runEngine(files);
+        const issues = await runEngine(targetFiles)
 
         spinner.stop();
 
