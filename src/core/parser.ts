@@ -18,15 +18,20 @@ export async function parseVueFile(filePath: string): Promise<ParsedVueFile> {
     const { descriptor } = parseSFC(source);
 
     const scriptContent =
-        descriptor.scriptSetup?.content ?? descriptor.script?.content ?? '';
-        
+        descriptor.scriptSetup?.content || descriptor.script?.content || '';
+
     let scriptAst: unknown | null = null;
 
     if (scriptContent) {
         scriptAst = parseScript(scriptContent, {
             sourceType: 'module',
 
-            plugins: ['typescript', 'jsx'],
+            plugins: [
+                'typescript',
+                'jsx',
+                'decorators-legacy',
+                'classProperties',
+            ],
         });
     }
 

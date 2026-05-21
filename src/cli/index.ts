@@ -1,42 +1,29 @@
 #!/usr/bin/env node
-import { cac } from 'cac'
 
-import { checkCommand } from './commands/check'
+import { cac } from 'cac';
 
-import { baselineCommand } from './commands/baseline'
+import { checkCommand } from './commands/check';
 
-const cli = cac('vue-doctor')
+import { baselineCommand } from './commands/baseline';
 
-cli
-  .command('check', 'Run project analysis')
-  
+const cli = cac('vue-doctor');
 
-  .option(
-    '--changed',
-    'Analyze changed files only'
-  )
+cli.command('check', 'Run project analysis')
 
-  .option(
-    '--reporter <type>',
-    'Reporter type',
-    {
-      default: 'stylish'
-    }
-  )
+    .option('--changed', 'Analyze changed files only')
 
-  .action(async (options) => {
-    await checkCommand(options)
-  })
+    .option('--reporter <type>', 'Reporter type', {
+        default: 'stylish',
+    })
 
-cli
-  .command(
-    'baseline',
-    'Generate baseline file'
-  )
-  .action(async () => {
-    await baselineCommand()
-  })
+    .action(async (options) => {
+        await checkCommand(options);
+    });
 
-cli.help()
+cli.command('baseline', 'Generate baseline file').action(async () => {
+    await baselineCommand();
+});
 
-cli.parse()
+cli.help();
+
+cli.parse();
