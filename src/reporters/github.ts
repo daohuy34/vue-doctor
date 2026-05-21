@@ -9,8 +9,11 @@ export function githubReporter(
         ? 'error'
         : 'warning'
 
+    const line = issue.line ?? 1
+    const column = issue.column ?? 1
+
     console.log(
-      `::${level} file=${issue.file},line=${issue.line},col=${issue.column}::${issue.message}`
+      `::${level} file=${issue.file},line=${line},col=${column}::${issue.message}`
     )
   }
 }
