@@ -1,19 +1,23 @@
 import type { Issue } from '../types/issue'
 
-export function githubReporter(
-  issues: Issue[]
-) {
+export function githubReporter(issues: Issue[]) {
+  const grouped = new Map<string, Issue[]>()
+
   for (const issue of issues) {
-    const level =
-      issue.severity === 'error'
-        ? 'error'
-        : 'warning'
+    if (!grouped.has(issue.file)) {
+      grouped.set(issue.file, [])
+    }
+    grouped.get(issue.file)!.push(issue)
+  }
 
-    const line = issue.line ?? 1
-    const column = issue.column ?? 1
+  for (const [file, fileIssues] of grouped) {
+    for (const issue of fileIssues) {
+      const level =
+        issue.severity === 'error' ? 'error' : 'warning'
 
-    console.log(
-      `::${level} file=${issue.file},line=${line},col=${column}::${issue.message}`
-    )
+      console.log(
+        `::${level} file=${file},line=${issue.line ?? 1},col=${issue.column ?? 1}::${issue.message}`
+      )
+    }
   }
 }

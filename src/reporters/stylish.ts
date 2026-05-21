@@ -1,67 +1,44 @@
-import chalk from 'chalk'
-
 import type { Issue } from '../types/issue'
 
-export function stylishReporter(
-  issues: Issue[]
-) {
+export function stylishReporter(issues: Issue[]) {
   if (!issues.length) {
-    console.log(
-      chalk.green('✔ No issues found')
-    )
-
+    console.log('✔ No issues found')
     return
   }
 
+  const grouped = new Map<string, Issue[]>()
+
   for (const issue of issues) {
-    const icon =
-      issue.severity === 'error'
-        ? chalk.red('✖')
-        : chalk.yellow('⚠')
+    const file = issue.file
 
-    const location =
-      issue.line != null
-        ? `${issue.file}:${issue.line}:${issue.column}`
-        : issue.file
-
-    console.log(
-      `${icon} ${issue.rule}`
-    )
-
-    console.log(
-      chalk.gray(location)
-    )
-
-    console.log(issue.message)
-
-    if (issue.suggestion) {
-      console.log(
-        chalk.gray(
-          `Suggestion: ${issue.suggestion}`
-        )
-      )
+    if (!grouped.has(file)) {
+      grouped.set(file, [])
     }
 
-    console.log()
+    grouped.get(file)!.push(issue)
   }
 
-  const warnings = issues.filter(
-    (i) => i.severity === 'warning'
-  ).length
+  for (const [file, fileIssues] of grouped) {
+    console.log('\n' + file)
 
-  const errors = issues.filter(
-    (i) => i.severity === 'error'
-  ).length
+    for (const issue of fileIssues) {
+      const icon =
+        issue.severity === 'error' ? '✖' : '⚠'
 
-  console.log(
-    chalk.yellow(
-      `Warnings: ${warnings}`
-    )
-  )
+      console.log(
+        `  ${icon} ${issue.rule}`
+      )
 
-  console.log(
-    chalk.red(
-      `Errors: ${errors}`
-    )
-  )
+      console.log(
+        `    ${issue.message}`
+      )
+    }
+  }
+
+  const warnings = issues.filter(i => i.severity === 'warning').length
+  const errors = issues.filter(i => i.severity === 'error').length
+
+  console.log('\nSummary:')
+  console.log(`Warnings: ${warnings}`)
+  console.log(`Errors: ${errors}`)
 }
