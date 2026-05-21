@@ -1,5 +1,7 @@
 import ora from 'ora';
 
+import { loadConfig } from '../../core/config'
+
 import { scanProject } from '../../core/scanner';
 import { runEngine } from '../../core/engine';
 import { reporters } from '../../reporters'
@@ -12,6 +14,7 @@ export async function checkCommand(options: {
         changed?: boolean
     }
   }) {
+    const config = await loadConfig()
     
     const spinner = ora('Scanning project...').start();
 
@@ -49,20 +52,25 @@ export async function checkCommand(options: {
         reporter(issues)
 
         const hasWarnings = issues.some(
-            (issue) => issue.severity === 'warning',
-        );
+            (issue) => issue.severity === 'warning'
+        )
 
-        const hasErrors = issues.some((issue) => issue.severity === 'error');
+        const hasErrors = issues.some(
+            (issue) => issue.severity === 'error'
+        )
 
         if (hasErrors) {
-            process.exit(2);
+            process.exit(2)
         }
 
-        if (hasWarnings) {
-            process.exit(1);
+        if (
+            config.failOnWarning !== false &&
+            hasWarnings
+        ) {
+            process.exit(1)
         }
 
-        process.exit(0);
+        process.exit(0)
     } catch (error) {
         spinner.fail('vue-doctor failed');
 

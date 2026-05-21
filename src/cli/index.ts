@@ -1,11 +1,15 @@
+#!/usr/bin/env node
 import { cac } from 'cac'
 
 import { checkCommand } from './commands/check'
+
+import { baselineCommand } from './commands/baseline'
 
 const cli = cac('vue-doctor')
 
 cli
   .command('check', 'Run project analysis')
+  
 
   .option(
     '--changed',
@@ -22,6 +26,15 @@ cli
 
   .action(async (options) => {
     await checkCommand(options)
+  })
+
+cli
+  .command(
+    'baseline',
+    'Generate baseline file'
+  )
+  .action(async () => {
+    await baselineCommand()
   })
 
 cli.help()

@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "type": "module",
   "bin": {
-    "vue-doctor": "./bin/vue-doctor.js"
+    "vue-doctor": "./dist/index.js"
   },
   "scripts": {
     "build": "tsup src/cli/index.ts --format esm,cjs --dts --out-dir dist",
