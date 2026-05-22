@@ -1,20 +1,19 @@
-import { cosmiconfig } from 'cosmiconfig'
+import { cosmiconfig } from 'cosmiconfig';
 
-export async function loadConfig() {
-  const explorer = cosmiconfig(
-    'vue-doctor'
-  )
+import type { VueDoctorConfig } from '../types/config';
 
-  const result = await explorer.search()
+export async function loadConfig(): Promise<VueDoctorConfig> {
+    const explorer = cosmiconfig('vue-doctor');
 
-  const userConfig =
-    result?.config ?? {}
+    const result = await explorer.search();
 
-  return {
-    rules:
-      userConfig.rules ?? {},
+    const userConfig = result?.config ?? {};
 
-    failOnWarning:
-      userConfig.failOnWarning ?? true,
-  }
+    return {
+        rules: userConfig.rules ?? {},
+
+        failOnWarning: userConfig.failOnWarning ?? true,
+
+        plugins: userConfig.plugins ?? [],
+    };
 }

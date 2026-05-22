@@ -1,25 +1,40 @@
+import { performance } from 'node:perf_hooks';
+
 import { loadConfig } from './config';
+import { parseVueFile } from './parser';
+import { scanProject } from './scanner';
+import { loadCache, saveCache } from './cache';
 
 import { rules } from '../rules';
 
-import type { Issue } from '../types/issue';
-
-import { parseVueFile } from './parser';
-
-import { scanProject } from './scanner';
+import { createHash } from '../utils/hash';
 import { createFingerprint } from '../utils/fingerprint';
 
+import type { Issue } from '../types/issue';
 import { loadBaseline } from './baseline';
-import { createHash } from '../utils/hash';
-import { loadCache, saveCache } from './cache';
+import { normalizePlugins } from './plugins';
 
 export async function runEngine(targetFiles?: string[]) {
     const config = await loadConfig();
+
     const issues: Issue[] = [];
+
     const files = await scanProject(targetFiles);
+
     const seen = new Set<string>();
+
     const baseline = loadBaseline();
+
     const cache = loadCache();
+
+    const start = performance.now();
+
+    let cacheHits = 0;
+    let cacheMisses = 0;
+
+    const ruleTimings = new Map<string, number>();
+
+    const allRules = [...rules, ...normalizePlugins(config.plugins)];
 
     for (const file of files) {
         const parsed = await parseVueFile(file);
@@ -31,46 +46,97 @@ export async function runEngine(targetFiles?: string[]) {
         const cached = cache[file];
 
         if (cached && cached.hash === hash) {
+            cacheHits++;
+
             issues.push(...cached.issues);
 
             continue;
         }
-        const fileIssues: Issue[] = [];
-        for (const rule of rules) {
-            const findings = await rule.check({
-                filePath: file,
-                source,
-                descriptor: parsed.descriptor,
-                scriptAst: parsed.scriptAst,
-            });
 
-            const normalized = findings
-                .map((issue) => {
-                    const override = config.rules?.[issue.rule];
+        cacheMisses++;
 
-                    if (override === 'off') return null;
+        const results = await Promise.all(
+            allRules.map(async (rule) => {
+                const ruleStart = performance.now();
 
-                    if (override) {
-                        issue.severity = override;
-                    }
+                const result = await rule.check({
+                    filePath: file,
+                    source,
+                    descriptor: parsed.descriptor,
+                    scriptAst: parsed.scriptAst,
+                });
 
-                    issue.fingerprint = createFingerprint(issue);
+                const ruleEnd = performance.now();
 
-                    if (seen.has(issue.fingerprint)) return null;
-                    if (baseline.has(issue.fingerprint)) return null;
+                ruleTimings.set(
+                    rule.name,
+                    (ruleTimings.get(rule.name) ?? 0) + (ruleEnd - ruleStart),
+                );
 
-                    seen.add(issue.fingerprint);
+                return result;
+            }),
+        );
 
-                    return issue;
-                })
-                .filter(Boolean);
-            cache[file] = {
-                hash,
-                issues: fileIssues,
-            };
-            fileIssues.push(...normalized);
-        }
+        const findings = results.flat();
+
+        const fileIssues = findings
+            .map((issue) => {
+                const override = config.rules?.[issue.rule];
+
+                if (override === 'off') {
+                    return null;
+                }
+
+                if (override === 'warning' || override === 'error') {
+                    issue.severity = override;
+                }
+
+                issue.fingerprint = createFingerprint(issue);
+
+                if (seen.has(issue.fingerprint)) {
+                    return null;
+                }
+
+                if (baseline.has(issue.fingerprint)) {
+                    return null;
+                }
+
+                seen.add(issue.fingerprint);
+
+                return issue;
+            })
+            .filter((issue): issue is Issue => issue !== null);
+
+        cache[file] = {
+            hash,
+            issues: fileIssues,
+        };
+
+        issues.push(...fileIssues);
     }
+
     saveCache(cache);
-    return issues;
+
+    const end = performance.now();
+
+    return {
+        issues,
+
+        metrics: {
+            files: files.length,
+
+            cacheHits,
+
+            cacheMisses,
+
+            duration: ((end - start) / 1000).toFixed(2),
+
+            ruleTimings: Object.fromEntries(
+                [...ruleTimings.entries()].map(([rule, time]) => [
+                    rule,
+                    time.toFixed(2),
+                ]),
+            ),
+        },
+    };
 }

@@ -1,0 +1,9 @@
+playground
+src
+.github
+.vscode
+
+.vue-doctor-cache.json
+.vue-doctor-baseline.json
+
+*.log

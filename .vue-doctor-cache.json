@@ -1,0 +1,208 @@
+{
+  "src/playground/Test.vue": {
+    "hash": "7373cbaa4aad231c78979a36f9d67973",
+    "issues": [
+      {
+        "rule": "no-large-component",
+        "severity": "warning",
+        "file": "src/playground/Test.vue",
+        "message": "Component exceeds recommended size (504 LOC)",
+        "suggestion": "Consider splitting UI, composables, or business logic into smaller modules.",
+        "fingerprint": "28ae01dde06f20c0225768b383c9e1c2"
+      },
+      {
+        "rule": "no-window-in-ssr",
+        "severity": "error",
+        "file": "src/playground/Test.vue",
+        "message": "Detected SSR unsafe API usage: window",
+        "suggestion": "Wrap browser-only APIs inside onMounted() or process.client checks.",
+        "fingerprint": "19641506fc7261b7bd66882c1ffec33a"
+      },
+      {
+        "rule": "no-window-in-ssr",
+        "severity": "error",
+        "file": "src/playground/Test.vue",
+        "message": "Detected SSR unsafe API usage: document",
+        "suggestion": "Wrap browser-only APIs inside onMounted() or process.client checks.",
+        "fingerprint": "82e20b1a8af2483e24b38662d8d2f689"
+      },
+      {
+        "rule": "no-window-in-ssr",
+        "severity": "error",
+        "file": "src/playground/Test.vue",
+        "message": "Detected SSR unsafe API usage: localStorage",
+        "suggestion": "Wrap browser-only APIs inside onMounted() or process.client checks.",
+        "fingerprint": "2902162e2d3c24867f8a8e54cf8ee9f3"
+      },
+      {
+        "rule": "no-console",
+        "severity": "warning",
+        "file": "src/playground/Test.vue",
+        "line": 103,
+        "column": 8,
+        "message": "console usage detected.",
+        "suggestion": "Remove console logs before production.",
+        "fingerprint": "18f4e75beac95d1a86627bef45d1ac21"
+      },
+      {
+        "rule": "no-console",
+        "severity": "warning",
+        "file": "src/playground/Test.vue",
+        "line": 112,
+        "column": 6,
+        "message": "console usage detected.",
+        "suggestion": "Remove console logs before production.",
+        "fingerprint": "71fd6177e601d834a095769fb61cdba7"
+      },
+      {
+        "rule": "no-console",
+        "severity": "warning",
+        "file": "src/playground/Test.vue",
+        "line": 117,
+        "column": 6,
+        "message": "console usage detected.",
+        "suggestion": "Remove console logs before production.",
+        "fingerprint": "109362a95a97bf2c3d025a57f48d9dbd"
+      },
+      {
+        "rule": "no-console",
+        "severity": "warning",
+        "file": "src/playground/Test.vue",
+        "line": 124,
+        "column": 8,
+        "message": "console usage detected.",
+        "suggestion": "Remove console logs before production.",
+        "fingerprint": "af0240d104a7578c60989c2ec1f10bb9"
+      },
+      {
+        "rule": "no-console",
+        "severity": "warning",
+        "file": "src/playground/Test.vue",
+        "line": 134,
+        "column": 4,
+        "message": "console usage detected.",
+        "suggestion": "Remove console logs before production.",
+        "fingerprint": "b68128f7f70ae53486f388c7edb83574"
+      },
+      {
+        "rule": "no-console",
+        "severity": "warning",
+        "file": "src/playground/Test.vue",
+        "line": 138,
+        "column": 4,
+        "message": "console usage detected.",
+        "suggestion": "Remove console logs before production.",
+        "fingerprint": "dc4edc2d73328c0b679e284ee3096339"
+      },
+      {
+        "rule": "no-console",
+        "severity": "warning",
+        "file": "src/playground/Test.vue",
+        "line": 146,
+        "column": 8,
+        "message": "console usage detected.",
+        "suggestion": "Remove console logs before production.",
+        "fingerprint": "3787657bcc96b11f0bbdbc4e033573e3"
+      },
+      {
+        "rule": "no-console",
+        "severity": "warning",
+        "file": "src/playground/Test.vue",
+        "line": 157,
+        "column": 4,
+        "message": "console usage detected.",
+        "suggestion": "Remove console logs before production.",
+        "fingerprint": "9daffb14537da3bb35810c1395c8c5a9"
+      },
+      {
+        "rule": "no-console",
+        "severity": "warning",
+        "file": "src/playground/Test.vue",
+        "line": 162,
+        "column": 4,
+        "message": "console usage detected.",
+        "suggestion": "Remove console logs before production.",
+        "fingerprint": "2d5b445b1f9c768a6735a038388efa84"
+      },
+      {
+        "rule": "no-console",
+        "severity": "warning",
+        "file": "src/playground/Test.vue",
+        "line": 181,
+        "column": 4,
+        "message": "console usage detected.",
+        "suggestion": "Remove console logs before production.",
+        "fingerprint": "0d364793eb6299eb4df633aa91bb0b36"
+      },
+      {
+        "rule": "no-console",
+        "severity": "warning",
+        "file": "src/playground/Test.vue",
+        "line": 186,
+        "column": 4,
+        "message": "console usage detected.",
+        "suggestion": "Remove console logs before production.",
+        "fingerprint": "c825cf4cd1069774c0743e882fc4593e"
+      },
+      {
+        "rule": "no-console",
+        "severity": "warning",
+        "file": "src/playground/Test.vue",
+        "line": 192,
+        "column": 4,
+        "message": "console usage detected.",
+        "suggestion": "Remove console logs before production.",
+        "fingerprint": "cdfcaad2f8ecfe5bd2f6ec39afd60dfa"
+      },
+      {
+        "rule": "no-console",
+        "severity": "warning",
+        "file": "src/playground/Test.vue",
+        "line": 198,
+        "column": 4,
+        "message": "console usage detected.",
+        "suggestion": "Remove console logs before production.",
+        "fingerprint": "de4b4d4d0662e64a3db30a429b08294c"
+      },
+      {
+        "rule": "no-console",
+        "severity": "warning",
+        "file": "src/playground/Test.vue",
+        "line": 245,
+        "column": 6,
+        "message": "console usage detected.",
+        "suggestion": "Remove console logs before production.",
+        "fingerprint": "c7ab6cd7a590ddf1307472faaf326564"
+      },
+      {
+        "rule": "no-console",
+        "severity": "warning",
+        "file": "src/playground/Test.vue",
+        "line": 271,
+        "column": 8,
+        "message": "console usage detected.",
+        "suggestion": "Remove console logs before production.",
+        "fingerprint": "4dd3ed1f2ec2ccf4c2ae752d20a63dc3"
+      },
+      {
+        "rule": "no-console",
+        "severity": "warning",
+        "file": "src/playground/Test.vue",
+        "line": 300,
+        "column": 6,
+        "message": "console usage detected.",
+        "suggestion": "Remove console logs before production.",
+        "fingerprint": "6ad3a460c50d7d0fcc5f6d3250759df4"
+      },
+      {
+        "rule": "test-rule",
+        "severity": "warning",
+        "file": "src/playground/Test.vue",
+        "line": 1,
+        "column": 1,
+        "message": "plugin works",
+        "fingerprint": "6a9517c2c70824d7f4f2c769c301a50d"
+      }
+    ]
+  }
+}

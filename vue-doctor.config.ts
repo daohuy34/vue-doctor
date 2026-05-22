@@ -4,5 +4,6 @@ export default {
         'no-deep-watch': 'error',
         'no-large-component': 'on',
     },
-    failOnWarning: false
+    failOnWarning: false,
+    plugins: [],
 };

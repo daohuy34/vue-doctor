@@ -1,17 +1,15 @@
-import { runEngine } from './../../core/engine'
+import { runEngine } from './../../core/engine';
 
-import { saveBaseline } from './../../core/baseline'
+import { saveBaseline } from './../../core/baseline';
 
 export async function baselineCommand() {
-  const issues = await runEngine()
+    const { issues } = await runEngine();
 
-  const fingerprints = issues
-    .map((issue) => issue.fingerprint)
-    .filter(Boolean) as string[]
+    const fingerprints = issues
+        .map((issue) => issue.fingerprint)
+        .filter(Boolean) as string[];
 
-  saveBaseline(fingerprints)
+    saveBaseline(fingerprints);
 
-  console.log(
-    '✔ Baseline generated'
-  )
+    console.log('✔ Baseline generated');
 }

@@ -91,3 +91,6 @@ vite.config.ts.timestamp-*
 # Windows
 ehthumbs.db
 Desktop.ini
+
+.vue-doctor-cache.json
+.vue-doctor-baseline.json
