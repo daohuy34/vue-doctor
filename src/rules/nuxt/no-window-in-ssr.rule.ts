@@ -13,6 +13,8 @@ export const noWindowInSsrRule: Rule = {
     meta: {
         severity: 'error',
         category: 'nuxt',
+        description: 'Detect browser-only APIs that may break SSR.',
+        recommended: true,
     },
 
     async check(context) {

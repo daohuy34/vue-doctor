@@ -35,6 +35,16 @@
         "fingerprint": "2902162e2d3c24867f8a8e54cf8ee9f3"
       },
       {
+        "rule": "no-deep-watch",
+        "severity": "error",
+        "file": "src/playground/Test.vue",
+        "line": 98,
+        "column": 4,
+        "message": "Deep watch detected.",
+        "suggestion": "Avoid deep watch on \"todos\". Watch a specific nested path instead: watch: { 'todos.yourProp': handler }",
+        "fingerprint": "6178756aa7682c2b61026734730c817f"
+      },
+      {
         "rule": "no-console",
         "severity": "warning",
         "file": "src/playground/Test.vue",
@@ -193,15 +203,133 @@
         "message": "console usage detected.",
         "suggestion": "Remove console logs before production.",
         "fingerprint": "6ad3a460c50d7d0fcc5f6d3250759df4"
+      }
+    ]
+  },
+  "src/playground/Test_2.vue": {
+    "hash": "99740639c2ffbfdc3f4196c4d5ff9776",
+    "issues": [
+      {
+        "rule": "no-large-component",
+        "severity": "warning",
+        "file": "src/playground/Test_2.vue",
+        "message": "Component exceeds recommended size (654 LOC)",
+        "suggestion": "Consider splitting UI, composables, or business logic into smaller modules.",
+        "fingerprint": "835c35fadfa819d4a40c2189bcbbeace"
       },
       {
-        "rule": "test-rule",
+        "rule": "no-window-in-ssr",
+        "severity": "error",
+        "file": "src/playground/Test_2.vue",
+        "message": "Detected SSR unsafe API usage: window",
+        "suggestion": "Wrap browser-only APIs inside onMounted() or process.client checks.",
+        "fingerprint": "d307eeb03c4d36f54d5521ddc95f4a0c"
+      },
+      {
+        "rule": "no-window-in-ssr",
+        "severity": "error",
+        "file": "src/playground/Test_2.vue",
+        "message": "Detected SSR unsafe API usage: document",
+        "suggestion": "Wrap browser-only APIs inside onMounted() or process.client checks.",
+        "fingerprint": "47632716424f73c65c37430a02c6e94f"
+      },
+      {
+        "rule": "no-window-in-ssr",
+        "severity": "error",
+        "file": "src/playground/Test_2.vue",
+        "message": "Detected SSR unsafe API usage: localStorage",
+        "suggestion": "Wrap browser-only APIs inside onMounted() or process.client checks.",
+        "fingerprint": "72659056ba84333c73b9f89a42585300"
+      },
+      {
+        "rule": "no-console",
         "severity": "warning",
-        "file": "src/playground/Test.vue",
-        "line": 1,
-        "column": 1,
-        "message": "plugin works",
-        "fingerprint": "6a9517c2c70824d7f4f2c769c301a50d"
+        "file": "src/playground/Test_2.vue",
+        "line": 23,
+        "column": 0,
+        "message": "console usage detected.",
+        "suggestion": "Remove console logs before production.",
+        "fingerprint": "59e7ec63f03c65197c6a08dc04ecd59a"
+      },
+      {
+        "rule": "no-mutate-props",
+        "severity": "error",
+        "file": "src/playground/Test_2.vue",
+        "line": 9,
+        "column": 0,
+        "message": "Prop \"modelValue\" is mutated directly.",
+        "suggestion": "Props are read-only. Emit an event to let the parent update \"modelValue\": this.$emit('update:modelValue', newValue) or use a writable computed with get/set.",
+        "fingerprint": "d40c792eb08c7481fc80182fea9ae687"
+      },
+      {
+        "rule": "no-mutate-props",
+        "severity": "error",
+        "file": "src/playground/Test_2.vue",
+        "line": 12,
+        "column": 0,
+        "message": "Prop \"config\" is mutated directly.",
+        "suggestion": "Props are read-only. Emit an event to let the parent update \"config\": this.$emit('update:config', newValue) or use a writable computed with get/set.",
+        "fingerprint": "a7381d0e9ec0e4d0788c1d1562dac5a9"
+      },
+      {
+        "rule": "no-mutate-props",
+        "severity": "error",
+        "file": "src/playground/Test_2.vue",
+        "line": 15,
+        "column": 0,
+        "message": "Prop \"items\" is mutated directly.",
+        "suggestion": "Props are read-only. Emit an event to let the parent update \"items\": this.$emit('update:items', newValue) or use a writable computed with get/set.",
+        "fingerprint": "b104f7290e3a855aa3cb3e5804a27c20"
+      },
+      {
+        "rule": "no-mutate-props",
+        "severity": "error",
+        "file": "src/playground/Test_2.vue",
+        "line": 16,
+        "column": 0,
+        "message": "Prop \"items\" is mutated directly.",
+        "suggestion": "Props are read-only. Emit an event to let the parent update \"items\": this.$emit('update:items', newValue) or use a writable computed with get/set.",
+        "fingerprint": "49f682bc3e704d50cec107a0e9973840"
+      },
+      {
+        "rule": "no-mutate-props",
+        "severity": "error",
+        "file": "src/playground/Test_2.vue",
+        "line": 17,
+        "column": 0,
+        "message": "Prop \"items\" is mutated directly.",
+        "suggestion": "Props are read-only. Emit an event to let the parent update \"items\": this.$emit('update:items', newValue) or use a writable computed with get/set.",
+        "fingerprint": "d55777bf58408859f079cd054d5afd57"
+      },
+      {
+        "rule": "no-mutate-props",
+        "severity": "error",
+        "file": "src/playground/Test_2.vue",
+        "line": 18,
+        "column": 0,
+        "message": "Prop \"items\" is mutated directly.",
+        "suggestion": "Props are read-only. Emit an event to let the parent update \"items\": this.$emit('update:items', newValue) or use a writable computed with get/set.",
+        "fingerprint": "bb5985128ef4320d4f2f739fe26d4952"
+      },
+      {
+        "rule": "no-mutate-props",
+        "severity": "error",
+        "file": "src/playground/Test_2.vue",
+        "line": 19,
+        "column": 0,
+        "message": "Prop \"items\" is mutated directly.",
+        "suggestion": "Props are read-only. Emit an event to let the parent update \"items\": this.$emit('update:items', newValue) or use a writable computed with get/set.",
+        "fingerprint": "c9548986e73d447a71d47604956efdb9"
+      },
+      {
+        "rule": "no-mutate-props",
+        "severity": "error",
+        "file": "src/playground/Test_2.vue",
+        "line": 20,
+        "column": 0,
+        "message": "Prop \"items\" is mutated directly.",
+        "suggestion": "Props are read-only. Emit an event to let the parent update \"items\": this.$emit('update:items', newValue) or use a writable computed with get/set.",
+        "fingerprint": "442bb673e15a474e4c3f86c1d9411a4d"
       }
     ]
   }

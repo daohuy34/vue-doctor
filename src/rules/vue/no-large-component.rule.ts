@@ -6,7 +6,7 @@ export const noLargeComponentRule: Rule = {
     meta: {
         severity: 'warning',
         category: 'vue',
-        description: 'Detect console usage inside Vue components.',
+        description: 'Detect oversized Vue Single File Components.',
 
         recommended: true,
     },
