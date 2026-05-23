@@ -1,9 +1,9 @@
 {
-  "name": "@quanghuy/vue-doctor",
+  "name": "@daohuy/vue-doctor",
   "version": "0.1.0-alpha.1",
   "type": "module",
   "bin": {
-    "vue-doctor": "./dist/index.js"
+    "vue-doctor": "dist/index.js"
   },
   "scripts": {
     "build": "tsup src/cli/index.ts --format esm,cjs --dts --out-dir dist",
