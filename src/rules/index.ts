@@ -7,6 +7,7 @@ import { noVIfWithVForRule } from './vue/no-v-if-with-v-for.rule';
 import { requireKeyInVForRule } from './vue/require-key-in-v-for.rule';
 import { noSideEffectInComputedRule } from './vue/no-side-effect-in-computed.rule';
 import { noUnusedComponentDataRule } from './vue/no-unused-component-data.rule';
+import { noVHtmlRule } from './vue/no-v-html.rule';
 
 export const rules = [
     noLargeComponentRule,
@@ -18,4 +19,5 @@ export const rules = [
     requireKeyInVForRule,
     noSideEffectInComputedRule,
     noUnusedComponentDataRule,
+    noVHtmlRule,
 ];
