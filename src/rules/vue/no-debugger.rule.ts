@@ -1,4 +1,5 @@
 import { traverse } from '../../utils/ast';
+import { createLineRemovalFix } from '../../utils/fix';
 import type { Rule } from '../../types/rule';
 
 export const noDebuggerRule: Rule = {
@@ -34,5 +35,13 @@ export const noDebuggerRule: Rule = {
         });
 
         return issues;
+    },
+
+    async fix(context, issue) {
+        if (!issue.line) {
+            return null;
+        }
+
+        return createLineRemovalFix(context.source, issue.line);
     },
 };

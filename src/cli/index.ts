@@ -3,6 +3,7 @@
 import { cac } from 'cac';
 
 import { checkCommand } from './commands/check';
+import { fixCommand } from './commands/fix';
 
 import { baselineCommand } from './commands/baseline';
 import { rulesCommand } from './commands/rules';
@@ -20,6 +21,12 @@ cli.command('check', 'Run project analysis')
 
     .action(async (options) => {
         await checkCommand(options);
+    });
+
+cli.command('fix', 'Apply safe autofixes for supported rules')
+    .option('--changed', 'Apply fixes only to changed files')
+    .action(async (options) => {
+        await fixCommand(options);
     });
 
 cli.command('baseline', 'Generate baseline file').action(async () => {

@@ -6,6 +6,7 @@ import { scanProject } from './scanner';
 import { loadCache, saveCache } from './cache';
 
 import { rules } from '../rules';
+import { ruleMetadata } from '../rules/metadata';
 
 import { createHash } from '../utils/hash';
 import { createFingerprint } from '../utils/fingerprint';
@@ -13,6 +14,32 @@ import { createFingerprint } from '../utils/fingerprint';
 import type { Issue } from '../types/issue';
 import { loadBaseline } from './baseline';
 import { normalizePlugins } from './plugins';
+
+function attachCategory(issue: Issue): Issue {
+    const metadata = ruleMetadata.find((entry) => entry.name === issue.rule);
+
+    if (metadata) {
+        issue.category = metadata.category;
+    }
+
+    return issue;
+}
+
+function applyConfigOverrides(issue: Issue, config: Awaited<ReturnType<typeof loadConfig>>) {
+    const override = config.rules?.[issue.rule];
+
+    if (override === 'off') {
+        return null;
+    }
+
+    if (override === 'warning' || override === 'error' || override === 'critical') {
+        issue.severity = override;
+    }
+
+    attachCategory(issue);
+
+    return issue;
+}
 
 export async function runEngine(targetFiles?: string[]) {
     const config = await loadConfig();
@@ -48,7 +75,13 @@ export async function runEngine(targetFiles?: string[]) {
         if (cached && cached.hash === hash) {
             cacheHits++;
 
-            issues.push(...cached.issues);
+            const cachedIssues = (cached.issues as Issue[] | undefined) ?? [];
+
+            issues.push(
+                ...cachedIssues
+                    .map((issue) => applyConfigOverrides(issue, config) ?? null)
+                    .filter((issue): issue is Issue => issue !== null),
+            );
 
             continue;
         }
@@ -84,29 +117,25 @@ export async function runEngine(targetFiles?: string[]) {
 
         const fileIssues = findings
             .map((issue) => {
-                const override = config.rules?.[issue.rule];
+                const normalized = applyConfigOverrides(issue, config);
 
-                if (override === 'off') {
+                if (!normalized) {
                     return null;
                 }
 
-                if (override === 'warning' || override === 'error') {
-                    issue.severity = override;
-                }
+                normalized.fingerprint = createFingerprint(normalized);
 
-                issue.fingerprint = createFingerprint(issue);
-
-                if (seen.has(issue.fingerprint)) {
+                if (seen.has(normalized.fingerprint)) {
                     return null;
                 }
 
-                if (baseline.has(issue.fingerprint)) {
+                if (baseline.has(normalized.fingerprint)) {
                     return null;
                 }
 
-                seen.add(issue.fingerprint);
+                seen.add(normalized.fingerprint);
 
-                return issue;
+                return normalized;
             })
             .filter((issue): issue is Issue => issue !== null);
 

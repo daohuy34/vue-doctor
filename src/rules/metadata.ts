@@ -1,7 +1,7 @@
 export interface RuleMetadata {
     name: string;
     description: string;
-    severity: 'info' | 'warning' | 'error';
+    severity: 'info' | 'warning' | 'error' | 'critical';
     category: string;
     recommended: boolean;
     docs: string;
@@ -17,7 +17,7 @@ export const ruleMetadata: RuleMetadata[] = [
             'and may cause performance issues. ' +
             'Watch a specific nested property via a getter instead.',
         severity: 'warning',
-        category: 'Performance',
+        category: 'performance',
         recommended: true,
         docs: 'docs/rules/no-deep-watch.md',
     },
@@ -31,7 +31,7 @@ export const ruleMetadata: RuleMetadata[] = [
             'Props are read-only; direct mutation breaks one-way data flow and causes ' +
             'unpredictable behavior. Emit an event or use a writable computed instead.',
         severity: 'error',
-        category: 'Reactivity',
+        category: 'best-practice',
         recommended: true,
         docs: 'docs/rules/no-mutate-props.md',
     },
@@ -44,7 +44,7 @@ export const ruleMetadata: RuleMetadata[] = [
             'Computed must be pure functions; side effects cause infinite update loops ' +
             'and unpredictable behavior.',
         severity: 'error',
-        category: 'Reactivity',
+        category: 'best-practice',
         recommended: true,
         docs: 'docs/rules/no-side-effect-in-computed.md',
     },
@@ -59,7 +59,7 @@ export const ruleMetadata: RuleMetadata[] = [
             'v-if wins in Vue 3), leading to subtle bugs. ' +
             'Move the conditional to a wrapper <template> element.',
         severity: 'error',
-        category: 'Template',
+        category: 'maintainability',
         recommended: true,
         docs: 'docs/rules/no-v-if-with-v-for.md',
     },
@@ -71,7 +71,7 @@ export const ruleMetadata: RuleMetadata[] = [
             'Without a unique key Vue cannot efficiently track and reorder DOM nodes, ' +
             'leading to incorrect rendering and degraded performance.',
         severity: 'error',
-        category: 'Template',
+        category: 'maintainability',
         recommended: true,
         docs: 'docs/rules/require-key-in-v-for.md',
     },
@@ -83,8 +83,8 @@ export const ruleMetadata: RuleMetadata[] = [
             'Rendering unsanitized user input as HTML is a cross-site scripting (XSS) vulnerability. ' +
             'Prefer text interpolation {{ }} which Vue escapes automatically, ' +
             'or sanitize input with DOMPurify before binding.',
-        severity: 'error',
-        category: 'Template',
+        severity: 'critical',
+        category: 'security',
         recommended: true,
         docs: 'docs/rules/no-v-html.md',
     },
@@ -98,7 +98,7 @@ export const ruleMetadata: RuleMetadata[] = [
             'Large components are harder to read, test, and maintain. ' +
             'Consider splitting into smaller, focused components.',
         severity: 'warning',
-        category: 'Maintainability',
+        category: 'maintainability',
         recommended: true,
         docs: 'docs/rules/no-large-component.md',
     },
@@ -110,7 +110,7 @@ export const ruleMetadata: RuleMetadata[] = [
             'computed properties, methods, watchers, or lifecycle hooks. ' +
             'Unused reactive properties waste memory and add noise to the component.',
         severity: 'warning',
-        category: 'Maintainability',
+        category: 'maintainability',
         recommended: true,
         docs: 'docs/rules/no-unused-component-data.md',
     },
@@ -119,7 +119,7 @@ export const ruleMetadata: RuleMetadata[] = [
         name: 'no-debugger',
         description: 'Disallow debugger statements in Vue components.',
         severity: 'warning',
-        category: 'Best Practices',
+        category: 'best-practice',
         recommended: true,
         docs: 'docs/rules/no-debugger.md',
     },
@@ -128,7 +128,7 @@ export const ruleMetadata: RuleMetadata[] = [
         name: 'no-empty-catch',
         description: 'Disallow empty catch blocks.',
         severity: 'warning',
-        category: 'Best Practices',
+        category: 'best-practice',
         recommended: true,
         docs: 'docs/rules/no-empty-catch.md',
     },
@@ -137,7 +137,7 @@ export const ruleMetadata: RuleMetadata[] = [
         name: 'excessive-props',
         description: 'Warn when a component declares too many props.',
         severity: 'warning',
-        category: 'Maintainability',
+        category: 'maintainability',
         recommended: true,
         docs: 'docs/rules/excessive-props.md',
     },
@@ -146,7 +146,7 @@ export const ruleMetadata: RuleMetadata[] = [
         name: 'excessive-watchers',
         description: 'Warn when a component declares too many watchers.',
         severity: 'warning',
-        category: 'Maintainability',
+        category: 'maintainability',
         recommended: true,
         docs: 'docs/rules/excessive-watchers.md',
     },
@@ -155,7 +155,7 @@ export const ruleMetadata: RuleMetadata[] = [
         name: 'excessive-computed-properties',
         description: 'Warn when a component declares too many computed properties.',
         severity: 'info',
-        category: 'Maintainability',
+        category: 'maintainability',
         recommended: true,
         docs: 'docs/rules/excessive-computed-properties.md',
     },
@@ -164,7 +164,7 @@ export const ruleMetadata: RuleMetadata[] = [
         name: 'no-large-template',
         description: 'Warn when a template exceeds line or node thresholds.',
         severity: 'warning',
-        category: 'Maintainability',
+        category: 'maintainability',
         recommended: true,
         docs: 'docs/rules/no-large-template.md',
     },
@@ -173,7 +173,7 @@ export const ruleMetadata: RuleMetadata[] = [
         name: 'excessive-dom-depth',
         description: 'Warn when template nesting exceeds a configurable depth.',
         severity: 'warning',
-        category: 'Maintainability',
+        category: 'maintainability',
         recommended: true,
         docs: 'docs/rules/excessive-dom-depth.md',
     },
@@ -182,9 +182,38 @@ export const ruleMetadata: RuleMetadata[] = [
         name: 'excessive-v-for-nesting',
         description: 'Warn when templates contain nested v-for loops beyond the configured limit.',
         severity: 'warning',
-        category: 'Maintainability',
+        category: 'maintainability',
         recommended: true,
         docs: 'docs/rules/excessive-v-for-nesting.md',
+    },
+
+    // ── AI ────────────────────────────────────────────────────────────────
+
+    {
+        name: 'ai-monster-component',
+        description: 'Warn when a component appears excessively complex based on size and structure.',
+        severity: 'warning',
+        category: 'ai',
+        recommended: true,
+        docs: 'docs/rules/ai-monster-component.md',
+    },
+
+    {
+        name: 'excessive-reactive-state',
+        description: 'Warn when a component contains too much reactive state.',
+        severity: 'warning',
+        category: 'ai',
+        recommended: true,
+        docs: 'docs/rules/excessive-reactive-state.md',
+    },
+
+    {
+        name: 'excessive-component-responsibility',
+        description: 'Warn when a component appears to have multiple responsibilities.',
+        severity: 'warning',
+        category: 'ai',
+        recommended: true,
+        docs: 'docs/rules/excessive-component-responsibility.md',
     },
 
     // ── Best Practices ─────────────────────────────────────────────────────
@@ -196,7 +225,7 @@ export const ruleMetadata: RuleMetadata[] = [
             'inside Vue components. Debug statements left in production code ' +
             'expose implementation details and clutter the browser console.',
         severity: 'warning',
-        category: 'Best Practices',
+        category: 'best-practice',
         recommended: true,
         docs: 'docs/rules/no-console.md',
     },
@@ -209,7 +238,7 @@ export const ruleMetadata: RuleMetadata[] = [
             'Disallow window access in code that runs during server-side rendering. ' +
             'The browser global does not exist on the server and will throw at runtime.',
         severity: 'error',
-        category: 'SSR',
+        category: 'ssr',
         recommended: true,
         docs: 'docs/rules/no-window-in-ssr.md',
     },
@@ -220,7 +249,7 @@ export const ruleMetadata: RuleMetadata[] = [
             'Disallow document access in code that runs during server-side rendering. ' +
             'The browser global does not exist on the server and will throw at runtime.',
         severity: 'error',
-        category: 'SSR',
+        category: 'ssr',
         recommended: true,
         docs: 'docs/rules/no-document-in-ssr.md',
     },
@@ -231,7 +260,7 @@ export const ruleMetadata: RuleMetadata[] = [
             'Disallow localStorage access in code that runs during server-side rendering. ' +
             'The browser global does not exist on the server and will throw at runtime.',
         severity: 'error',
-        category: 'SSR',
+        category: 'ssr',
         recommended: true,
         docs: 'docs/rules/no-localstorage-in-ssr.md',
     },
@@ -242,7 +271,7 @@ export const ruleMetadata: RuleMetadata[] = [
             'Disallow sessionStorage access in code that runs during server-side rendering. ' +
             'The browser global does not exist on the server and will throw at runtime.',
         severity: 'error',
-        category: 'SSR',
+        category: 'ssr',
         recommended: true,
         docs: 'docs/rules/no-sessionstorage-in-ssr.md',
     },

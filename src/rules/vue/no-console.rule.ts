@@ -1,4 +1,5 @@
 import { traverse } from '../../utils/ast';
+import { createLineRemovalFix, isSafeConsoleStatement } from '../../utils/fix';
 import type { Rule } from '../../types/rule';
 
 export const noConsoleRule: Rule = {
@@ -19,10 +20,10 @@ export const noConsoleRule: Rule = {
             return [];
         }
 
-        const issues = [];
+        const issues: any[] = [];
 
         traverse(context.scriptAst as any, {
-            MemberExpression(path) {
+            MemberExpression(path: any) {
                 const object = path.node.object;
 
                 if (object.type === 'Identifier' && object.name === 'console') {
@@ -45,5 +46,17 @@ export const noConsoleRule: Rule = {
         });
 
         return issues;
+    },
+
+    async fix(context, issue) {
+        if (!issue.line) {
+            return null;
+        }
+
+        if (!isSafeConsoleStatement(context.source, issue.line)) {
+            return null;
+        }
+
+        return createLineRemovalFix(context.source, issue.line);
     },
 };

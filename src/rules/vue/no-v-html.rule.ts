@@ -139,8 +139,8 @@ export const noVHtmlRule: Rule = {
     name: 'no-v-html',
 
     meta: {
-        severity: 'error',
-        category: 'vue',
+        severity: 'critical',
+        category: 'security',
         description:
             'Disallow v-html with dynamic content. ' +
             'Rendering unsanitized user input as HTML is a cross-site scripting (XSS) vulnerability.',
@@ -162,7 +162,7 @@ export const noVHtmlRule: Rule = {
             const hasSanitizer = callsSanitizer(expr);
 
             // Sanitizer usage: downgrade to warning, still report
-            const severity = hasSanitizer ? 'warning' : 'error';
+            const severity = hasSanitizer ? 'warning' : 'critical';
 
             issues.push({
                 rule: 'no-v-html',

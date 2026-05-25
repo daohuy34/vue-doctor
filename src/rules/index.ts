@@ -19,6 +19,9 @@ import { excessiveComputedPropertiesRule } from './vue/excessive-computed-proper
 import { noLargeTemplateRule } from './vue/no-large-template.rule';
 import { excessiveDomDepthRule } from './vue/excessive-dom-depth.rule';
 import { excessiveVForNestingRule } from './vue/excessive-v-for-nesting.rule';
+import { aiMonsterComponentRule } from './vue/ai-monster-component.rule';
+import { excessiveReactiveStateRule } from './vue/excessive-reactive-state.rule';
+import { excessiveComponentResponsibilityRule } from './vue/excessive-component-responsibility.rule';
 
 export const rules = [
     noLargeComponentRule,
@@ -42,4 +45,7 @@ export const rules = [
     noLargeTemplateRule,
     excessiveDomDepthRule,
     excessiveVForNestingRule,
+    aiMonsterComponentRule,
+    excessiveReactiveStateRule,
+    excessiveComponentResponsibilityRule,
 ];

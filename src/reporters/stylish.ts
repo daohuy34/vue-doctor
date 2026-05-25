@@ -33,19 +33,29 @@ export function stylishReporter(issues: Issue[]) {
         for (const [rule, items] of groupedByRule) {
             const first = items[0];
 
-            const icon = first.severity === 'error' ? '✖' : '⚠';
+            const icon =
+                first.severity === 'critical' || first.severity === 'error'
+                    ? '✖'
+                    : '⚠';
 
             const count = items.length;
 
             console.log(`  ${icon} ${rule} (${count} occurrences)`);
 
-            console.log(`    ${first.message}`);
+            for (const item of items) {
+                const line = item.line ?? 1;
+                const column = item.column ?? 1;
+
+                console.log(`     ${item.message}:${line}:${column}`);
+            }
         }
     }
 
     const warnings = issues.filter((i) => i.severity === 'warning').length;
 
-    const errors = issues.filter((i) => i.severity === 'error').length;
+    const errors = issues.filter(
+        (i) => i.severity === 'error' || i.severity === 'critical',
+    ).length;
 
     console.log('\nSummary:');
 

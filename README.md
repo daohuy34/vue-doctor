@@ -271,6 +271,30 @@ Category: Maintainability
 
 ---
 
+### ai-monster-component
+
+Warns when a component appears excessively complex based on size and structure.
+
+Category: AI
+
+---
+
+### excessive-reactive-state
+
+Warns when a component contains too much reactive state.
+
+Category: AI
+
+---
+
+### excessive-component-responsibility
+
+Warns when a component appears to have multiple responsibilities.
+
+Category: AI
+
+---
+
 ### no-window-in-ssr
 
 Detects `window` usage in code that runs during SSR.
@@ -319,6 +343,9 @@ Available rules:
 • no-console (Best Practices)
 • no-deep-watch (Performance)
 • no-large-component (Maintainability)
+• ai-monster-component (AI)
+• excessive-reactive-state (AI)
+• excessive-component-responsibility (AI)
 • no-window-in-ssr (SSR)
 • no-document-in-ssr (SSR)
 • no-localstorage-in-ssr (SSR)
@@ -470,10 +497,29 @@ vue-doctor check --changed
 vue-doctor check --reporter json
 vue-doctor check --reporter github
 
+vue-doctor fix
+vue-doctor fix --changed
+
 vue-doctor baseline
 
 vue-doctor rules
 vue-doctor rule <name>
+```
+
+## Auto-fix
+
+Vue Doctor currently provides safe autofixes for supported rules.
+
+Available today:
+
+- `no-debugger`
+- `no-console` (direct console statements only)
+
+Run:
+
+```bash
+vue-doctor fix
+vue-doctor fix --changed
 ```
 
 ---
