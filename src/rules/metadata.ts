@@ -206,12 +206,44 @@ export const ruleMetadata: RuleMetadata[] = [
     {
         name: 'no-window-in-ssr',
         description:
-            'Disallow browser-only globals (window, document, navigator, localStorage, ' +
-            'sessionStorage) in code that runs during server-side rendering. ' +
-            'These APIs do not exist on the server and will throw at runtime.',
+            'Disallow window access in code that runs during server-side rendering. ' +
+            'The browser global does not exist on the server and will throw at runtime.',
         severity: 'error',
         category: 'SSR',
         recommended: true,
         docs: 'docs/rules/no-window-in-ssr.md',
+    },
+
+    {
+        name: 'no-document-in-ssr',
+        description:
+            'Disallow document access in code that runs during server-side rendering. ' +
+            'The browser global does not exist on the server and will throw at runtime.',
+        severity: 'error',
+        category: 'SSR',
+        recommended: true,
+        docs: 'docs/rules/no-document-in-ssr.md',
+    },
+
+    {
+        name: 'no-localstorage-in-ssr',
+        description:
+            'Disallow localStorage access in code that runs during server-side rendering. ' +
+            'The browser global does not exist on the server and will throw at runtime.',
+        severity: 'error',
+        category: 'SSR',
+        recommended: true,
+        docs: 'docs/rules/no-localstorage-in-ssr.md',
+    },
+
+    {
+        name: 'no-sessionstorage-in-ssr',
+        description:
+            'Disallow sessionStorage access in code that runs during server-side rendering. ' +
+            'The browser global does not exist on the server and will throw at runtime.',
+        severity: 'error',
+        category: 'SSR',
+        recommended: true,
+        docs: 'docs/rules/no-sessionstorage-in-ssr.md',
     },
 ];

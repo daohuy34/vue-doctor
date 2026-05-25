@@ -1,30 +1,30 @@
 import type { Rule } from '../../types/rule';
 
-function hasWindowUsage(source: string): boolean {
-    return /\bwindow\b/.test(source);
+function hasSessionStorageUsage(source: string): boolean {
+    return /\bsessionStorage\b/.test(source);
 }
 
-export const noWindowInSsrRule: Rule = {
-    name: 'no-window-in-ssr',
+export const noSessionStorageInSsrRule: Rule = {
+    name: 'no-sessionstorage-in-ssr',
 
     meta: {
         severity: 'error',
         category: 'SSR',
-        description: 'Detect window usage in SSR contexts.',
+        description: 'Detect sessionStorage usage in SSR contexts.',
         recommended: true,
     },
 
     async check(context) {
-        if (!hasWindowUsage(context.source)) {
+        if (!hasSessionStorageUsage(context.source)) {
             return [];
         }
 
         return [
             {
-                rule: 'no-window-in-ssr',
+                rule: 'no-sessionstorage-in-ssr',
                 severity: 'error',
                 file: context.filePath,
-                message: 'Detected SSR unsafe API usage: window.',
+                message: 'Detected SSR unsafe API usage: sessionStorage.',
                 suggestion:
                     'Wrap browser-only APIs inside onMounted() or process.client checks.',
             },

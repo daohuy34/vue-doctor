@@ -1,19 +1,22 @@
 
----
-
-## `docs/rules/no-window-in-ssr.md`
-
-```md
 # no-window-in-ssr
 
-Detects browser APIs used outside client-only contexts.
+Detects `window` usage in SSR-sensitive code.
 
 ## Why?
 
-window, document and localStorage are unavailable during SSR rendering.
+`window` is not available during server-side rendering and will throw at runtime.
 
 ## Bad
 
 ```ts
-const theme =
-    localStorage.getItem('theme')
+const href = window.location.href;
+```
+
+## Good
+
+```ts
+if (process.client) {
+    const href = window.location.href;
+}
+```

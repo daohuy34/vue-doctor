@@ -1,5 +1,8 @@
-import babelTraverse from '@babel/traverse';
+import * as babelTraverse from '@babel/traverse';
 
-const traverse = babelTraverse.default;
+const traverse =
+    typeof babelTraverse === 'function'
+        ? babelTraverse
+        : (babelTraverse as any).default ?? babelTraverse;
 
 export { traverse };

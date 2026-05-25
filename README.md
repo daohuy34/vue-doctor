@@ -273,15 +273,31 @@ Category: Maintainability
 
 ### no-window-in-ssr
 
-Detects browser-only APIs that may break SSR.
+Detects `window` usage in code that runs during SSR.
 
-Examples:
+Category: SSR
 
-```ts
-window
-document
-localStorage
-```
+---
+
+### no-document-in-ssr
+
+Detects `document` usage in code that runs during SSR.
+
+Category: SSR
+
+---
+
+### no-localstorage-in-ssr
+
+Detects `localStorage` usage in code that runs during SSR.
+
+Category: SSR
+
+---
+
+### no-sessionstorage-in-ssr
+
+Detects `sessionStorage` usage in code that runs during SSR.
 
 Category: SSR
 
@@ -304,6 +320,9 @@ Available rules:
 • no-deep-watch (Performance)
 • no-large-component (Maintainability)
 • no-window-in-ssr (SSR)
+• no-document-in-ssr (SSR)
+• no-localstorage-in-ssr (SSR)
+• no-sessionstorage-in-ssr (SSR)
 ```
 
 Show rule details:
