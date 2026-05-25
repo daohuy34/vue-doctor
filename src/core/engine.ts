@@ -64,6 +64,9 @@ export async function runEngine(targetFiles?: string[]) {
                     source,
                     descriptor: parsed.descriptor,
                     scriptAst: parsed.scriptAst,
+                    config: {
+                        ruleOptions: config.ruleOptions,
+                    },
                 });
 
                 const ruleEnd = performance.now();

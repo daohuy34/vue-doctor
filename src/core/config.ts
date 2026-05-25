@@ -12,6 +12,8 @@ export async function loadConfig(): Promise<VueDoctorConfig> {
     return {
         rules: userConfig.rules ?? {},
 
+        ruleOptions: userConfig.ruleOptions ?? {},
+
         failOnWarning: userConfig.failOnWarning ?? true,
 
         plugins: userConfig.plugins ?? [],

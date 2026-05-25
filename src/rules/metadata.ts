@@ -1,7 +1,7 @@
 export interface RuleMetadata {
     name: string;
     description: string;
-    severity: 'warning' | 'error';
+    severity: 'info' | 'warning' | 'error';
     category: string;
     recommended: boolean;
     docs: string;
@@ -113,6 +113,78 @@ export const ruleMetadata: RuleMetadata[] = [
         category: 'Maintainability',
         recommended: true,
         docs: 'docs/rules/no-unused-component-data.md',
+    },
+
+    {
+        name: 'no-debugger',
+        description: 'Disallow debugger statements in Vue components.',
+        severity: 'warning',
+        category: 'Best Practices',
+        recommended: true,
+        docs: 'docs/rules/no-debugger.md',
+    },
+
+    {
+        name: 'no-empty-catch',
+        description: 'Disallow empty catch blocks.',
+        severity: 'warning',
+        category: 'Best Practices',
+        recommended: true,
+        docs: 'docs/rules/no-empty-catch.md',
+    },
+
+    {
+        name: 'excessive-props',
+        description: 'Warn when a component declares too many props.',
+        severity: 'warning',
+        category: 'Maintainability',
+        recommended: true,
+        docs: 'docs/rules/excessive-props.md',
+    },
+
+    {
+        name: 'excessive-watchers',
+        description: 'Warn when a component declares too many watchers.',
+        severity: 'warning',
+        category: 'Maintainability',
+        recommended: true,
+        docs: 'docs/rules/excessive-watchers.md',
+    },
+
+    {
+        name: 'excessive-computed-properties',
+        description: 'Warn when a component declares too many computed properties.',
+        severity: 'info',
+        category: 'Maintainability',
+        recommended: true,
+        docs: 'docs/rules/excessive-computed-properties.md',
+    },
+
+    {
+        name: 'no-large-template',
+        description: 'Warn when a template exceeds line or node thresholds.',
+        severity: 'warning',
+        category: 'Maintainability',
+        recommended: true,
+        docs: 'docs/rules/no-large-template.md',
+    },
+
+    {
+        name: 'excessive-dom-depth',
+        description: 'Warn when template nesting exceeds a configurable depth.',
+        severity: 'warning',
+        category: 'Maintainability',
+        recommended: true,
+        docs: 'docs/rules/excessive-dom-depth.md',
+    },
+
+    {
+        name: 'excessive-v-for-nesting',
+        description: 'Warn when templates contain nested v-for loops beyond the configured limit.',
+        severity: 'warning',
+        category: 'Maintainability',
+        recommended: true,
+        docs: 'docs/rules/excessive-v-for-nesting.md',
     },
 
     // ── Best Practices ─────────────────────────────────────────────────────

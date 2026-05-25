@@ -1,3 +1,4 @@
+import { getRuleOption } from '../../utils/rule-options';
 import type { Rule } from '../../types/rule';
 
 export const noLargeComponentRule: Rule = {
@@ -5,16 +6,17 @@ export const noLargeComponentRule: Rule = {
 
     meta: {
         severity: 'warning',
-        category: 'vue',
+        category: 'Maintainability',
         description: 'Detect oversized Vue Single File Components.',
 
         recommended: true,
     },
 
     async check(context) {
+        const maxLines = getRuleOption(context, 'no-large-component', 'maxLines', 500);
         const lines = context.source.split('\n').length;
 
-        if (lines < 500) {
+        if (lines < maxLines) {
             return [];
         }
 

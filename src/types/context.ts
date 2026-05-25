@@ -1,4 +1,5 @@
 import type { SFCDescriptor } from '@vue/compiler-sfc';
+import type { RuleOptions } from './config';
 
 export interface RuleContext {
     filePath: string;
@@ -8,4 +9,8 @@ export interface RuleContext {
     descriptor: SFCDescriptor;
 
     scriptAst: unknown | null;
+
+    config?: {
+        ruleOptions?: RuleOptions;
+    };
 }

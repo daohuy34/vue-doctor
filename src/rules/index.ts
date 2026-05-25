@@ -8,6 +8,14 @@ import { requireKeyInVForRule } from './vue/require-key-in-v-for.rule';
 import { noSideEffectInComputedRule } from './vue/no-side-effect-in-computed.rule';
 import { noUnusedComponentDataRule } from './vue/no-unused-component-data.rule';
 import { noVHtmlRule } from './vue/no-v-html.rule';
+import { noDebuggerRule } from './vue/no-debugger.rule';
+import { noEmptyCatchRule } from './vue/no-empty-catch.rule';
+import { excessivePropsRule } from './vue/excessive-props.rule';
+import { excessiveWatchersRule } from './vue/excessive-watchers.rule';
+import { excessiveComputedPropertiesRule } from './vue/excessive-computed-properties.rule';
+import { noLargeTemplateRule } from './vue/no-large-template.rule';
+import { excessiveDomDepthRule } from './vue/excessive-dom-depth.rule';
+import { excessiveVForNestingRule } from './vue/excessive-v-for-nesting.rule';
 
 export const rules = [
     noLargeComponentRule,
@@ -20,4 +28,12 @@ export const rules = [
     noSideEffectInComputedRule,
     noUnusedComponentDataRule,
     noVHtmlRule,
+    noDebuggerRule,
+    noEmptyCatchRule,
+    excessivePropsRule,
+    excessiveWatchersRule,
+    excessiveComputedPropertiesRule,
+    noLargeTemplateRule,
+    excessiveDomDepthRule,
+    excessiveVForNestingRule,
 ];

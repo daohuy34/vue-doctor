@@ -105,6 +105,31 @@ export default {
         'no-large-component': 'warning',
     },
 
+    ruleOptions: {
+        'no-large-component': {
+            maxLines: 600,
+        },
+        'no-large-template': {
+            maxLines: 450,
+            maxNodes: 250,
+        },
+        'excessive-props': {
+            maxProps: 12,
+        },
+        'excessive-watchers': {
+            maxWatchers: 8,
+        },
+        'excessive-computed-properties': {
+            maxComputed: 18,
+        },
+        'excessive-dom-depth': {
+            maxDepth: 5,
+        },
+        'excessive-v-for-nesting': {
+            maxNesting: 2,
+        },
+    },
+
     failOnWarning: false,
 };
 ```
@@ -123,6 +148,25 @@ Example:
 export default {
     rules: {
         'no-console': 'off',
+    },
+};
+```
+
+### Rule Options
+
+Use `ruleOptions` to override built-in thresholds for Phase 1 rules.
+
+Example:
+
+```ts
+export default {
+    ruleOptions: {
+        'excessive-props': {
+            maxProps: 10,
+        },
+        'no-large-template': {
+            maxLines: 300,
+        },
     },
 };
 ```
@@ -160,6 +204,70 @@ Detects oversized Vue Single File Components.
 Category: Maintainability
 
 Default threshold: 500 LOC
+
+---
+
+### no-debugger
+
+Detects `debugger` statements in script blocks.
+
+Category: Best Practices
+
+---
+
+### no-empty-catch
+
+Detects empty `catch` blocks.
+
+Category: Best Practices
+
+---
+
+### excessive-props
+
+Warns when a component declares more props than the configured threshold.
+
+Category: Maintainability
+
+---
+
+### excessive-watchers
+
+Warns when a component uses more watchers than the configured threshold.
+
+Category: Maintainability
+
+---
+
+### excessive-computed-properties
+
+Warns when a component declares more computed properties than the configured threshold.
+
+Category: Maintainability
+
+---
+
+### no-large-template
+
+Warns when a template exceeds the line or HTML node threshold.
+
+Category: Maintainability
+
+---
+
+### excessive-dom-depth
+
+Warns when template nesting exceeds the configured DOM depth.
+
+Category: Maintainability
+
+---
+
+### excessive-v-for-nesting
+
+Warns when nested `v-for` loops exceed the configured threshold.
+
+Category: Maintainability
 
 ---
 
