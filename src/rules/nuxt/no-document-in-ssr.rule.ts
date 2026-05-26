@@ -1,4 +1,5 @@
 import type { Rule } from '../../types/rule';
+import { findFirstMatchLocation } from '../../utils/location';
 
 function hasDocumentUsage(source: string): boolean {
     return /\bdocument\b/.test(source);
@@ -15,7 +16,9 @@ export const noDocumentInSsrRule: Rule = {
     },
 
     async check(context) {
-        if (!hasDocumentUsage(context.source)) {
+        const location = findFirstMatchLocation(context.source, /\bdocument\b/);
+
+        if (!location) {
             return [];
         }
 
@@ -24,6 +27,8 @@ export const noDocumentInSsrRule: Rule = {
                 rule: 'no-document-in-ssr',
                 severity: 'error',
                 file: context.filePath,
+                line: location.line,
+                column: location.column,
                 message: 'Detected SSR unsafe API usage: document.',
                 suggestion:
                     'Wrap browser-only APIs inside onMounted() or process.client checks.',

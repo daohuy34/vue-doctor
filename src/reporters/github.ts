@@ -1,5 +1,13 @@
 import type { Issue } from '../types/issue'
 
+function normalizeColumn(column?: number) {
+    if (column === undefined) {
+        return 1
+    }
+
+    return column === 0 ? 1 : column
+}
+
 export function githubReporter(issues: Issue[]) {
     const grouped = new Map<string, Issue[]>()
 
@@ -18,7 +26,7 @@ export function githubReporter(issues: Issue[]) {
                     : 'warning'
 
             console.log(
-                `::${level} file=${file},line=${issue.line ?? 1},col=${issue.column ?? 1}::${issue.message}`,
+                `::${level} file=${file},line=${issue.line ?? 1},col=${normalizeColumn(issue.column)}::${issue.message}`,
             )
         }
     }

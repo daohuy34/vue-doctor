@@ -1,4 +1,5 @@
 import type { Rule } from '../../types/rule';
+import { findFirstMatchLocation } from '../../utils/location';
 
 function hasLocalStorageUsage(source: string): boolean {
     return /\blocalStorage\b/.test(source);
@@ -15,7 +16,12 @@ export const noLocalStorageInSsrRule: Rule = {
     },
 
     async check(context) {
-        if (!hasLocalStorageUsage(context.source)) {
+        const location = findFirstMatchLocation(
+            context.source,
+            /\blocalStorage\b/,
+        );
+
+        if (!location) {
             return [];
         }
 
@@ -24,6 +30,8 @@ export const noLocalStorageInSsrRule: Rule = {
                 rule: 'no-localstorage-in-ssr',
                 severity: 'error',
                 file: context.filePath,
+                line: location.line,
+                column: location.column,
                 message: 'Detected SSR unsafe API usage: localStorage.',
                 suggestion:
                     'Wrap browser-only APIs inside onMounted() or process.client checks.',

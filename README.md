@@ -1,70 +1,71 @@
 # Vue Doctor
 
-A lightweight static analysis tool for Vue.js projects.
+Static Analysis and Architecture Analysis for Vue & Nuxt applications.
 
-Vue Doctor helps detect common code quality, performance, and SSR issues in Vue applications before they reach production.
+Vue Doctor helps identify maintainability issues, SSR risks, and architectural smells before they become technical debt.
+
+Unlike traditional linters, Vue Doctor focuses on code quality, project health, and long-term maintainability.
 
 ---
 
-## Features
+## Why Vue Doctor?
 
-- Analyze Vue Single File Components (`.vue`)
-- Detect common anti-patterns
-- Support Vue 2 and Vue 3 projects
-- Incremental analysis with cache
-- Baseline support for legacy projects
-- GitHub Actions integration
-- Custom plugin system
-- Multiple reporters (stylish, json, github)
+Most linters focus on syntax and style:
+
+- Semicolons
+- Formatting
+- Variable naming
+- Console statements
+
+Vue Doctor focuses on issues that affect real-world Vue applications:
+
+- Oversized components
+- Deep watchers
+- SSR unsafe APIs
+- Excessive reactive state
+- Architecture smells
+- Maintainability risks
 
 ---
 
 ## Installation
 
-### Global
-
 ```bash
-npm install -g vue-doctor
+npm install -D @daohuy34/vue-doctor
 ```
 
-### Local
+or
 
 ```bash
-npm install --save-dev vue-doctor
-```
-
-Run with:
-
-```bash
-npx vue-doctor check
+npx @daohuy34/vue-doctor check
 ```
 
 ---
 
-## Quick Start
+## Usage
 
-Analyze an entire project:
+Analyze the current project:
 
 ```bash
 vue-doctor check
 ```
 
-Analyze only changed files:
+Analyze a specific directory:
 
 ```bash
-vue-doctor check --changed
+vue-doctor check src
 ```
 
-JSON output:
+Create a baseline:
 
 ```bash
-vue-doctor check --reporter json
+vue-doctor baseline
 ```
 
-GitHub Actions output:
+Use an existing baseline:
 
 ```bash
-vue-doctor check --reporter github
+vue-doctor check --baseline
 ```
 
 ---
@@ -72,350 +73,106 @@ vue-doctor check --reporter github
 ## Example Output
 
 ```text
-src/components/UserProfile.vue
+src/components/ProductEditor.vue
 
-  ⚠ no-console
-    console usage detected.
+✖ no-large-component
+    Component exceeds recommended size (624 LOC)
 
-  ✖ no-deep-watch
-    Deep watch detected.
+✖ no-deep-watch
+    Deep watch detected
 
-Summary:
-Warnings: 1
-Errors: 1
+⚠ no-window-in-ssr
+    window usage detected in SSR context
+
+Summary
+
+Files scanned: 124
+Issues found: 18
+Warnings: 9
+Errors: 9
 ```
 
 ---
 
-## Configuration
+## What Vue Doctor Detects
 
-Create a file:
+### Maintainability
 
-```text
-vue-doctor.config.ts
-```
+- Large components
+- Excessive reactive state
+- Deep watchers
+- Large composables
 
-Example:
+### SSR Safety
 
-```ts
-export default {
-    rules: {
-        'no-console': 'warning',
-        'no-deep-watch': 'error',
-        'no-large-component': 'warning',
-    },
+- window usage in SSR
+- document usage in SSR
+- localStorage usage in SSR
+- sessionStorage usage in SSR
 
-    ruleOptions: {
-        'no-large-component': {
-            maxLines: 600,
-        },
-        'no-large-template': {
-            maxLines: 450,
-            maxNodes: 250,
-        },
-        'excessive-props': {
-            maxProps: 12,
-        },
-        'excessive-watchers': {
-            maxWatchers: 8,
-        },
-        'excessive-computed-properties': {
-            maxComputed: 18,
-        },
-        'excessive-dom-depth': {
-            maxDepth: 5,
-        },
-        'excessive-v-for-nesting': {
-            maxNesting: 2,
-        },
-    },
+### Vue Best Practices
 
-    failOnWarning: false,
-};
-```
-
-### Rule Levels
-
-| Value | Description |
-|---------|---------|
-| warning | Report as warning |
-| error | Report as error |
-| off | Disable rule |
-
-Example:
-
-```ts
-export default {
-    rules: {
-        'no-console': 'off',
-    },
-};
-```
-
-### Rule Options
-
-Use `ruleOptions` to override built-in thresholds for Phase 1 rules.
-
-Example:
-
-```ts
-export default {
-    ruleOptions: {
-        'excessive-props': {
-            maxProps: 10,
-        },
-        'no-large-template': {
-            maxLines: 300,
-        },
-    },
-};
-```
+- Risky watch patterns
+- Performance-related anti-patterns
+- Component structure issues
 
 ---
 
-## Built-in Rules
+## Current Rules
 
-### no-console
+### Maintainability
 
-Detects console usage in application code.
+- no-large-component
+- no-deep-watch
 
-Category: Best Practices
+### SSR
 
----
+- no-window-in-ssr
+- no-document-in-ssr
+- no-local-storage-in-ssr
+- no-session-storage-in-ssr
 
-### no-deep-watch
+### AI Analysis
 
-Detects Vue watchers using:
-
-```ts
-watch(data, callback, {
-    deep: true,
-});
-```
-
-Category: Performance
+- ai-monster-component
 
 ---
 
-### no-large-component
+## Baseline Support
 
-Detects oversized Vue Single File Components.
+Ignore existing issues and focus only on newly introduced problems.
 
-Category: Maintainability
-
-Default threshold: 500 LOC
-
----
-
-### no-debugger
-
-Detects `debugger` statements in script blocks.
-
-Category: Best Practices
-
----
-
-### no-empty-catch
-
-Detects empty `catch` blocks.
-
-Category: Best Practices
-
----
-
-### excessive-props
-
-Warns when a component declares more props than the configured threshold.
-
-Category: Maintainability
-
----
-
-### excessive-watchers
-
-Warns when a component uses more watchers than the configured threshold.
-
-Category: Maintainability
-
----
-
-### excessive-computed-properties
-
-Warns when a component declares more computed properties than the configured threshold.
-
-Category: Maintainability
-
----
-
-### no-large-template
-
-Warns when a template exceeds the line or HTML node threshold.
-
-Category: Maintainability
-
----
-
-### excessive-dom-depth
-
-Warns when template nesting exceeds the configured DOM depth.
-
-Category: Maintainability
-
----
-
-### excessive-v-for-nesting
-
-Warns when nested `v-for` loops exceed the configured threshold.
-
-Category: Maintainability
-
----
-
-### ai-monster-component
-
-Warns when a component appears excessively complex based on size and structure.
-
-Category: AI
-
----
-
-### excessive-reactive-state
-
-Warns when a component contains too much reactive state.
-
-Category: AI
-
----
-
-### excessive-component-responsibility
-
-Warns when a component appears to have multiple responsibilities.
-
-Category: AI
-
----
-
-### no-window-in-ssr
-
-Detects `window` usage in code that runs during SSR.
-
-Category: SSR
-
----
-
-### no-document-in-ssr
-
-Detects `document` usage in code that runs during SSR.
-
-Category: SSR
-
----
-
-### no-localstorage-in-ssr
-
-Detects `localStorage` usage in code that runs during SSR.
-
-Category: SSR
-
----
-
-### no-sessionstorage-in-ssr
-
-Detects `sessionStorage` usage in code that runs during SSR.
-
-Category: SSR
-
----
-
-## Rule Documentation
-
-List available rules:
-
-```bash
-vue-doctor rules
-```
-
-Example:
-
-```text
-Available rules:
-
-• no-console (Best Practices)
-• no-deep-watch (Performance)
-• no-large-component (Maintainability)
-• ai-monster-component (AI)
-• excessive-reactive-state (AI)
-• excessive-component-responsibility (AI)
-• no-window-in-ssr (SSR)
-• no-document-in-ssr (SSR)
-• no-localstorage-in-ssr (SSR)
-• no-sessionstorage-in-ssr (SSR)
-```
-
-Show rule details:
-
-```bash
-vue-doctor rule no-console
-```
-
-Example:
-
-```text
-Rule: no-console
-
-Category:
-Best Practices
-
-Default Severity:
-warning
-
-Description:
-Detect console usage in application code.
-```
-
----
-
-## Baseline
-
-Useful for large legacy projects.
-
-Generate baseline:
+Create baseline:
 
 ```bash
 vue-doctor baseline
 ```
 
-This creates:
+Run with baseline:
 
-```text
-.vue-doctor-baseline.json
+```bash
+vue-doctor check --baseline
 ```
 
-Known issues inside the baseline file will be ignored in future scans.
+This is useful for gradually improving large existing projects.
 
 ---
 
-## Cache
+## Cache Support
 
-Vue Doctor automatically caches analysis results.
+Vue Doctor caches file analysis results to speed up subsequent runs.
 
-Cache file:
+Generated automatically:
 
 ```text
 .vue-doctor-cache.json
 ```
 
-Delete cache manually if needed:
-
-```bash
-rm .vue-doctor-cache.json
-```
-
 ---
 
-## GitHub Actions
+## CI/CD Example
 
-Example workflow:
+GitHub Actions:
 
 ```yaml
 name: Vue Doctor
@@ -434,115 +191,23 @@ jobs:
         with:
           node-version: 22
 
-      - run: npm install
-
-      - run: npm run build
-
-      - run: node dist/index.js check --reporter github --changed
+      - run: npm ci
+      - run: npx @daohuy34/vue-doctor check
 ```
 
 ---
 
-## Custom Rules
+## Philosophy
 
-Example:
+ESLint answers:
 
-```ts
-import type { Rule } from './src/types/rule';
+> Is this code valid?
 
-const customRule: Rule = {
-    name: 'test-rule',
+Vue Doctor answers:
 
-    meta: {
-        severity: 'warning',
-        category: 'Custom',
-        description: 'Example custom rule',
-        recommended: false,
-    },
+> Is this code maintainable?
 
-    async check(ctx) {
-        return [
-            {
-                rule: 'test-rule',
-                severity: 'warning',
-                file: ctx.filePath,
-                line: 1,
-                column: 1,
-                message: 'plugin works',
-            },
-        ];
-    },
-};
-
-export default [customRule];
-```
-
-Register plugin:
-
-```ts
-import customRules from './custom-rules';
-
-export default {
-    plugins: [customRules],
-};
-```
-
----
-
-## Commands
-
-```bash
-vue-doctor check
-vue-doctor check --changed
-vue-doctor check --reporter json
-vue-doctor check --reporter github
-
-vue-doctor fix
-vue-doctor fix --changed
-
-vue-doctor baseline
-
-vue-doctor rules
-vue-doctor rule <name>
-```
-
-## Auto-fix
-
-Vue Doctor currently provides safe autofixes for supported rules.
-
-Available today:
-
-- `no-debugger`
-- `no-console` (direct console statements only)
-
-Run:
-
-```bash
-vue-doctor fix
-vue-doctor fix --changed
-```
-
----
-
-## Roadmap
-
-### Current
-
-- Rule Engine
-- Vue SFC Parser
-- Baseline
-- Cache
-- GitHub Reporter
-- Plugin API
-
-### Planned
-
-- Auto Fix
-- VS Code Extension
-- Nuxt-specific Rules
-- Pinia Rules
-- Composition API Best Practices
-- HTML Template Analysis
+Use both together.
 
 ---
 

@@ -19,6 +19,8 @@ cli.command('check', 'Run project analysis')
         default: 'stylish',
     })
 
+    .option('--fail-on <severity>', 'Minimum severity that should fail the command')
+
     .action(async (options) => {
         await checkCommand(options);
     });

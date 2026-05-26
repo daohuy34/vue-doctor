@@ -59,4 +59,16 @@ const msg = 'hello';
         const issues = await noConsoleRule.check(ctx);
         expect(issues).toHaveLength(0);
     });
+
+    it('maps console locations to full-file line numbers', async () => {
+        const ctx = createContext(`
+<script setup>
+console.log('hello');
+</script>
+`);
+        const issues = await noConsoleRule.check(ctx);
+
+        expect(issues).toHaveLength(1);
+        expect(issues[0].line).toBe(2);
+    });
 });

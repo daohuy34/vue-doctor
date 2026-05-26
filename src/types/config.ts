@@ -10,5 +10,7 @@ export interface VueDoctorConfig {
 
     plugins?: VueDoctorPlugin[];
 
+    failOn?: Severity;
+
     failOnWarning?: boolean;
 }

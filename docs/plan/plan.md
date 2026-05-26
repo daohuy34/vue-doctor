@@ -1,525 +1,270 @@
-# Vue Doctor Roadmap
+# Phase 4 - CI/CD First
 
-Current Status
+## Context
 
-Implemented Rules:
-
-- no-console
-- no-deep-watch
-- no-large-component
-- no-mutate-props
-- no-side-effect-in-computed
-- no-unused-component-data
-- no-v-html
-- no-v-if-with-v-for
-- require-key-in-v-for
-
-Target Platforms:
+Vue Doctor currently supports:
 
 - Vue 2
 - Vue 3
 - Nuxt 2
 - Nuxt 3
 
-Primary Goal:
+The project already contains 25+ rules.
 
-Become a static analysis tool focused on Vue-specific code quality, performance, maintainability and SSR issues.
+The next goal is NOT adding more rules.
 
----
-
-# Phase 1 - Universal Vue Rules
-
-Goal:
-
-Increase rule coverage from 9 rules to 20+ rules.
-
-All rules in this phase must support:
-
-- Vue 2
-- Vue 3
-- Nuxt 2
-- Nuxt 3
-
-Do NOT implement Composition API specific rules yet.
+The next goal is making Vue Doctor production-ready for CI/CD usage.
 
 ---
 
-## Milestone 1.1 - Debug & Safety
+# Milestone 4.1 - Severity System
 
-### Rule: no-debugger
+## Objective
 
-Detect:
+Every rule must have severity metadata.
 
-```js
-debugger;
-```
-
-Report:
-
-```txt
-Unexpected debugger statement.
-```
-
-Severity:
-
-```txt
-warning
-```
-
-Files:
-
-- JS
-- TS
-- Vue SFC
-
-Tests:
-
-- debugger exists
-- no debugger
-
----
-
-### Rule: no-empty-catch
-
-Detect:
-
-```js
-try {
-} catch (e) {
-}
-```
-
-Report:
-
-```txt
-Empty catch block detected.
-```
-
-Severity:
-
-```txt
-warning
-```
-
-Tests:
-
-- empty catch
-- catch with code
-
----
-
-Definition of Done:
-
-- Rule implemented
-- Unit tests added
-- Documentation added
-- README updated
-
----
-
-## Milestone 1.2 - Component Complexity
-
-### Rule: excessive-props
-
-Detect:
-
-Options API:
-
-```js
-props: {
-  a: String,
-  b: String,
-  ...
-}
-```
-
-Composition API:
+Supported severities:
 
 ```ts
-defineProps({
-  ...
-})
+type Severity =
+  | 'info'
+  | 'warning'
+  | 'error'
+  | 'critical'
 ```
 
-Threshold:
+---
 
-```txt
-> 15 props
+## Tasks
+
+### Task 1
+
+Update Rule interface.
+
+Current:
+
+```ts
+interface Rule {
+  name: string
+  check(): Finding[]
+}
 ```
 
-Report:
+Target:
 
-```txt
-Component has too many props.
-```
-
-Severity:
-
-```txt
-warning
-```
-
-Config:
-
-```json
-{
-  "maxProps": 15
+```ts
+interface Rule {
+  name: string
+  severity: Severity
+  category: RuleCategory
+  check(): Finding[]
 }
 ```
 
 ---
 
-### Rule: excessive-watchers
+### Task 2
 
-Detect:
+Add severity to all built-in rules.
 
-Vue 2:
-
-```js
-watch: {
-}
-```
-
-Vue 3:
+Examples:
 
 ```ts
-watch(...)
-watchEffect(...)
-```
+noVHtmlRule
+=> critical
 
-Threshold:
+noWindowInSsrRule
+=> error
 
-```txt
-> 10 watchers
-```
+noDocumentInSsrRule
+=> error
 
-Report:
+noLocalStorageInSsrRule
+=> error
 
-```txt
-Component contains excessive watchers.
-```
+noSessionStorageInSsrRule
+=> error
 
-Severity:
+requireKeyInVForRule
+=> error
 
-```txt
-warning
-```
+noMutatePropsRule
+=> error
 
-Config:
+noConsoleRule
+=> warning
 
-```json
-{
-  "maxWatchers": 10
-}
-```
+excessiveWatchersRule
+=> warning
 
----
-
-### Rule: excessive-computed-properties
-
-Threshold:
-
-```txt
-> 20 computed properties
-```
-
-Severity:
-
-```txt
-info
+excessiveComputedPropertiesRule
+=> info
 ```
 
 ---
 
-Definition of Done:
+### Task 3
 
-- All thresholds configurable
-- Tests for threshold exceeded
-- Tests for threshold not exceeded
+Update reporters.
 
----
-
-## Milestone 1.3 - Template Quality
-
-### Rule: no-large-template
-
-Count:
-
-- template lines
-- html nodes
-
-Default thresholds:
+Output example:
 
 ```txt
-500 template lines
-or
-300 html nodes
-```
-
-Report:
-
-```txt
-Template is too large.
+[critical] no-v-html
+[warning] excessive-watchers
 ```
 
 ---
 
-### Rule: excessive-dom-depth
+## Done Criteria
 
-Detect:
-
-```html
-<div>
-  <div>
-    <div>
-      <div>
-        <div>
-```
-
-Threshold:
-
-```txt
-depth > 6
-```
-
-Report:
-
-```txt
-Template nesting is too deep.
-```
+- All rules have severity
+- Reporters display severity
+- Tests pass
 
 ---
 
-### Rule: excessive-v-for-nesting
+# Milestone 4.2 - Rule Categories
 
-Detect:
+## Objective
 
-```html
-v-for
-  v-for
-    v-for
-```
-
-Threshold:
-
-```txt
-3 nested loops
-```
-
-Report:
-
-```txt
-Nested v-for detected.
-```
+Group findings by category.
 
 ---
 
-Definition of Done:
-
-- Template parser reused
-- All rules tested
-- Performance impact measured
-
----
-
-# Phase 2 - Nuxt & SSR Rules
-
-Goal:
-
-Become the best Vue/Nuxt SSR analyzer.
-
----
-
-## Milestone 2.1 - Browser API in SSR
-
-### Rule: no-window-in-ssr
-
-Detect:
+## Categories
 
 ```ts
-window.location.href
-```
-
-Outside:
-
-- onMounted
-- client-only guards
-
-Report:
-
-```txt
-window is not available during SSR.
-```
-
-Severity:
-
-```txt
-error
+type RuleCategory =
+  | 'security'
+  | 'ssr'
+  | 'performance'
+  | 'maintainability'
+  | 'best-practice'
+  | 'ai'
 ```
 
 ---
 
-### Rule: no-document-in-ssr
+## Tasks
 
-Detect:
+Add category to every rule.
 
-```ts
-document.querySelector()
-```
-
-Severity:
+Examples:
 
 ```txt
-error
+security
+ └─ no-v-html
+
+ssr
+ ├─ no-window-in-ssr
+ ├─ no-document-in-ssr
+ ├─ no-localstorage-in-ssr
+ └─ no-sessionstorage-in-ssr
+
+performance
+ ├─ excessive-watchers
+ ├─ excessive-dom-depth
+ └─ excessive-v-for-nesting
+
+ai
+ ├─ ai-monster-component
+ ├─ excessive-reactive-state
+ └─ excessive-component-responsibility
 ```
 
 ---
 
-### Rule: no-localstorage-in-ssr
+## Done Criteria
 
-Detect:
-
-```ts
-localStorage.getItem()
-```
-
-Severity:
+CLI output example:
 
 ```txt
-error
+[security][critical] no-v-html
+
+Avoid using v-html.
 ```
 
 ---
 
-### Rule: no-sessionstorage-in-ssr
+# Milestone 4.3 - Exit Codes
 
-Detect:
+## Objective
 
-```ts
-sessionStorage.getItem()
-```
+Allow CI pipelines to fail.
 
-Severity:
+---
+
+## Tasks
+
+Implement exit codes.
 
 ```txt
-error
+0 = success
+
+1 = findings found
+
+2 = runtime error
 ```
 
 ---
 
-Definition of Done:
+## Examples
 
-- Nuxt 2 samples
-- Nuxt 3 samples
-- SSR-safe false positives minimized
+Clean project:
 
----
+```bash
+vue-doctor check
+```
 
-# Phase 3 - AI Generated Code Detection
-
-Goal:
-
-Create rules that ESLint does not provide.
-
-This is Vue Doctor's unique selling point.
-
----
-
-## Milestone 3.1 - Monster Component Detection
-
-### Rule: ai-monster-component
-
-Calculate score using:
-
-- LOC
-- Props
-- Watchers
-- Computed
-- Methods
-- Refs
-
-Example:
+Exit:
 
 ```txt
-LOC: 1200
-Props: 18
-Watchers: 14
-Computed: 22
-```
-
-Report:
-
-```txt
-Component appears excessively complex.
-```
-
-Severity:
-
-```txt
-warning
+0
 ```
 
 ---
 
-### Rule: excessive-reactive-state
-
-Detect:
-
-```ts
-ref()
-reactive()
-```
-
-Threshold:
+Project with findings:
 
 ```txt
-> 25 reactive variables
+1
 ```
 
-Report:
+---
+
+Parser crash:
 
 ```txt
-Too much reactive state in a single component.
+2
 ```
 
 ---
 
-### Rule: excessive-component-responsibility
+## Done Criteria
 
-Score based on:
+Automated tests added.
 
-- props
-- methods
-- watchers
-- template size
+---
 
-Report:
+# Milestone 4.4 - Fail-On Severity
 
-```txt
-Component may have multiple responsibilities.
+## Objective
+
+Allow CI to fail only above a given threshold.
+
+---
+
+## New CLI Option
+
+```bash
+vue-doctor check \
+  --fail-on warning
 ```
 
 ---
 
-Definition of Done:
-
-- Scoring system documented
-- Threshold configurable
-- False positive examples covered
-
----
-
-# Phase 4 - Engine Improvements
-
-Goal:
-
-Improve ecosystem and adoption.
-
----
-
-## Milestone 4.1 - Severity System
-
-Add:
+## Supported Values
 
 ```txt
 info
@@ -528,97 +273,238 @@ error
 critical
 ```
 
-All rules must declare severity.
+---
 
-Example:
+## Examples
+
+```bash
+vue-doctor check \
+  --fail-on error
+```
+
+Only:
 
 ```txt
-no-console -> warning
-require-key-in-v-for -> error
-no-v-html -> critical
+error
+critical
 ```
+
+trigger failure.
 
 ---
 
-## Milestone 4.2 - Rule Categories
+## Done Criteria
 
-Add categories:
-
-```txt
-security
-performance
-maintainability
-ssr
-best-practice
-ai
-```
-
-Output example:
-
-```txt
-[security] no-v-html
-[performance] excessive-watchers
-```
+Integration tests added.
 
 ---
 
-## Milestone 4.3 - JSON Reporter V2
+# Milestone 4.5 - JSON Reporter V2
 
-Output:
+## Objective
+
+Produce stable machine-readable output.
+
+---
+
+## New Schema
 
 ```json
 {
-  "file": "",
-  "rule": "",
-  "severity": "",
-  "category": "",
-  "message": "",
-  "line": 0
+  "summary": {
+    "files": 15,
+    "findings": 6
+  },
+  "findings": [
+    {
+      "rule": "no-v-html",
+      "severity": "critical",
+      "category": "security",
+      "file": "src/App.vue",
+      "line": 22,
+      "message": "Avoid using v-html."
+    }
+  ]
 }
 ```
 
 ---
 
-# Phase 5 - Ecosystem
+## Tasks
 
-## VSCode Extension
-
-Features:
-
-- run on save
-- diagnostics
-- quick navigation
+- Create schema
+- Update reporter
+- Add tests
 
 ---
 
-## GitHub Action
+## Done Criteria
 
-Command:
+Schema documented.
+
+---
+
+# Milestone 4.6 - Changed Files Mode
+
+## Objective
+
+Support Pull Request analysis.
+
+---
+
+## New Option
 
 ```bash
-vue-doctor check
+vue-doctor check \
+  --changed
 ```
-
-Support:
-
-- PR comments
-- annotations
 
 ---
 
-## Autofix API
+## Behaviour
 
-Introduce:
+Read:
 
-```ts
-fix()
+```bash
+git diff
 ```
 
-inside rule interface.
+Analyze only changed files.
 
-Only safe fixes allowed.
+---
 
-Examples:
+## Tasks
 
-- remove debugger
-- remove console.log
+- detect changed files
+- fallback when git unavailable
+- tests
+
+---
+
+## Done Criteria
+
+Only modified files are analyzed.
+
+---
+
+# Milestone 4.7 - GitHub Annotation Reporter
+
+## Objective
+
+Show findings directly in GitHub Actions.
+
+---
+
+## New Reporter
+
+```bash
+vue-doctor check \
+  --reporter github
+```
+
+---
+
+## Output
+
+```txt
+::warning file=src/App.vue,line=20::
+Avoid deep watch usage.
+```
+
+---
+
+## Tasks
+
+Implement GitHub workflow commands.
+
+Reference:
+
+warning
+
+```txt
+::warning
+```
+
+error
+
+```txt
+::error
+```
+
+---
+
+## Done Criteria
+
+Findings appear inline in GitHub Actions.
+
+---
+
+# Milestone 4.8 - Official GitHub Action
+
+## Objective
+
+Publish first-party GitHub Action.
+
+---
+
+## New Repository
+
+vue-doctor-action
+
+---
+
+## Usage
+
+```yaml
+- uses: daohuy/vue-doctor-action@v1
+```
+
+---
+
+## Inputs
+
+```yaml
+with:
+  path: src
+  fail-on: error
+  reporter: github
+```
+
+---
+
+## Internal Behaviour
+
+Execute:
+
+```bash
+npx vue-doctor check
+```
+
+with provided options.
+
+---
+
+## Done Criteria
+
+Action published.
+
+Action tested.
+
+README includes usage examples.
+
+---
+
+# Definition of Done
+
+Phase 4 is complete when:
+
+- Severity system exists
+- Categories exist
+- Exit codes exist
+- Fail-on severity exists
+- JSON reporter stable
+- Changed files mode exists
+- GitHub annotation reporter exists
+- Official GitHub Action published
+
+No new rules should be added during Phase 4.

@@ -1,5 +1,13 @@
 import type { Issue } from '../types/issue';
 
+function normalizeColumn(column?: number) {
+    if (column === undefined) {
+        return 1;
+    }
+
+    return column === 0 ? 1 : column;
+}
+
 export function stylishReporter(issues: Issue[]) {
     if (!issues.length) {
         console.log('✔ No issues found');
@@ -44,9 +52,9 @@ export function stylishReporter(issues: Issue[]) {
 
             for (const item of items) {
                 const line = item.line ?? 1;
-                const column = item.column ?? 1;
+                const column = normalizeColumn(item.column);
 
-                console.log(`     ${item.message}:${line}:${column}`);
+                console.log(`     ${line}:${column} ${item.message}`);
             }
         }
     }

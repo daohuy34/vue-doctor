@@ -1,4 +1,5 @@
 import type { Rule } from '../../types/rule';
+import { findFirstMatchLocation } from '../../utils/location';
 
 function hasWindowUsage(source: string): boolean {
     return /\bwindow\b/.test(source);
@@ -15,7 +16,9 @@ export const noWindowInSsrRule: Rule = {
     },
 
     async check(context) {
-        if (!hasWindowUsage(context.source)) {
+        const location = findFirstMatchLocation(context.source, /\bwindow\b/);
+
+        if (!location) {
             return [];
         }
 
@@ -24,6 +27,8 @@ export const noWindowInSsrRule: Rule = {
                 rule: 'no-window-in-ssr',
                 severity: 'error',
                 file: context.filePath,
+                line: location.line,
+                column: location.column,
                 message: 'Detected SSR unsafe API usage: window.',
                 suggestion:
                     'Wrap browser-only APIs inside onMounted() or process.client checks.',

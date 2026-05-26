@@ -15,7 +15,7 @@ export async function fixCommand(options: {
     const config = await loadConfig();
 
     const targetFiles = options.changed
-        ? getChangedFiles()
+        ? getChangedFiles() ?? (await scanProject())
         : await scanProject();
 
     if (!targetFiles.length) {

@@ -1,4 +1,5 @@
 import type { Rule } from '../../types/rule';
+import { findFirstMatchLocation } from '../../utils/location';
 
 function hasSessionStorageUsage(source: string): boolean {
     return /\bsessionStorage\b/.test(source);
@@ -15,7 +16,12 @@ export const noSessionStorageInSsrRule: Rule = {
     },
 
     async check(context) {
-        if (!hasSessionStorageUsage(context.source)) {
+        const location = findFirstMatchLocation(
+            context.source,
+            /\bsessionStorage\b/,
+        );
+
+        if (!location) {
             return [];
         }
 
@@ -24,6 +30,8 @@ export const noSessionStorageInSsrRule: Rule = {
                 rule: 'no-sessionstorage-in-ssr',
                 severity: 'error',
                 file: context.filePath,
+                line: location.line,
+                column: location.column,
                 message: 'Detected SSR unsafe API usage: sessionStorage.',
                 suggestion:
                     'Wrap browser-only APIs inside onMounted() or process.client checks.',

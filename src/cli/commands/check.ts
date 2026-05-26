@@ -2,19 +2,16 @@ import ora from 'ora';
 
 import { loadConfig } from '../../core/config';
 
-import { scanProject } from '../../core/scanner';
 import { runEngine } from '../../core/engine';
 import { reporters } from '../../reporters';
+import { getFailureExitCode, resolveFailOn } from '../check-utils';
 
 import { getChangedFiles } from '../../utils/git';
 
 export async function checkCommand(options: {
-    changed: any;
-    reporter: 'stylish' | 'json' | 'github';
-    options: {
-        reporter?: string;
-        changed?: boolean;
-    };
+    changed?: boolean;
+    reporter?: 'stylish' | 'json' | 'github';
+    failOn?: 'info' | 'warning' | 'error' | 'critical';
 }) {
     const config = await loadConfig();
 
@@ -23,13 +20,19 @@ export async function checkCommand(options: {
     let targetFiles: string[] | undefined;
 
     if (options.changed) {
-        targetFiles = getChangedFiles();
-    }
+        const changedFiles = getChangedFiles();
 
-    if (options.changed && (!targetFiles || !targetFiles.length)) {
-        console.log('✔ No changed files found');
+        if (changedFiles === null) {
+            console.log('⚠ Git information unavailable; scanning the full project');
+        } else {
+            targetFiles = changedFiles;
 
-        process.exit(0);
+            if (!targetFiles.length) {
+                console.log('✔ No changed files found');
+
+                process.exit(0);
+            }
+        }
     }
 
     try {
@@ -54,21 +57,10 @@ export async function checkCommand(options: {
 
         console.log(`Time: ${metrics.duration}s`);
 
-        const hasWarnings = issues.some(
-            (issue) => issue.severity === 'warning',
-        );
+        const failOn = resolveFailOn(config, options.failOn);
+        const exitCode = getFailureExitCode(issues, failOn);
 
-        const hasErrors = issues.some((issue) => issue.severity === 'error');
-
-        if (hasErrors) {
-            process.exit(2);
-        }
-
-        if (config.failOnWarning !== false && hasWarnings) {
-            process.exit(1);
-        }
-
-        process.exit(0);
+        process.exit(exitCode);
     } catch (error) {
         spinner.fail('vue-doctor failed');
 

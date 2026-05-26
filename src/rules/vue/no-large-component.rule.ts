@@ -26,6 +26,8 @@ export const noLargeComponentRule: Rule = {
                 severity: 'warning',
 
                 file: context.filePath,
+                line: 1,
+                column: 1,
 
                 message: `Component exceeds recommended size (${lines} LOC)`,
 
