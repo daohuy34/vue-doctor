@@ -1,38 +1,33 @@
 {
   "src/playground/Test.vue": {
-    "hash": "7373cbaa4aad231c78979a36f9d67973",
+    "hash": "600fd59735f294956a4059114953107c",
     "issues": [
       {
-        "rule": "no-large-component",
-        "severity": "warning",
-        "file": "src/playground/Test.vue",
-        "message": "Component exceeds recommended size (504 LOC)",
-        "suggestion": "Consider splitting UI, composables, or business logic into smaller modules.",
-        "fingerprint": "28ae01dde06f20c0225768b383c9e1c2"
-      },
-      {
         "rule": "no-window-in-ssr",
         "severity": "error",
         "file": "src/playground/Test.vue",
-        "message": "Detected SSR unsafe API usage: window",
+        "message": "Detected SSR unsafe API usage: window.",
         "suggestion": "Wrap browser-only APIs inside onMounted() or process.client checks.",
-        "fingerprint": "19641506fc7261b7bd66882c1ffec33a"
+        "category": "ssr",
+        "fingerprint": "2c8221c61b16180a0362ad8b008dc920"
       },
       {
-        "rule": "no-window-in-ssr",
+        "rule": "no-document-in-ssr",
         "severity": "error",
         "file": "src/playground/Test.vue",
-        "message": "Detected SSR unsafe API usage: document",
+        "message": "Detected SSR unsafe API usage: document.",
         "suggestion": "Wrap browser-only APIs inside onMounted() or process.client checks.",
-        "fingerprint": "82e20b1a8af2483e24b38662d8d2f689"
+        "category": "ssr",
+        "fingerprint": "049b31234178d5e89cd0f5e705b3cc94"
       },
       {
-        "rule": "no-window-in-ssr",
+        "rule": "no-localstorage-in-ssr",
         "severity": "error",
         "file": "src/playground/Test.vue",
-        "message": "Detected SSR unsafe API usage: localStorage",
+        "message": "Detected SSR unsafe API usage: localStorage.",
         "suggestion": "Wrap browser-only APIs inside onMounted() or process.client checks.",
-        "fingerprint": "2902162e2d3c24867f8a8e54cf8ee9f3"
+        "category": "ssr",
+        "fingerprint": "71c70c643f249be82dba614b61168c0d"
       },
       {
         "rule": "no-deep-watch",
@@ -42,6 +37,7 @@
         "column": 4,
         "message": "Deep watch detected.",
         "suggestion": "Avoid deep watch on \"todos\". Watch a specific nested path instead: watch: { 'todos.yourProp': handler }",
+        "category": "performance",
         "fingerprint": "6178756aa7682c2b61026734730c817f"
       },
       {
@@ -52,6 +48,7 @@
         "column": 8,
         "message": "console usage detected.",
         "suggestion": "Remove console logs before production.",
+        "category": "best-practice",
         "fingerprint": "18f4e75beac95d1a86627bef45d1ac21"
       },
       {
@@ -62,6 +59,7 @@
         "column": 6,
         "message": "console usage detected.",
         "suggestion": "Remove console logs before production.",
+        "category": "best-practice",
         "fingerprint": "71fd6177e601d834a095769fb61cdba7"
       },
       {
@@ -72,6 +70,7 @@
         "column": 6,
         "message": "console usage detected.",
         "suggestion": "Remove console logs before production.",
+        "category": "best-practice",
         "fingerprint": "109362a95a97bf2c3d025a57f48d9dbd"
       },
       {
@@ -82,6 +81,7 @@
         "column": 8,
         "message": "console usage detected.",
         "suggestion": "Remove console logs before production.",
+        "category": "best-practice",
         "fingerprint": "af0240d104a7578c60989c2ec1f10bb9"
       },
       {
@@ -92,6 +92,7 @@
         "column": 4,
         "message": "console usage detected.",
         "suggestion": "Remove console logs before production.",
+        "category": "best-practice",
         "fingerprint": "b68128f7f70ae53486f388c7edb83574"
       },
       {
@@ -102,6 +103,7 @@
         "column": 4,
         "message": "console usage detected.",
         "suggestion": "Remove console logs before production.",
+        "category": "best-practice",
         "fingerprint": "dc4edc2d73328c0b679e284ee3096339"
       },
       {
@@ -112,6 +114,7 @@
         "column": 8,
         "message": "console usage detected.",
         "suggestion": "Remove console logs before production.",
+        "category": "best-practice",
         "fingerprint": "3787657bcc96b11f0bbdbc4e033573e3"
       },
       {
@@ -122,6 +125,7 @@
         "column": 4,
         "message": "console usage detected.",
         "suggestion": "Remove console logs before production.",
+        "category": "best-practice",
         "fingerprint": "9daffb14537da3bb35810c1395c8c5a9"
       },
       {
@@ -132,6 +136,7 @@
         "column": 4,
         "message": "console usage detected.",
         "suggestion": "Remove console logs before production.",
+        "category": "best-practice",
         "fingerprint": "2d5b445b1f9c768a6735a038388efa84"
       },
       {
@@ -142,6 +147,7 @@
         "column": 4,
         "message": "console usage detected.",
         "suggestion": "Remove console logs before production.",
+        "category": "best-practice",
         "fingerprint": "0d364793eb6299eb4df633aa91bb0b36"
       },
       {
@@ -152,6 +158,7 @@
         "column": 4,
         "message": "console usage detected.",
         "suggestion": "Remove console logs before production.",
+        "category": "best-practice",
         "fingerprint": "c825cf4cd1069774c0743e882fc4593e"
       },
       {
@@ -162,6 +169,7 @@
         "column": 4,
         "message": "console usage detected.",
         "suggestion": "Remove console logs before production.",
+        "category": "best-practice",
         "fingerprint": "cdfcaad2f8ecfe5bd2f6ec39afd60dfa"
       },
       {
@@ -172,6 +180,7 @@
         "column": 4,
         "message": "console usage detected.",
         "suggestion": "Remove console logs before production.",
+        "category": "best-practice",
         "fingerprint": "de4b4d4d0662e64a3db30a429b08294c"
       },
       {
@@ -182,6 +191,7 @@
         "column": 6,
         "message": "console usage detected.",
         "suggestion": "Remove console logs before production.",
+        "category": "best-practice",
         "fingerprint": "c7ab6cd7a590ddf1307472faaf326564"
       },
       {
@@ -192,6 +202,7 @@
         "column": 8,
         "message": "console usage detected.",
         "suggestion": "Remove console logs before production.",
+        "category": "best-practice",
         "fingerprint": "4dd3ed1f2ec2ccf4c2ae752d20a63dc3"
       },
       {
@@ -202,12 +213,51 @@
         "column": 6,
         "message": "console usage detected.",
         "suggestion": "Remove console logs before production.",
+        "category": "best-practice",
         "fingerprint": "6ad3a460c50d7d0fcc5f6d3250759df4"
+      },
+      {
+        "rule": "no-side-effect-in-computed",
+        "severity": "error",
+        "file": "src/playground/Test.vue",
+        "line": 88,
+        "column": 19,
+        "message": "Computed property \"highestPriorityTodo\" has a side effect: array mutation via `?.todos.sort`.",
+        "suggestion": "Do not call `?.todos.sort` inside computed \"highestPriorityTodo\". Use a non-mutating alternative: spread [...arr], map(), filter(), or slice().",
+        "category": "best-practice",
+        "fingerprint": "d23a9bd2445debeb3b85ed49bbecd499"
+      },
+      {
+        "rule": "excessive-dom-depth",
+        "severity": "warning",
+        "file": "src/playground/Test.vue",
+        "message": "Template nesting is too deep.",
+        "suggestion": "Extract deeply nested markup into child components or simplify the structure.",
+        "category": "maintainability",
+        "fingerprint": "91a6e3d0981ac67cef4e2dde6a3b7155"
+      },
+      {
+        "rule": "ai-monster-component",
+        "severity": "warning",
+        "file": "src/playground/Test.vue",
+        "message": "Component appears excessively complex (score 575 > 12).",
+        "suggestion": "Split this component into smaller pieces and extract reusable logic into composables or child components.",
+        "category": "ai",
+        "fingerprint": "3258e1ba047429e33920894a633b9238"
+      },
+      {
+        "rule": "excessive-component-responsibility",
+        "severity": "warning",
+        "file": "src/playground/Test.vue",
+        "message": "Component may have multiple responsibilities (score 20 > 12).",
+        "suggestion": "Split the component into smaller responsibilities and move shared behavior into composables or child components.",
+        "category": "ai",
+        "fingerprint": "af5a8db5419db6a767d11eb374aeec15"
       }
     ]
   },
   "src/playground/Test_2.vue": {
-    "hash": "99740639c2ffbfdc3f4196c4d5ff9776",
+    "hash": "7d5df1523cbdda1eae8100bee7940788",
     "issues": [
       {
         "rule": "no-large-component",
@@ -215,31 +265,35 @@
         "file": "src/playground/Test_2.vue",
         "message": "Component exceeds recommended size (654 LOC)",
         "suggestion": "Consider splitting UI, composables, or business logic into smaller modules.",
+        "category": "maintainability",
         "fingerprint": "835c35fadfa819d4a40c2189bcbbeace"
       },
       {
         "rule": "no-window-in-ssr",
         "severity": "error",
         "file": "src/playground/Test_2.vue",
-        "message": "Detected SSR unsafe API usage: window",
+        "message": "Detected SSR unsafe API usage: window.",
         "suggestion": "Wrap browser-only APIs inside onMounted() or process.client checks.",
-        "fingerprint": "d307eeb03c4d36f54d5521ddc95f4a0c"
+        "category": "ssr",
+        "fingerprint": "f97e9aba66d76be016ddb2bd2658f087"
       },
       {
-        "rule": "no-window-in-ssr",
+        "rule": "no-document-in-ssr",
         "severity": "error",
         "file": "src/playground/Test_2.vue",
-        "message": "Detected SSR unsafe API usage: document",
+        "message": "Detected SSR unsafe API usage: document.",
         "suggestion": "Wrap browser-only APIs inside onMounted() or process.client checks.",
-        "fingerprint": "47632716424f73c65c37430a02c6e94f"
+        "category": "ssr",
+        "fingerprint": "58b117c4f158934ddb74ddbbbf5a5724"
       },
       {
-        "rule": "no-window-in-ssr",
+        "rule": "no-localstorage-in-ssr",
         "severity": "error",
         "file": "src/playground/Test_2.vue",
-        "message": "Detected SSR unsafe API usage: localStorage",
+        "message": "Detected SSR unsafe API usage: localStorage.",
         "suggestion": "Wrap browser-only APIs inside onMounted() or process.client checks.",
-        "fingerprint": "72659056ba84333c73b9f89a42585300"
+        "category": "ssr",
+        "fingerprint": "26446a17b22208aa1bc233ac5fb3a84c"
       },
       {
         "rule": "no-console",
@@ -249,6 +303,7 @@
         "column": 0,
         "message": "console usage detected.",
         "suggestion": "Remove console logs before production.",
+        "category": "best-practice",
         "fingerprint": "59e7ec63f03c65197c6a08dc04ecd59a"
       },
       {
@@ -259,6 +314,7 @@
         "column": 0,
         "message": "Prop \"modelValue\" is mutated directly.",
         "suggestion": "Props are read-only. Emit an event to let the parent update \"modelValue\": this.$emit('update:modelValue', newValue) or use a writable computed with get/set.",
+        "category": "best-practice",
         "fingerprint": "d40c792eb08c7481fc80182fea9ae687"
       },
       {
@@ -269,6 +325,7 @@
         "column": 0,
         "message": "Prop \"config\" is mutated directly.",
         "suggestion": "Props are read-only. Emit an event to let the parent update \"config\": this.$emit('update:config', newValue) or use a writable computed with get/set.",
+        "category": "best-practice",
         "fingerprint": "a7381d0e9ec0e4d0788c1d1562dac5a9"
       },
       {
@@ -279,6 +336,7 @@
         "column": 0,
         "message": "Prop \"items\" is mutated directly.",
         "suggestion": "Props are read-only. Emit an event to let the parent update \"items\": this.$emit('update:items', newValue) or use a writable computed with get/set.",
+        "category": "best-practice",
         "fingerprint": "b104f7290e3a855aa3cb3e5804a27c20"
       },
       {
@@ -289,6 +347,7 @@
         "column": 0,
         "message": "Prop \"items\" is mutated directly.",
         "suggestion": "Props are read-only. Emit an event to let the parent update \"items\": this.$emit('update:items', newValue) or use a writable computed with get/set.",
+        "category": "best-practice",
         "fingerprint": "49f682bc3e704d50cec107a0e9973840"
       },
       {
@@ -299,6 +358,7 @@
         "column": 0,
         "message": "Prop \"items\" is mutated directly.",
         "suggestion": "Props are read-only. Emit an event to let the parent update \"items\": this.$emit('update:items', newValue) or use a writable computed with get/set.",
+        "category": "best-practice",
         "fingerprint": "d55777bf58408859f079cd054d5afd57"
       },
       {
@@ -309,6 +369,7 @@
         "column": 0,
         "message": "Prop \"items\" is mutated directly.",
         "suggestion": "Props are read-only. Emit an event to let the parent update \"items\": this.$emit('update:items', newValue) or use a writable computed with get/set.",
+        "category": "best-practice",
         "fingerprint": "bb5985128ef4320d4f2f739fe26d4952"
       },
       {
@@ -319,6 +380,7 @@
         "column": 0,
         "message": "Prop \"items\" is mutated directly.",
         "suggestion": "Props are read-only. Emit an event to let the parent update \"items\": this.$emit('update:items', newValue) or use a writable computed with get/set.",
+        "category": "best-practice",
         "fingerprint": "c9548986e73d447a71d47604956efdb9"
       },
       {
@@ -329,7 +391,26 @@
         "column": 0,
         "message": "Prop \"items\" is mutated directly.",
         "suggestion": "Props are read-only. Emit an event to let the parent update \"items\": this.$emit('update:items', newValue) or use a writable computed with get/set.",
+        "category": "best-practice",
         "fingerprint": "442bb673e15a474e4c3f86c1d9411a4d"
+      },
+      {
+        "rule": "excessive-dom-depth",
+        "severity": "warning",
+        "file": "src/playground/Test_2.vue",
+        "message": "Template nesting is too deep.",
+        "suggestion": "Extract deeply nested markup into child components or simplify the structure.",
+        "category": "maintainability",
+        "fingerprint": "c14fe8f7501694366ba831a38a1afcb2"
+      },
+      {
+        "rule": "ai-monster-component",
+        "severity": "warning",
+        "file": "src/playground/Test_2.vue",
+        "message": "Component appears excessively complex (score 706 > 12).",
+        "suggestion": "Split this component into smaller pieces and extract reusable logic into composables or child components.",
+        "category": "ai",
+        "fingerprint": "dae15be6607d95747951ba8ddb96fed4"
       }
     ]
   }

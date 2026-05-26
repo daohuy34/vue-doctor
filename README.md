@@ -56,6 +56,12 @@ Analyze a specific directory:
 vue-doctor check src
 ```
 
+Inspect project dependencies:
+
+```bash
+vue-doctor graph
+```
+
 Create a baseline:
 
 ```bash

@@ -6,6 +6,7 @@ import { checkCommand } from './commands/check';
 import { fixCommand } from './commands/fix';
 
 import { baselineCommand } from './commands/baseline';
+import { graphCommand } from './commands/graph';
 import { rulesCommand } from './commands/rules';
 import { ruleCommand } from './commands/rule';
 
@@ -33,6 +34,10 @@ cli.command('fix', 'Apply safe autofixes for supported rules')
 
 cli.command('baseline', 'Generate baseline file').action(async () => {
     await baselineCommand();
+});
+
+cli.command('graph', 'Inspect project dependency graph').action(async () => {
+    await graphCommand();
 });
 
 cli.command('rules', 'List available rules').action(async () => {

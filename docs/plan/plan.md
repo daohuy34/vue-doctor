@@ -1,328 +1,242 @@
-# Phase 4 - CI/CD First
+# Vue Doctor Roadmap
 
-## Context
+## Vision
 
-Vue Doctor currently supports:
-
-- Vue 2
-- Vue 3
-- Nuxt 2
-- Nuxt 3
-
-The project already contains 25+ rules.
-
-The next goal is NOT adding more rules.
-
-The next goal is making Vue Doctor production-ready for CI/CD usage.
-
----
-
-# Milestone 4.1 - Severity System
-
-## Objective
-
-Every rule must have severity metadata.
-
-Supported severities:
-
-```ts
-type Severity =
-  | 'info'
-  | 'warning'
-  | 'error'
-  | 'critical'
-```
-
----
-
-## Tasks
-
-### Task 1
-
-Update Rule interface.
-
-Current:
-
-```ts
-interface Rule {
-  name: string
-  check(): Finding[]
-}
-```
+Become the standard architecture analyzer for Vue & Nuxt applications.
 
 Target:
 
-```ts
-interface Rule {
-  name: string
-  severity: Severity
-  category: RuleCategory
-  check(): Finding[]
-}
-```
+- Individual developers
+- Startup teams
+- Enterprise Vue projects
 
 ---
 
-### Task 2
+# v1.3 - Project Graph Engine
 
-Add severity to all built-in rules.
+Goal:
 
-Examples:
+Understand relationships between files instead of analyzing files independently.
 
-```ts
-noVHtmlRule
-=> critical
+## Features
 
-noWindowInSsrRule
-=> error
+- Project dependency graph
+- Component graph
+- Composable graph
+- Store graph
 
-noDocumentInSsrRule
-=> error
-
-noLocalStorageInSsrRule
-=> error
-
-noSessionStorageInSsrRule
-=> error
-
-requireKeyInVForRule
-=> error
-
-noMutatePropsRule
-=> error
-
-noConsoleRule
-=> warning
-
-excessiveWatchersRule
-=> warning
-
-excessiveComputedPropertiesRule
-=> info
-```
-
----
-
-### Task 3
-
-Update reporters.
-
-Output example:
-
-```txt
-[critical] no-v-html
-[warning] excessive-watchers
-```
-
----
-
-## Done Criteria
-
-- All rules have severity
-- Reporters display severity
-- Tests pass
-
----
-
-# Milestone 4.2 - Rule Categories
-
-## Objective
-
-Group findings by category.
-
----
-
-## Categories
-
-```ts
-type RuleCategory =
-  | 'security'
-  | 'ssr'
-  | 'performance'
-  | 'maintainability'
-  | 'best-practice'
-  | 'ai'
-```
-
----
-
-## Tasks
-
-Add category to every rule.
-
-Examples:
-
-```txt
-security
- └─ no-v-html
-
-ssr
- ├─ no-window-in-ssr
- ├─ no-document-in-ssr
- ├─ no-localstorage-in-ssr
- └─ no-sessionstorage-in-ssr
-
-performance
- ├─ excessive-watchers
- ├─ excessive-dom-depth
- └─ excessive-v-for-nesting
-
-ai
- ├─ ai-monster-component
- ├─ excessive-reactive-state
- └─ excessive-component-responsibility
-```
-
----
-
-## Done Criteria
-
-CLI output example:
-
-```txt
-[security][critical] no-v-html
-
-Avoid using v-html.
-```
-
----
-
-# Milestone 4.3 - Exit Codes
-
-## Objective
-
-Allow CI pipelines to fail.
-
----
-
-## Tasks
-
-Implement exit codes.
-
-```txt
-0 = success
-
-1 = findings found
-
-2 = runtime error
-```
-
----
-
-## Examples
-
-Clean project:
+## New Commands
 
 ```bash
-vue-doctor check
+vue-doctor graph
 ```
 
-Exit:
+Output:
 
-```txt
-0
-```
-
----
-
-Project with findings:
-
-```txt
-1
+```text
+Pages: 25
+Components: 162
+Stores: 12
+Composables: 43
 ```
 
 ---
 
-Parser crash:
+# v1.4 - Dependency Analysis
 
-```txt
-2
-```
+Goal:
+
+Detect unhealthy dependencies.
+
+## Rules
+
+### component-coupling
+
+Too many imported components.
+
+### composable-coupling
+
+Too many imported composables.
+
+### store-coupling
+
+Store depends on too many stores.
+
+### circular-import
+
+Circular dependencies.
 
 ---
 
-## Done Criteria
+# v1.5 - Feature Boundary Analysis
 
-Automated tests added.
+Goal:
+
+Prevent architecture decay.
+
+## Rules
+
+### feature-leakage
+
+Feature imports another feature's internal implementation.
+
+### layer-violation
+
+UI layer imports infrastructure layer directly.
+
+### forbidden-dependency
+
+Disallowed module relationships.
 
 ---
 
-# Milestone 4.4 - Fail-On Severity
+# v1.6 - Nuxt Analyzer
 
-## Objective
+Goal:
 
-Allow CI to fail only above a given threshold.
+Understand Nuxt-specific architecture issues.
+
+## Rules
+
+### page-complexity
+
+Large page components.
+
+### async-data-abuse
+
+Too many useAsyncData calls.
+
+### duplicate-fetch
+
+Same API called from multiple locations.
+
+### hydration-risk
+
+Potential SSR hydration problems.
 
 ---
 
-## New CLI Option
+# v1.7 - Pinia Analyzer
+
+Goal:
+
+Detect unhealthy stores.
+
+## Rules
+
+### store-bloat
+
+Too many states.
+
+### store-god-object
+
+Store doing too much.
+
+### cross-store-dependency
+
+Store dependency chains.
+
+### circular-store-dependency
+
+Circular store references.
+
+---
+
+# v1.8 - Architecture Insights
+
+Goal:
+
+Provide project-wide metrics.
+
+## Metrics
+
+### Architecture Score
+
+0-100 score.
+
+### Dependency Health
+
+Project dependency quality.
+
+### Maintainability Score
+
+Long-term maintenance risk.
+
+### Technical Debt Index
+
+Estimated architecture debt.
+
+---
+
+# v2.0 - Architecture Dashboard
+
+Goal:
+
+Visualize architecture health.
+
+## Features
+
+Generate:
 
 ```bash
-vue-doctor check \
-  --fail-on warning
+vue-doctor report
+```
+
+Produces:
+
+```text
+architecture-report.html
+```
+
+### Dashboard Sections
+
+- Architecture Score
+- Component Health
+- Store Health
+- Dependency Graph
+- Rule Violations
+- Trend Analysis
+
+---
+
+# v2.1 - GitHub Integration
+
+Goal:
+
+Become CI/CD friendly.
+
+## Features
+
+- GitHub Action
+- SARIF Output
+- PR Comments
+- Architecture Diff
+
+Example:
+
+```yaml
+- uses: vue-doctor/action@v1
 ```
 
 ---
 
-## Supported Values
+# v2.2 - Team & Enterprise
 
-```txt
-info
-warning
-error
-critical
-```
+## Features
 
----
+- Rule Profiles
+- Team Standards
+- Shared Config
+- Architecture Policies
 
-## Examples
-
-```bash
-vue-doctor check \
-  --fail-on error
-```
-
-Only:
-
-```txt
-error
-critical
-```
-
-trigger failure.
-
----
-
-## Done Criteria
-
-Integration tests added.
-
----
-
-# Milestone 4.5 - JSON Reporter V2
-
-## Objective
-
-Produce stable machine-readable output.
-
----
-
-## New Schema
+Example:
 
 ```json
 {
-  "summary": {
-    "files": 15,
-    "findings": 6
-  },
-  "findings": [
+  "forbiddenDependencies": [
     {
-      "rule": "no-v-html",
-      "severity": "critical",
-      "category": "security",
-      "file": "src/App.vue",
-      "line": 22,
-      "message": "Avoid using v-html."
+      "from": "features/order",
+      "to": "features/product/internal"
     }
   ]
 }
@@ -330,181 +244,16 @@ Produce stable machine-readable output.
 
 ---
 
-## Tasks
+# Long-term Vision
 
-- Create schema
-- Update reporter
-- Add tests
+Vue Doctor should answer:
 
----
+- Is this project maintainable?
+- Is architecture getting worse?
+- Which components are becoming risky?
+- Which stores should be split?
+- Which dependencies should be removed?
 
-## Done Criteria
+Instead of only answering:
 
-Schema documented.
-
----
-
-# Milestone 4.6 - Changed Files Mode
-
-## Objective
-
-Support Pull Request analysis.
-
----
-
-## New Option
-
-```bash
-vue-doctor check \
-  --changed
-```
-
----
-
-## Behaviour
-
-Read:
-
-```bash
-git diff
-```
-
-Analyze only changed files.
-
----
-
-## Tasks
-
-- detect changed files
-- fallback when git unavailable
-- tests
-
----
-
-## Done Criteria
-
-Only modified files are analyzed.
-
----
-
-# Milestone 4.7 - GitHub Annotation Reporter
-
-## Objective
-
-Show findings directly in GitHub Actions.
-
----
-
-## New Reporter
-
-```bash
-vue-doctor check \
-  --reporter github
-```
-
----
-
-## Output
-
-```txt
-::warning file=src/App.vue,line=20::
-Avoid deep watch usage.
-```
-
----
-
-## Tasks
-
-Implement GitHub workflow commands.
-
-Reference:
-
-warning
-
-```txt
-::warning
-```
-
-error
-
-```txt
-::error
-```
-
----
-
-## Done Criteria
-
-Findings appear inline in GitHub Actions.
-
----
-
-# Milestone 4.8 - Official GitHub Action
-
-## Objective
-
-Publish first-party GitHub Action.
-
----
-
-## New Repository
-
-vue-doctor-action
-
----
-
-## Usage
-
-```yaml
-- uses: daohuy/vue-doctor-action@v1
-```
-
----
-
-## Inputs
-
-```yaml
-with:
-  path: src
-  fail-on: error
-  reporter: github
-```
-
----
-
-## Internal Behaviour
-
-Execute:
-
-```bash
-npx vue-doctor check
-```
-
-with provided options.
-
----
-
-## Done Criteria
-
-Action published.
-
-Action tested.
-
-README includes usage examples.
-
----
-
-# Definition of Done
-
-Phase 4 is complete when:
-
-- Severity system exists
-- Categories exist
-- Exit codes exist
-- Fail-on severity exists
-- JSON reporter stable
-- Changed files mode exists
-- GitHub annotation reporter exists
-- Official GitHub Action published
-
-No new rules should be added during Phase 4.
+- Is there a console.log here?
