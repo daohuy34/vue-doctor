@@ -60,7 +60,11 @@ export function classifyGraphNode(filePath: string): GraphNodeKind {
     return 'other';
 }
 
-export function extractImports(source: string) {
+export function extractImports(source: string): string[] {
+    if (!source) {
+        return [];
+    }
+
     const imports = new Set<string>();
 
     for (const match of source.matchAll(

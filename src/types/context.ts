@@ -10,6 +10,8 @@ export interface RuleContext {
 
     scriptAst: unknown | null;
 
+    scriptStartLine: number;
+
     config?: {
         ruleOptions?: RuleOptions;
     };

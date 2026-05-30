@@ -94,3 +94,9 @@ Desktop.ini
 
 .vue-doctor-cache.json
 .vue-doctor-baseline.json
+
+# Playgrounds (test files)
+src/playground/
+
+# Documentation
+docs/

@@ -21,12 +21,16 @@ export const noConsoleRule: Rule = {
         }
 
         const issues: any[] = [];
+        const scriptStartLine = context.scriptStartLine;
 
         traverse(context.scriptAst as any, {
             MemberExpression(path: any) {
                 const object = path.node.object;
 
                 if (object.type === 'Identifier' && object.name === 'console') {
+                    const scriptLine = path.node.loc?.start.line ?? 1;
+                    const fileLine = scriptLine + scriptStartLine - 1;
+
                     issues.push({
                         rule: 'no-console',
 
@@ -34,7 +38,7 @@ export const noConsoleRule: Rule = {
 
                         file: context.filePath,
 
-                        line: path.node.loc?.start.line,
+                        line: fileLine,
                         column: path.node.loc?.start.column,
 
                         message: 'console usage detected.',

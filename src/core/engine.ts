@@ -97,6 +97,7 @@ export async function runEngine(targetFiles?: string[]) {
                     source,
                     descriptor: parsed.descriptor,
                     scriptAst: parsed.scriptAst,
+                    scriptStartLine: parsed.scriptStartLine,
                     config: {
                         ruleOptions: config.ruleOptions,
                     },
