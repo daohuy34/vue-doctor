@@ -1,7 +1,7 @@
 import type { ObjectExpression } from '@babel/types';
 
 import { traverse } from '../../utils/ast';
-
+import { toFileLine } from '../../utils/line-utils';
 import type { Rule } from '../../types/rule';
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -174,7 +174,7 @@ export const noDeepWatchRule: Rule = {
                     rule: 'no-deep-watch',
                     severity: 'warning',
                     file: context.filePath,
-                    line: path.node.loc?.start.line,
+                    line: toFileLine(path.node.loc?.start.line, context.scriptStartLine),
                     column: path.node.loc?.start.column,
                     message: 'Deep watch detected.',
                     suggestion: compositionSuggestion(sourceName),
@@ -244,7 +244,7 @@ export const noDeepWatchRule: Rule = {
                             rule: 'no-deep-watch',
                             severity: 'warning',
                             file: context.filePath,
-                            line: entry.loc?.start.line,
+                            line: toFileLine(entry.loc?.start.line, context.scriptStartLine),
                             column: entry.loc?.start.column,
                             message: 'Deep watch detected.',
                             suggestion: optionsSuggestion(watchedKey),

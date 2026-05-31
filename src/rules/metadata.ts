@@ -275,4 +275,86 @@ export const ruleMetadata: RuleMetadata[] = [
         recommended: true,
         docs: 'docs/rules/no-sessionstorage-in-ssr.md',
     },
+
+    // ── Architecture ─────────────────────────────────────────────────────
+
+    {
+        name: 'no-circular-dependency',
+        description:
+            'Detect circular dependencies between modules. ' +
+            'Circular dependencies make code harder to test, understand, and maintain. ' +
+            'They can also cause issues with module loading and create tight coupling.',
+        severity: 'error',
+        category: 'architecture',
+        recommended: true,
+        docs: 'docs/rules/no-circular-dependency.md',
+    },
+
+    // ── Coupling ─────────────────────────────────────────────────────────
+
+    {
+        name: 'component-coupling',
+        description:
+            'Detect components with excessive dependencies (high fan-out). ' +
+            'Components that import too many other modules are harder to test, reuse, and maintain.',
+        severity: 'warning',
+        category: 'architecture',
+        recommended: false,
+        docs: 'docs/rules/component-coupling.md',
+    },
+
+    {
+        name: 'composable-coupling',
+        description:
+            'Detect composables with excessive dependencies. ' +
+            'Highly coupled composables may indicate code that should be split.',
+        severity: 'warning',
+        category: 'architecture',
+        recommended: false,
+        docs: 'docs/rules/composable-coupling.md',
+    },
+
+    {
+        name: 'store-coupling',
+        description:
+            'Detect stores with excessive dependencies. ' +
+            'Store-to-store coupling can lead to circular dependencies and make state management harder.',
+        severity: 'warning',
+        category: 'architecture',
+        recommended: false,
+        docs: 'docs/rules/store-coupling.md',
+    },
+
+    {
+        name: 'layer-violation',
+        description:
+            'Detect architectural layer violations. ' +
+            'Files in higher layers should not depend on files in lower layers.',
+        severity: 'warning',
+        category: 'architecture',
+        recommended: false,
+        docs: 'docs/rules/layer-violation.md',
+    },
+
+    {
+        name: 'forbidden-dependency',
+        description:
+            'Detect specific forbidden dependencies. ' +
+            'Use this to enforce project-specific architectural rules.',
+        severity: 'error',
+        category: 'architecture',
+        recommended: false,
+        docs: 'docs/rules/forbidden-dependency.md',
+    },
+
+    {
+        name: 'feature-leakage',
+        description:
+            'Detect when features import internal modules of other features. ' +
+            'Features should only use the public API (index.ts) of other features.',
+        severity: 'warning',
+        category: 'architecture',
+        recommended: false,
+        docs: 'docs/rules/feature-leakage.md',
+    },
 ];

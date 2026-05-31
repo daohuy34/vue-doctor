@@ -1,4 +1,5 @@
 import type { Rule } from '../../types/rule';
+import { toFileLine } from '../../utils/line-utils';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Constants

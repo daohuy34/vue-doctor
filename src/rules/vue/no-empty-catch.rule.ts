@@ -1,5 +1,6 @@
 import { traverse } from '../../utils/ast';
 import type { Rule } from '../../types/rule';
+import { toFileLine } from '../../utils/line-utils';
 
 export const noEmptyCatchRule: Rule = {
     name: 'no-empty-catch',
@@ -28,7 +29,7 @@ export const noEmptyCatchRule: Rule = {
                     rule: 'no-empty-catch',
                     severity: 'warning',
                     file: context.filePath,
-                    line: path.node.loc?.start.line,
+                    line: toFileLine(path.node.loc?.start.line, context.scriptStartLine),
                     column: path.node.loc?.start.column,
                     message: 'Empty catch block detected.',
                     suggestion:

@@ -6,8 +6,16 @@ import {
     type ProjectGraph,
     type GraphNodeKind,
 } from './graph';
+import {
+    findCircularDependencies,
+    getCircularDependenciesForFile,
+    formatCircularDependency,
+    type CircularDependency,
+    type CycleDetectionResult,
+} from './circular-deps';
 
 export type { GraphNodeKind, GraphEdge } from './graph';
+export type { CircularDependency, CycleDetectionResult } from './circular-deps';
 
 export interface ComponentInfo {
     name: string;
@@ -207,6 +215,55 @@ export function getFanOut(context: ProjectContext, filePath: string): number {
     }
 
     return count;
+}
+
+/**
+ * Find all circular dependencies in the project.
+ */
+export function findCircularDeps(context: ProjectContext): CycleDetectionResult {
+    return findCircularDependencies(context.graph.edges);
+}
+
+/**
+ * Get all circular dependencies involving a specific file.
+ */
+export function getCircularDepsForFile(
+    context: ProjectContext,
+    filePath: string,
+): CircularDependency[] {
+    const normalizedPath = filePath.replace(/\\/g, '/');
+    return getCircularDependenciesForFile(normalizedPath, context.graph.edges);
+}
+
+/**
+ * Check if a specific file is part of a circular dependency.
+ */
+export function isFileInCircularDep(context: ProjectContext, filePath: string): boolean {
+    const normalizedPath = filePath.replace(/\\/g, '/');
+    const cycles = getCircularDependenciesForFile(normalizedPath, context.graph.edges);
+    return cycles.length > 0;
+}
+
+/**
+ * Get a human-readable summary of all circular dependencies.
+ */
+export function getCircularDepsSummary(context: ProjectContext): string {
+    const result = findCircularDeps(context);
+
+    if (!result.hasCycles) {
+        return 'No circular dependencies found.';
+    }
+
+    const lines: string[] = [
+        `Found ${result.count} circular dependency(ies):`,
+        '',
+    ];
+
+    for (const cycle of result.cycles) {
+        lines.push(`  • ${formatCircularDependency(cycle)}`);
+    }
+
+    return lines.join('\n');
 }
 
 export function getProjectStats(context: ProjectContext) {

@@ -18,14 +18,12 @@ describe('graph core', () => {
         const imports = extractImports(`
             import Button from '@/components/Button.vue'
             import { useAuth } from '@/composables/useAuth'
-            const lazy = await import('./Lazy.vue')
             const pkg = 'react'
         `);
 
         expect(imports).toEqual([
             '@/components/Button.vue',
             '@/composables/useAuth',
-            './Lazy.vue',
         ]);
     });
 

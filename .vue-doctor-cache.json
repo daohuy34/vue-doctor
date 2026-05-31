@@ -1,231 +1,348 @@
 {
+  "vue-doctor.config.ts": {
+    "hash": "c2cb0df7e4e5e593b9946d32b8d4925d",
+    "issues": []
+  },
+  "tests/helpers.ts": {
+    "hash": "3e179f4b06d7d949e8f3a6c6946012e2",
+    "issues": []
+  },
+  "src/cli/check-utils.ts": {
+    "hash": "91cc5b4468819b48bb488a4db9aecda3",
+    "issues": []
+  },
+  "src/cli/index.ts": {
+    "hash": "3542a36098afb18fde04b66da5c0cd70",
+    "issues": []
+  },
+  "src/core/baseline.ts": {
+    "hash": "75670dd8d2fe0a9303cf53a446446fa8",
+    "issues": []
+  },
+  "src/core/cache.ts": {
+    "hash": "1da6a3776edf199c436b8519d7d95f7d",
+    "issues": []
+  },
+  "src/core/composable-graph.ts": {
+    "hash": "9efd5e78402cabc9ae320e33aa29a061",
+    "issues": []
+  },
+  "src/core/config.ts": {
+    "hash": "156a501693273350408a706d839decaa",
+    "issues": []
+  },
+  "src/core/engine-v2.ts": {
+    "hash": "8ee05d187c4e8e3df85c3d18aae84105",
+    "issues": []
+  },
+  "src/core/engine.ts": {
+    "hash": "405a080d74c81837c6446c2e376ae6f6",
+    "issues": []
+  },
+  "src/core/graph.ts": {
+    "hash": "a737bfacdd289a8f140f03e4518c5898",
+    "issues": []
+  },
+  "src/core/ignore.ts": {
+    "hash": "3fc4232a5cd39d0e0e56beb16dc05bc5",
+    "issues": []
+  },
+  "src/core/index.ts": {
+    "hash": "b0383ed054c31c4473c6e39d2f9706db",
+    "issues": []
+  },
+  "src/core/parser.ts": {
+    "hash": "880a22a43469d58e52ce45c4707987a6",
+    "issues": []
+  },
+  "src/core/plugins.ts": {
+    "hash": "34d8c56002ec6a0c08d60c9cd849cae9",
+    "issues": []
+  },
+  "src/core/project.ts": {
+    "hash": "371aa9f32e0ad904b1698b1028e459ca",
+    "issues": []
+  },
+  "src/core/scanner.ts": {
+    "hash": "ac3577b2e9b676a71cf65748499c0e0e",
+    "issues": []
+  },
+  "src/core/store-graph.ts": {
+    "hash": "2c1784e2733fdfbea6dce7f1bd05c413",
+    "issues": []
+  },
+  "src/playground/AppButton.vue": {
+    "hash": "66c415b8b5b8a6f68b3e0a58f381b23d",
+    "issues": [
+      {
+        "rule": "ai-monster-component",
+        "severity": "warning",
+        "file": "src/playground/AppButton.vue",
+        "message": "Component appears excessively complex (score 39 > 12).",
+        "suggestion": "Split this component into smaller pieces and extract reusable logic into composables or child components.",
+        "category": "ai",
+        "fingerprint": "27ac91fa31cb2c7705ff939693850c2d"
+      }
+    ]
+  },
+  "src/playground/BaseCard.vue": {
+    "hash": "e964bd8a41f5d112e5d96aecd7ea2e23",
+    "issues": [
+      {
+        "rule": "no-console",
+        "severity": "warning",
+        "file": "src/playground/BaseCard.vue",
+        "line": 20,
+        "column": 4,
+        "message": "console usage detected.",
+        "suggestion": "Remove console logs before production.",
+        "category": "best-practice",
+        "fingerprint": "d725ad91b7348e0e16b78052f2687602"
+      },
+      {
+        "rule": "ai-monster-component",
+        "severity": "warning",
+        "file": "src/playground/BaseCard.vue",
+        "message": "Component appears excessively complex (score 39 > 12).",
+        "suggestion": "Split this component into smaller pieces and extract reusable logic into composables or child components.",
+        "category": "ai",
+        "fingerprint": "b8a2ffd7e39866b7f719cb528ebe16bd"
+      }
+    ]
+  },
   "src/playground/Test.vue": {
-    "hash": "600fd59735f294956a4059114953107c",
+    "hash": "7373cbaa4aad231c78979a36f9d67973",
     "issues": [
       {
         "rule": "no-window-in-ssr",
         "severity": "error",
         "file": "src/playground/Test.vue",
+        "line": 373,
+        "column": 23,
         "message": "Detected SSR unsafe API usage: window.",
         "suggestion": "Wrap browser-only APIs inside onMounted() or process.client checks.",
         "category": "ssr",
-        "fingerprint": "2c8221c61b16180a0362ad8b008dc920"
+        "fingerprint": "009203c54f0246d4bb1a68595821d0c4"
       },
       {
         "rule": "no-document-in-ssr",
         "severity": "error",
         "file": "src/playground/Test.vue",
+        "line": 284,
+        "column": 5,
         "message": "Detected SSR unsafe API usage: document.",
         "suggestion": "Wrap browser-only APIs inside onMounted() or process.client checks.",
         "category": "ssr",
-        "fingerprint": "049b31234178d5e89cd0f5e705b3cc94"
+        "fingerprint": "5bcd6ea28e07b5407bb6268463b7509d"
       },
       {
         "rule": "no-localstorage-in-ssr",
         "severity": "error",
         "file": "src/playground/Test.vue",
+        "line": 208,
+        "column": 20,
         "message": "Detected SSR unsafe API usage: localStorage.",
         "suggestion": "Wrap browser-only APIs inside onMounted() or process.client checks.",
         "category": "ssr",
-        "fingerprint": "71c70c643f249be82dba614b61168c0d"
+        "fingerprint": "c0c75dd90d08855d9170c1ae85a6bb7f"
       },
       {
         "rule": "no-deep-watch",
         "severity": "error",
         "file": "src/playground/Test.vue",
-        "line": 98,
+        "line": 206,
         "column": 4,
         "message": "Deep watch detected.",
         "suggestion": "Avoid deep watch on \"todos\". Watch a specific nested path instead: watch: { 'todos.yourProp': handler }",
         "category": "performance",
-        "fingerprint": "6178756aa7682c2b61026734730c817f"
+        "fingerprint": "f0d23edbf109999768a05fece98b8a04"
       },
       {
         "rule": "no-console",
         "severity": "warning",
         "file": "src/playground/Test.vue",
-        "line": 103,
+        "line": 211,
         "column": 8,
         "message": "console usage detected.",
         "suggestion": "Remove console logs before production.",
         "category": "best-practice",
-        "fingerprint": "18f4e75beac95d1a86627bef45d1ac21"
+        "fingerprint": "919e58e5a7ac6cd9c849edca2128ac67"
       },
       {
         "rule": "no-console",
         "severity": "warning",
         "file": "src/playground/Test.vue",
-        "line": 112,
+        "line": 220,
         "column": 6,
         "message": "console usage detected.",
         "suggestion": "Remove console logs before production.",
         "category": "best-practice",
-        "fingerprint": "71fd6177e601d834a095769fb61cdba7"
+        "fingerprint": "0d9f222aaf269215c1a6dd249e169749"
       },
       {
         "rule": "no-console",
         "severity": "warning",
         "file": "src/playground/Test.vue",
-        "line": 117,
+        "line": 225,
         "column": 6,
         "message": "console usage detected.",
         "suggestion": "Remove console logs before production.",
         "category": "best-practice",
-        "fingerprint": "109362a95a97bf2c3d025a57f48d9dbd"
+        "fingerprint": "c42bbae50cba70098422d594258d88f3"
       },
       {
         "rule": "no-console",
         "severity": "warning",
         "file": "src/playground/Test.vue",
-        "line": 124,
+        "line": 232,
         "column": 8,
         "message": "console usage detected.",
         "suggestion": "Remove console logs before production.",
         "category": "best-practice",
-        "fingerprint": "af0240d104a7578c60989c2ec1f10bb9"
+        "fingerprint": "c29815eb99a060ea042ea8894e7a3c9a"
       },
       {
         "rule": "no-console",
         "severity": "warning",
         "file": "src/playground/Test.vue",
-        "line": 134,
+        "line": 242,
         "column": 4,
         "message": "console usage detected.",
         "suggestion": "Remove console logs before production.",
         "category": "best-practice",
-        "fingerprint": "b68128f7f70ae53486f388c7edb83574"
+        "fingerprint": "d264b21b2d5567e2ef1bbdcccaf334c3"
       },
       {
         "rule": "no-console",
         "severity": "warning",
         "file": "src/playground/Test.vue",
-        "line": 138,
+        "line": 246,
         "column": 4,
         "message": "console usage detected.",
         "suggestion": "Remove console logs before production.",
         "category": "best-practice",
-        "fingerprint": "dc4edc2d73328c0b679e284ee3096339"
+        "fingerprint": "35d785860eb6fd664321a7111266eb27"
       },
       {
         "rule": "no-console",
         "severity": "warning",
         "file": "src/playground/Test.vue",
-        "line": 146,
+        "line": 254,
         "column": 8,
         "message": "console usage detected.",
         "suggestion": "Remove console logs before production.",
         "category": "best-practice",
-        "fingerprint": "3787657bcc96b11f0bbdbc4e033573e3"
+        "fingerprint": "88ffd43046865526e860a53ea47a4ba4"
       },
       {
         "rule": "no-console",
         "severity": "warning",
         "file": "src/playground/Test.vue",
-        "line": 157,
+        "line": 265,
         "column": 4,
         "message": "console usage detected.",
         "suggestion": "Remove console logs before production.",
         "category": "best-practice",
-        "fingerprint": "9daffb14537da3bb35810c1395c8c5a9"
+        "fingerprint": "f79a15f93e8eb2fa469d493543fec0bd"
       },
       {
         "rule": "no-console",
         "severity": "warning",
         "file": "src/playground/Test.vue",
-        "line": 162,
+        "line": 270,
         "column": 4,
         "message": "console usage detected.",
         "suggestion": "Remove console logs before production.",
         "category": "best-practice",
-        "fingerprint": "2d5b445b1f9c768a6735a038388efa84"
+        "fingerprint": "44b8e3f22e2e1be10028b18159615925"
       },
       {
         "rule": "no-console",
         "severity": "warning",
         "file": "src/playground/Test.vue",
-        "line": 181,
+        "line": 289,
         "column": 4,
         "message": "console usage detected.",
         "suggestion": "Remove console logs before production.",
         "category": "best-practice",
-        "fingerprint": "0d364793eb6299eb4df633aa91bb0b36"
+        "fingerprint": "603c99780f52b6c5deab9fa40d884f27"
       },
       {
         "rule": "no-console",
         "severity": "warning",
         "file": "src/playground/Test.vue",
-        "line": 186,
+        "line": 294,
         "column": 4,
         "message": "console usage detected.",
         "suggestion": "Remove console logs before production.",
         "category": "best-practice",
-        "fingerprint": "c825cf4cd1069774c0743e882fc4593e"
-      },
-      {
-        "rule": "no-console",
-        "severity": "warning",
-        "file": "src/playground/Test.vue",
-        "line": 192,
-        "column": 4,
-        "message": "console usage detected.",
-        "suggestion": "Remove console logs before production.",
-        "category": "best-practice",
-        "fingerprint": "cdfcaad2f8ecfe5bd2f6ec39afd60dfa"
-      },
-      {
-        "rule": "no-console",
-        "severity": "warning",
-        "file": "src/playground/Test.vue",
-        "line": 198,
-        "column": 4,
-        "message": "console usage detected.",
-        "suggestion": "Remove console logs before production.",
-        "category": "best-practice",
-        "fingerprint": "de4b4d4d0662e64a3db30a429b08294c"
-      },
-      {
-        "rule": "no-console",
-        "severity": "warning",
-        "file": "src/playground/Test.vue",
-        "line": 245,
-        "column": 6,
-        "message": "console usage detected.",
-        "suggestion": "Remove console logs before production.",
-        "category": "best-practice",
-        "fingerprint": "c7ab6cd7a590ddf1307472faaf326564"
-      },
-      {
-        "rule": "no-console",
-        "severity": "warning",
-        "file": "src/playground/Test.vue",
-        "line": 271,
-        "column": 8,
-        "message": "console usage detected.",
-        "suggestion": "Remove console logs before production.",
-        "category": "best-practice",
-        "fingerprint": "4dd3ed1f2ec2ccf4c2ae752d20a63dc3"
+        "fingerprint": "39a120093c8cc1357080406450b895ed"
       },
       {
         "rule": "no-console",
         "severity": "warning",
         "file": "src/playground/Test.vue",
         "line": 300,
-        "column": 6,
+        "column": 4,
         "message": "console usage detected.",
         "suggestion": "Remove console logs before production.",
         "category": "best-practice",
         "fingerprint": "6ad3a460c50d7d0fcc5f6d3250759df4"
       },
       {
+        "rule": "no-console",
+        "severity": "warning",
+        "file": "src/playground/Test.vue",
+        "line": 306,
+        "column": 4,
+        "message": "console usage detected.",
+        "suggestion": "Remove console logs before production.",
+        "category": "best-practice",
+        "fingerprint": "b9e4ee06639cdbe39f6b4c605d4eec1b"
+      },
+      {
+        "rule": "no-console",
+        "severity": "warning",
+        "file": "src/playground/Test.vue",
+        "line": 353,
+        "column": 6,
+        "message": "console usage detected.",
+        "suggestion": "Remove console logs before production.",
+        "category": "best-practice",
+        "fingerprint": "cfeef4d8be521c3e817be406ca7ce73e"
+      },
+      {
+        "rule": "no-console",
+        "severity": "warning",
+        "file": "src/playground/Test.vue",
+        "line": 379,
+        "column": 8,
+        "message": "console usage detected.",
+        "suggestion": "Remove console logs before production.",
+        "category": "best-practice",
+        "fingerprint": "d5ac456b26c27409c68de83921836d7d"
+      },
+      {
+        "rule": "no-console",
+        "severity": "warning",
+        "file": "src/playground/Test.vue",
+        "line": 408,
+        "column": 6,
+        "message": "console usage detected.",
+        "suggestion": "Remove console logs before production.",
+        "category": "best-practice",
+        "fingerprint": "4c531c35579d8b5f24f8ee94fdee00d3"
+      },
+      {
         "rule": "no-side-effect-in-computed",
         "severity": "error",
         "file": "src/playground/Test.vue",
-        "line": 88,
+        "line": 196,
         "column": 19,
         "message": "Computed property \"highestPriorityTodo\" has a side effect: array mutation via `?.todos.sort`.",
         "suggestion": "Do not call `?.todos.sort` inside computed \"highestPriorityTodo\". Use a non-mutating alternative: spread [...arr], map(), filter(), or slice().",
         "category": "best-practice",
-        "fingerprint": "d23a9bd2445debeb3b85ed49bbecd499"
+        "fingerprint": "30da539a379455ca851d3db3abbc1622"
       },
       {
         "rule": "excessive-dom-depth",
@@ -257,142 +374,150 @@
     ]
   },
   "src/playground/Test_2.vue": {
-    "hash": "7d5df1523cbdda1eae8100bee7940788",
+    "hash": "99740639c2ffbfdc3f4196c4d5ff9776",
     "issues": [
       {
         "rule": "no-large-component",
         "severity": "warning",
         "file": "src/playground/Test_2.vue",
+        "line": 1,
+        "column": 1,
         "message": "Component exceeds recommended size (654 LOC)",
         "suggestion": "Consider splitting UI, composables, or business logic into smaller modules.",
         "category": "maintainability",
-        "fingerprint": "835c35fadfa819d4a40c2189bcbbeace"
+        "fingerprint": "82ed1d35ad8ac03bbb4c091a1d2f1759"
       },
       {
         "rule": "no-window-in-ssr",
         "severity": "error",
         "file": "src/playground/Test_2.vue",
+        "line": 373,
+        "column": 23,
         "message": "Detected SSR unsafe API usage: window.",
         "suggestion": "Wrap browser-only APIs inside onMounted() or process.client checks.",
         "category": "ssr",
-        "fingerprint": "f97e9aba66d76be016ddb2bd2658f087"
+        "fingerprint": "f75750006d6a5f8a598fac8b336d88ce"
       },
       {
         "rule": "no-document-in-ssr",
         "severity": "error",
         "file": "src/playground/Test_2.vue",
+        "line": 284,
+        "column": 5,
         "message": "Detected SSR unsafe API usage: document.",
         "suggestion": "Wrap browser-only APIs inside onMounted() or process.client checks.",
         "category": "ssr",
-        "fingerprint": "58b117c4f158934ddb74ddbbbf5a5724"
+        "fingerprint": "a285a37cef8dc02c8bc32bc3a2346366"
       },
       {
         "rule": "no-localstorage-in-ssr",
         "severity": "error",
         "file": "src/playground/Test_2.vue",
+        "line": 208,
+        "column": 20,
         "message": "Detected SSR unsafe API usage: localStorage.",
         "suggestion": "Wrap browser-only APIs inside onMounted() or process.client checks.",
         "category": "ssr",
-        "fingerprint": "26446a17b22208aa1bc233ac5fb3a84c"
+        "fingerprint": "a8aeb2f63aba40abc391eda7e28b405a"
       },
       {
         "rule": "no-console",
         "severity": "warning",
         "file": "src/playground/Test_2.vue",
-        "line": 23,
+        "line": 625,
         "column": 0,
         "message": "console usage detected.",
         "suggestion": "Remove console logs before production.",
         "category": "best-practice",
-        "fingerprint": "59e7ec63f03c65197c6a08dc04ecd59a"
+        "fingerprint": "dfdd6095a916596cbdd940aba37b9f9a"
       },
       {
         "rule": "no-mutate-props",
         "severity": "error",
         "file": "src/playground/Test_2.vue",
-        "line": 9,
+        "line": 611,
         "column": 0,
         "message": "Prop \"modelValue\" is mutated directly.",
         "suggestion": "Props are read-only. Emit an event to let the parent update \"modelValue\": this.$emit('update:modelValue', newValue) or use a writable computed with get/set.",
         "category": "best-practice",
-        "fingerprint": "d40c792eb08c7481fc80182fea9ae687"
+        "fingerprint": "41f2a58181347983a375f5d709c957f4"
       },
       {
         "rule": "no-mutate-props",
         "severity": "error",
         "file": "src/playground/Test_2.vue",
-        "line": 12,
+        "line": 614,
         "column": 0,
         "message": "Prop \"config\" is mutated directly.",
         "suggestion": "Props are read-only. Emit an event to let the parent update \"config\": this.$emit('update:config', newValue) or use a writable computed with get/set.",
         "category": "best-practice",
-        "fingerprint": "a7381d0e9ec0e4d0788c1d1562dac5a9"
+        "fingerprint": "b8b56a4700777d8d55651c59db8c46ff"
       },
       {
         "rule": "no-mutate-props",
         "severity": "error",
         "file": "src/playground/Test_2.vue",
-        "line": 15,
+        "line": 617,
         "column": 0,
         "message": "Prop \"items\" is mutated directly.",
         "suggestion": "Props are read-only. Emit an event to let the parent update \"items\": this.$emit('update:items', newValue) or use a writable computed with get/set.",
         "category": "best-practice",
-        "fingerprint": "b104f7290e3a855aa3cb3e5804a27c20"
+        "fingerprint": "fbe29bc9ac5463b7ccdbae6bf8d080da"
       },
       {
         "rule": "no-mutate-props",
         "severity": "error",
         "file": "src/playground/Test_2.vue",
-        "line": 16,
+        "line": 618,
         "column": 0,
         "message": "Prop \"items\" is mutated directly.",
         "suggestion": "Props are read-only. Emit an event to let the parent update \"items\": this.$emit('update:items', newValue) or use a writable computed with get/set.",
         "category": "best-practice",
-        "fingerprint": "49f682bc3e704d50cec107a0e9973840"
+        "fingerprint": "97d03379630304ef63c7e6af11af0849"
       },
       {
         "rule": "no-mutate-props",
         "severity": "error",
         "file": "src/playground/Test_2.vue",
-        "line": 17,
+        "line": 619,
         "column": 0,
         "message": "Prop \"items\" is mutated directly.",
         "suggestion": "Props are read-only. Emit an event to let the parent update \"items\": this.$emit('update:items', newValue) or use a writable computed with get/set.",
         "category": "best-practice",
-        "fingerprint": "d55777bf58408859f079cd054d5afd57"
+        "fingerprint": "bb14c2d1d03d8af4cef6edc5ee5091f8"
       },
       {
         "rule": "no-mutate-props",
         "severity": "error",
         "file": "src/playground/Test_2.vue",
-        "line": 18,
+        "line": 620,
         "column": 0,
         "message": "Prop \"items\" is mutated directly.",
         "suggestion": "Props are read-only. Emit an event to let the parent update \"items\": this.$emit('update:items', newValue) or use a writable computed with get/set.",
         "category": "best-practice",
-        "fingerprint": "bb5985128ef4320d4f2f739fe26d4952"
+        "fingerprint": "55f7081beee7b2087c2bf14320eb425f"
       },
       {
         "rule": "no-mutate-props",
         "severity": "error",
         "file": "src/playground/Test_2.vue",
-        "line": 19,
+        "line": 621,
         "column": 0,
         "message": "Prop \"items\" is mutated directly.",
         "suggestion": "Props are read-only. Emit an event to let the parent update \"items\": this.$emit('update:items', newValue) or use a writable computed with get/set.",
         "category": "best-practice",
-        "fingerprint": "c9548986e73d447a71d47604956efdb9"
+        "fingerprint": "24da1edd795e2fe75605dae04f8f9eb2"
       },
       {
         "rule": "no-mutate-props",
         "severity": "error",
         "file": "src/playground/Test_2.vue",
-        "line": 20,
+        "line": 622,
         "column": 0,
         "message": "Prop \"items\" is mutated directly.",
         "suggestion": "Props are read-only. Emit an event to let the parent update \"items\": this.$emit('update:items', newValue) or use a writable computed with get/set.",
         "category": "best-practice",
-        "fingerprint": "442bb673e15a474e4c3f86c1d9411a4d"
+        "fingerprint": "1a2f71aac3bb77d0ccc157785e228479"
       },
       {
         "rule": "excessive-dom-depth",
@@ -413,5 +538,1111 @@
         "fingerprint": "dae15be6607d95747951ba8ddb96fed4"
       }
     ]
+  },
+  "src/playground/UserProfile.vue": {
+    "hash": "04b0e79aa06baf416c8e49b83f326bab",
+    "issues": [
+      {
+        "rule": "no-console",
+        "severity": "warning",
+        "file": "src/playground/UserProfile.vue",
+        "line": 30,
+        "column": 6,
+        "message": "console usage detected.",
+        "suggestion": "Remove console logs before production.",
+        "category": "best-practice",
+        "fingerprint": "644c22e5675522a5548e9acbf8716417"
+      },
+      {
+        "rule": "ai-monster-component",
+        "severity": "warning",
+        "file": "src/playground/UserProfile.vue",
+        "message": "Component appears excessively complex (score 43 > 12).",
+        "suggestion": "Split this component into smaller pieces and extract reusable logic into composables or child components.",
+        "category": "ai",
+        "fingerprint": "f8ca73d76eb47b7c7cb07f5158686a5f"
+      }
+    ]
+  },
+  "src/playground/counterStore.ts": {
+    "hash": "e74f15216ed2a9096b0a2ac06ac1d6e2",
+    "issues": []
+  },
+  "src/playground/useCounter.ts": {
+    "hash": "8a52ef9a7503129de575f6b6e3047cc3",
+    "issues": []
+  },
+  "src/playground/useTodo.ts": {
+    "hash": "f0df063c5053d976c0b927eced79d234",
+    "issues": []
+  },
+  "src/playground/userStore.ts": {
+    "hash": "3b623acbe33dbc4abde5caf472511750",
+    "issues": [
+      {
+        "rule": "no-localstorage-in-ssr",
+        "severity": "error",
+        "file": "src/playground/userStore.ts",
+        "line": 16,
+        "column": 5,
+        "message": "Detected SSR unsafe API usage: localStorage.",
+        "suggestion": "Wrap browser-only APIs inside onMounted() or process.client checks.",
+        "category": "ssr",
+        "fingerprint": "8704ba4006d6eb99c11b5e76ebd6443f"
+      }
+    ]
+  },
+  "src/reporters/github.ts": {
+    "hash": "bc971c82d76b5bcf4aa24f5d3797ab81",
+    "issues": []
+  },
+  "src/reporters/index.ts": {
+    "hash": "35840fdb584ebf01095ac70c867f6613",
+    "issues": []
+  },
+  "src/reporters/json.ts": {
+    "hash": "e618d78791f2621057a6ef8ad49bd2ba",
+    "issues": []
+  },
+  "src/reporters/stylish.ts": {
+    "hash": "43556547d1625719a26a2707af633203",
+    "issues": []
+  },
+  "src/rules/index.ts": {
+    "hash": "1e2fece5c0173e08cd557e761fb8092a",
+    "issues": [
+      {
+        "rule": "no-window-in-ssr",
+        "severity": "error",
+        "file": "src/rules/index.ts",
+        "line": 2,
+        "column": 46,
+        "message": "Detected SSR unsafe API usage: window.",
+        "suggestion": "Wrap browser-only APIs inside onMounted() or process.client checks.",
+        "category": "ssr",
+        "fingerprint": "388befdc0a225d72fa02df998336d5ed"
+      },
+      {
+        "rule": "no-document-in-ssr",
+        "severity": "error",
+        "file": "src/rules/index.ts",
+        "line": 3,
+        "column": 48,
+        "message": "Detected SSR unsafe API usage: document.",
+        "suggestion": "Wrap browser-only APIs inside onMounted() or process.client checks.",
+        "category": "ssr",
+        "fingerprint": "92cfa84e20a07ccce86029294218c7f1"
+      }
+    ]
+  },
+  "src/rules/metadata.ts": {
+    "hash": "262ccd14bbed1de9fbad87ec26dc535b",
+    "issues": [
+      {
+        "rule": "no-window-in-ssr",
+        "severity": "error",
+        "file": "src/rules/metadata.ts",
+        "line": 236,
+        "column": 19,
+        "message": "Detected SSR unsafe API usage: window.",
+        "suggestion": "Wrap browser-only APIs inside onMounted() or process.client checks.",
+        "category": "ssr",
+        "fingerprint": "d6b0239e364b86b634b39e0e948a8e09"
+      },
+      {
+        "rule": "no-document-in-ssr",
+        "severity": "error",
+        "file": "src/rules/metadata.ts",
+        "line": 247,
+        "column": 19,
+        "message": "Detected SSR unsafe API usage: document.",
+        "suggestion": "Wrap browser-only APIs inside onMounted() or process.client checks.",
+        "category": "ssr",
+        "fingerprint": "67d6215e54272c363241e31272a825ee"
+      },
+      {
+        "rule": "no-localstorage-in-ssr",
+        "severity": "error",
+        "file": "src/rules/metadata.ts",
+        "line": 260,
+        "column": 23,
+        "message": "Detected SSR unsafe API usage: localStorage.",
+        "suggestion": "Wrap browser-only APIs inside onMounted() or process.client checks.",
+        "category": "ssr",
+        "fingerprint": "8f2b16264d984ac8d29453ef6dcdf25d"
+      },
+      {
+        "rule": "no-sessionstorage-in-ssr",
+        "severity": "error",
+        "file": "src/rules/metadata.ts",
+        "line": 271,
+        "column": 23,
+        "message": "Detected SSR unsafe API usage: sessionStorage.",
+        "suggestion": "Wrap browser-only APIs inside onMounted() or process.client checks.",
+        "category": "ssr",
+        "fingerprint": "46d21ab02c033d4ddf813a31fc9473f0"
+      }
+    ]
+  },
+  "src/types/config.ts": {
+    "hash": "9efa2ef5ea7202cd74a1d5df607a0609",
+    "issues": []
+  },
+  "src/types/context.ts": {
+    "hash": "7fc5b445ba3fec8e8c7205ddba9cca3c",
+    "issues": []
+  },
+  "src/types/fix.ts": {
+    "hash": "8a255c5488b192a9ad9fdbd244867d56",
+    "issues": []
+  },
+  "src/types/issue.ts": {
+    "hash": "e70aff5bf82827c2235e1a532c97c8ef",
+    "issues": []
+  },
+  "src/types/plugin.ts": {
+    "hash": "5f1b720191f1bdc6f4f71e8c94bd3f24",
+    "issues": []
+  },
+  "src/types/rule.ts": {
+    "hash": "9be83d4d5bbb1f34dc520f3409e56068",
+    "issues": []
+  },
+  "src/utils/ast.ts": {
+    "hash": "6db46d3e198c7ddf6060618b842f6c03",
+    "issues": []
+  },
+  "src/utils/component-resolver.ts": {
+    "hash": "c3858a75d5338bbe4d57417660c9f677",
+    "issues": []
+  },
+  "src/utils/file-collector.ts": {
+    "hash": "fb58e592458d27599dec686bdbb4dca3",
+    "issues": []
+  },
+  "src/utils/fingerprint.ts": {
+    "hash": "54b0dc5cc5541efe7338804295b52430",
+    "issues": []
+  },
+  "src/utils/fix.ts": {
+    "hash": "f73e1e6b2082c15a1e145c610632d7d9",
+    "issues": []
+  },
+  "src/utils/git.ts": {
+    "hash": "8b01cbab989af28d52af89d4c48d6c11",
+    "issues": []
+  },
+  "src/utils/hash.ts": {
+    "hash": "ee5748aad3350d9f5a860c44b1ef4265",
+    "issues": []
+  },
+  "src/utils/index.ts": {
+    "hash": "e973c69385c97d217604a18fe5dcebd0",
+    "issues": []
+  },
+  "src/utils/line-utils.ts": {
+    "hash": "815de8a44344cec303fe06dc112380c2",
+    "issues": []
+  },
+  "src/utils/location.ts": {
+    "hash": "809f0fc2dad6b935f7b10b1b58ba81f3",
+    "issues": []
+  },
+  "src/utils/logger.ts": {
+    "hash": "e48d229e9d53d099de260f83f6703d79",
+    "issues": []
+  },
+  "src/utils/rule-options.ts": {
+    "hash": "bda95be7ceb6bfcf5222fabcedd16f07",
+    "issues": []
+  },
+  "src/utils/tsconfig-resolver.ts": {
+    "hash": "0ddbd67ca321bb12410f5a0d4fb05005",
+    "issues": []
+  },
+  "tests/cli/check-utils.test.ts": {
+    "hash": "14a4e9f1237d7c6526c87b278fef4ea5",
+    "issues": []
+  },
+  "tests/core/composable-graph.test.ts": {
+    "hash": "74272b567c488bdaa1c4e5d8271841d0",
+    "issues": [
+      {
+        "rule": "ai-monster-component",
+        "severity": "warning",
+        "file": "tests/core/composable-graph.test.ts",
+        "message": "Component appears excessively complex (score 226 > 12).",
+        "suggestion": "Split this component into smaller pieces and extract reusable logic into composables or child components.",
+        "category": "ai",
+        "fingerprint": "9f4b1bf9fd3f935024011127ec50db35"
+      }
+    ]
+  },
+  "tests/core/engine-v2.test.ts": {
+    "hash": "890ac2064d006611845ea36e35bc4a00",
+    "issues": [
+      {
+        "rule": "ai-monster-component",
+        "severity": "warning",
+        "file": "tests/core/engine-v2.test.ts",
+        "message": "Component appears excessively complex (score 94 > 12).",
+        "suggestion": "Split this component into smaller pieces and extract reusable logic into composables or child components.",
+        "category": "ai",
+        "fingerprint": "30169d7f50fe1948fdf7ba882012268f"
+      }
+    ]
+  },
+  "tests/core/graph.test.ts": {
+    "hash": "d79260705ad9317c2f17d8103799d7b5",
+    "issues": []
+  },
+  "tests/core/project-context.test.ts": {
+    "hash": "51d9a52680f86bbbbbe5ec5a6a11f7dd",
+    "issues": []
+  },
+  "tests/core/store-graph.test.ts": {
+    "hash": "1fe47bb7cdca200d95d455a72210d269",
+    "issues": []
+  },
+  "tests/reporters/json.test.ts": {
+    "hash": "c81dcf8a3dfd84801e7aa23bd7ce87c7",
+    "issues": []
+  },
+  "tests/reporters/stylish.test.ts": {
+    "hash": "ac57f1a8d1bc092839343adcf1e5d806",
+    "issues": []
+  },
+  "tests/utils/component-resolver.test.ts": {
+    "hash": "ce09cc5cb00d21c9a81726a6c99a0098",
+    "issues": [
+      {
+        "rule": "ai-monster-component",
+        "severity": "warning",
+        "file": "tests/utils/component-resolver.test.ts",
+        "message": "Component appears excessively complex (score 171 > 12).",
+        "suggestion": "Split this component into smaller pieces and extract reusable logic into composables or child components.",
+        "category": "ai",
+        "fingerprint": "8fe182f0b8c1c6585b6ca0d124ec3903"
+      }
+    ]
+  },
+  "tests/utils/file-collector.test.ts": {
+    "hash": "32ecde709a342912252c4171a1b2bced",
+    "issues": []
+  },
+  "tests/utils/fix.test.ts": {
+    "hash": "20036e5d9cece17596d446caf0a5e992",
+    "issues": []
+  },
+  "tests/utils/tsconfig-resolver.test.ts": {
+    "hash": "8672776f68f5503f9bb9ff8349c572cd",
+    "issues": []
+  },
+  "tests/rules/ai-monster-component.test.ts": {
+    "hash": "8f584f1cec3c3bf655dd6241e5edbca3",
+    "issues": [
+      {
+        "rule": "ai-monster-component",
+        "severity": "warning",
+        "file": "tests/rules/ai-monster-component.test.ts",
+        "message": "Component appears excessively complex (score 66 > 12).",
+        "suggestion": "Split this component into smaller pieces and extract reusable logic into composables or child components.",
+        "category": "ai",
+        "fingerprint": "7a4b818f8be99059739b78469abd84ba"
+      }
+    ]
+  },
+  "tests/rules/excessive-component-responsibility.test.ts": {
+    "hash": "193a251acb65d5b0ac8bab28c7432c70",
+    "issues": [
+      {
+        "rule": "ai-monster-component",
+        "severity": "warning",
+        "file": "tests/rules/excessive-component-responsibility.test.ts",
+        "message": "Component appears excessively complex (score 76 > 12).",
+        "suggestion": "Split this component into smaller pieces and extract reusable logic into composables or child components.",
+        "category": "ai",
+        "fingerprint": "1a678eff09e0d745e8dda748439fa1f4"
+      }
+    ]
+  },
+  "tests/rules/excessive-computed-properties.test.ts": {
+    "hash": "6dd2f42706e78d90b1dd21b7515738b6",
+    "issues": []
+  },
+  "tests/rules/excessive-dom-depth.test.ts": {
+    "hash": "895dad154646bf36fb7725c84bf9010b",
+    "issues": []
+  },
+  "tests/rules/excessive-props.test.ts": {
+    "hash": "1067c8d6f46039addd28064c03496419",
+    "issues": []
+  },
+  "tests/rules/excessive-reactive-state.test.ts": {
+    "hash": "28a8a7f86e86001fde84ab1ccc5b9d05",
+    "issues": []
+  },
+  "tests/rules/excessive-v-for-nesting.test.ts": {
+    "hash": "4eab35eb93a0c57307a6614ecbc16d88",
+    "issues": [
+      {
+        "rule": "require-key-in-v-for",
+        "severity": "error",
+        "file": "tests/rules/excessive-v-for-nesting.test.ts",
+        "line": 9,
+        "column": 1,
+        "message": "v-for over \"items\" on <div> is missing a :key binding.",
+        "suggestion": "Add a unique :key to help Vue track DOM nodes efficiently. Prefer a stable unique id: <div v-for=\"a in items\" :key=\"a.id\">. Using the loop index (:key=\"index\") is a last resort — it disables reordering optimizations and can cause subtle bugs.",
+        "category": "maintainability",
+        "fingerprint": "25194e0e28307640900b04d7d2ca6f1a"
+      },
+      {
+        "rule": "require-key-in-v-for",
+        "severity": "error",
+        "file": "tests/rules/excessive-v-for-nesting.test.ts",
+        "line": 10,
+        "column": 3,
+        "message": "v-for over \"items\" on <div> is missing a :key binding.",
+        "suggestion": "Add a unique :key to help Vue track DOM nodes efficiently. Prefer a stable unique id: <div v-for=\"b in items\" :key=\"b.id\">. Using the loop index (:key=\"index\") is a last resort — it disables reordering optimizations and can cause subtle bugs.",
+        "category": "maintainability",
+        "fingerprint": "645ffc9cd77524f6808260bc8fc4e6d0"
+      },
+      {
+        "rule": "require-key-in-v-for",
+        "severity": "error",
+        "file": "tests/rules/excessive-v-for-nesting.test.ts",
+        "line": 11,
+        "column": 5,
+        "message": "v-for over \"items\" on <div> is missing a :key binding.",
+        "suggestion": "Add a unique :key to help Vue track DOM nodes efficiently. Prefer a stable unique id: <div v-for=\"c in items\" :key=\"c.id\">. Using the loop index (:key=\"index\") is a last resort — it disables reordering optimizations and can cause subtle bugs.",
+        "category": "maintainability",
+        "fingerprint": "a49d6a7d42e277a34854b7add9545528"
+      },
+      {
+        "rule": "require-key-in-v-for",
+        "severity": "error",
+        "file": "tests/rules/excessive-v-for-nesting.test.ts",
+        "line": 12,
+        "column": 7,
+        "message": "v-for over \"items\" on <div> is missing a :key binding.",
+        "suggestion": "Add a unique :key to help Vue track DOM nodes efficiently. Prefer a stable unique id: <div v-for=\"d in items\" :key=\"d.id\">. Using the loop index (:key=\"index\") is a last resort — it disables reordering optimizations and can cause subtle bugs.",
+        "category": "maintainability",
+        "fingerprint": "b711ced9b95b416fd93663d070d5dc4c"
+      },
+      {
+        "rule": "excessive-v-for-nesting",
+        "severity": "warning",
+        "file": "tests/rules/excessive-v-for-nesting.test.ts",
+        "message": "Nested v-for detected.",
+        "suggestion": "Flatten nested loops or render a smaller subset in child components.",
+        "category": "maintainability",
+        "fingerprint": "dd270a8241c3c7e3078906fafbc2371e"
+      }
+    ]
+  },
+  "tests/rules/excessive-watchers.test.ts": {
+    "hash": "10282e292e52a399948a46e0b6b737b8",
+    "issues": []
+  },
+  "tests/rules/no-console.test.ts": {
+    "hash": "563d4719b9d2d72ae190a8cc863f0e37",
+    "issues": [
+      {
+        "rule": "no-console",
+        "severity": "warning",
+        "file": "tests/rules/no-console.test.ts",
+        "line": 9,
+        "column": 0,
+        "message": "console usage detected.",
+        "suggestion": "Remove console logs before production.",
+        "category": "best-practice",
+        "fingerprint": "a2c3f2e4e7234dfbaec9b62dbc9d93b2"
+      },
+      {
+        "rule": "ai-monster-component",
+        "severity": "warning",
+        "file": "tests/rules/no-console.test.ts",
+        "message": "Component appears excessively complex (score 76 > 12).",
+        "suggestion": "Split this component into smaller pieces and extract reusable logic into composables or child components.",
+        "category": "ai",
+        "fingerprint": "2223887cbd20e1319c5de061f90fbe0e"
+      }
+    ]
+  },
+  "tests/rules/no-debugger.test.ts": {
+    "hash": "b0e062378bbd203720b50aeb06f6ec5f",
+    "issues": [
+      {
+        "rule": "no-debugger",
+        "severity": "warning",
+        "file": "tests/rules/no-debugger.test.ts",
+        "line": 10,
+        "column": 0,
+        "message": "Unexpected debugger statement.",
+        "suggestion": "Remove debugger statements before shipping production code.",
+        "category": "best-practice",
+        "fingerprint": "61b5e2fee1345ad8d2b98bf3974664ad"
+      },
+      {
+        "rule": "ai-monster-component",
+        "severity": "warning",
+        "file": "tests/rules/no-debugger.test.ts",
+        "message": "Component appears excessively complex (score 33 > 12).",
+        "suggestion": "Split this component into smaller pieces and extract reusable logic into composables or child components.",
+        "category": "ai",
+        "fingerprint": "1f2a1725b4e32dd82a864eb37d838f6d"
+      }
+    ]
+  },
+  "tests/rules/no-deep-watch.test.ts": {
+    "hash": "b57788f119099a4be5f57d6ae0ff6a3a",
+    "issues": [
+      {
+        "rule": "no-deep-watch",
+        "severity": "error",
+        "file": "tests/rules/no-deep-watch.test.ts",
+        "line": 12,
+        "column": 0,
+        "message": "Deep watch detected.",
+        "suggestion": "Avoid deep watch on \"data\". Watch a specific nested property instead: watch(() => data.yourProp, handler)",
+        "category": "performance",
+        "fingerprint": "7d824f1d96b344e7792f943951126509"
+      },
+      {
+        "rule": "ai-monster-component",
+        "severity": "warning",
+        "file": "tests/rules/no-deep-watch.test.ts",
+        "message": "Component appears excessively complex (score 138 > 12).",
+        "suggestion": "Split this component into smaller pieces and extract reusable logic into composables or child components.",
+        "category": "ai",
+        "fingerprint": "7e9848218916359ef0adf0d29371c7c2"
+      }
+    ]
+  },
+  "tests/rules/no-document-in-ssr.test.ts": {
+    "hash": "78436da2d366de6a24143c9798a81769",
+    "issues": [
+      {
+        "rule": "no-document-in-ssr",
+        "severity": "error",
+        "file": "tests/rules/no-document-in-ssr.test.ts",
+        "line": 2,
+        "column": 62,
+        "message": "Detected SSR unsafe API usage: document.",
+        "suggestion": "Wrap browser-only APIs inside onMounted() or process.client checks.",
+        "category": "ssr",
+        "fingerprint": "ddbfbf246d7ed0ee33ec99a4a1aee6b4"
+      },
+      {
+        "rule": "ai-monster-component",
+        "severity": "warning",
+        "file": "tests/rules/no-document-in-ssr.test.ts",
+        "message": "Component appears excessively complex (score 31 > 12).",
+        "suggestion": "Split this component into smaller pieces and extract reusable logic into composables or child components.",
+        "category": "ai",
+        "fingerprint": "ff49bd418c668ce14f9c07ce9a37da55"
+      }
+    ]
+  },
+  "tests/rules/no-empty-catch.test.ts": {
+    "hash": "72a421a1df802fec532264f91ede93ce",
+    "issues": [
+      {
+        "rule": "no-empty-catch",
+        "severity": "warning",
+        "file": "tests/rules/no-empty-catch.test.ts",
+        "line": 11,
+        "column": 2,
+        "message": "Empty catch block detected.",
+        "suggestion": "Handle the error or rethrow it so failures are not silently swallowed.",
+        "category": "best-practice",
+        "fingerprint": "6e8a45bb65e74281848c9911b9de535b"
+      },
+      {
+        "rule": "ai-monster-component",
+        "severity": "warning",
+        "file": "tests/rules/no-empty-catch.test.ts",
+        "message": "Component appears excessively complex (score 39 > 12).",
+        "suggestion": "Split this component into smaller pieces and extract reusable logic into composables or child components.",
+        "category": "ai",
+        "fingerprint": "6d4223ed354e308c7a247373a143c356"
+      }
+    ]
+  },
+  "tests/rules/no-large-component.test.ts": {
+    "hash": "69b33dec4ba6c8863b35f47897a40274",
+    "issues": [
+      {
+        "rule": "ai-monster-component",
+        "severity": "warning",
+        "file": "tests/rules/no-large-component.test.ts",
+        "message": "Component appears excessively complex (score 37 > 12).",
+        "suggestion": "Split this component into smaller pieces and extract reusable logic into composables or child components.",
+        "category": "ai",
+        "fingerprint": "df32b43c3035b3b411ebc614539799e8"
+      }
+    ]
+  },
+  "tests/rules/no-large-template.test.ts": {
+    "hash": "4f25bfa0a2307d81281f45d4505c1320",
+    "issues": []
+  },
+  "tests/rules/no-localstorage-in-ssr.test.ts": {
+    "hash": "dc826ada8e6d39cb5bfdd7873e113a50",
+    "issues": [
+      {
+        "rule": "no-localstorage-in-ssr",
+        "severity": "error",
+        "file": "tests/rules/no-localstorage-in-ssr.test.ts",
+        "line": 6,
+        "column": 17,
+        "message": "Detected SSR unsafe API usage: localStorage.",
+        "suggestion": "Wrap browser-only APIs inside onMounted() or process.client checks.",
+        "category": "ssr",
+        "fingerprint": "8e21a4b206199b4fc0be952971ecaea2"
+      },
+      {
+        "rule": "ai-monster-component",
+        "severity": "warning",
+        "file": "tests/rules/no-localstorage-in-ssr.test.ts",
+        "message": "Component appears excessively complex (score 31 > 12).",
+        "suggestion": "Split this component into smaller pieces and extract reusable logic into composables or child components.",
+        "category": "ai",
+        "fingerprint": "e09327f23453f91279f980c4f60db207"
+      }
+    ]
+  },
+  "tests/rules/no-sessionstorage-in-ssr.test.ts": {
+    "hash": "3a9bd13e898ee88b3a0f51d576f3cade",
+    "issues": [
+      {
+        "rule": "no-sessionstorage-in-ssr",
+        "severity": "error",
+        "file": "tests/rules/no-sessionstorage-in-ssr.test.ts",
+        "line": 6,
+        "column": 17,
+        "message": "Detected SSR unsafe API usage: sessionStorage.",
+        "suggestion": "Wrap browser-only APIs inside onMounted() or process.client checks.",
+        "category": "ssr",
+        "fingerprint": "87f3c0ca37fb6ad1501e077e1d2ffa04"
+      },
+      {
+        "rule": "ai-monster-component",
+        "severity": "warning",
+        "file": "tests/rules/no-sessionstorage-in-ssr.test.ts",
+        "message": "Component appears excessively complex (score 31 > 12).",
+        "suggestion": "Split this component into smaller pieces and extract reusable logic into composables or child components.",
+        "category": "ai",
+        "fingerprint": "fbc0a3ce66f389dc4a1e58180ebcd62f"
+      }
+    ]
+  },
+  "tests/rules/no-window-in-ssr.test.ts": {
+    "hash": "5e06754de6c43f0b92840a954e2924f3",
+    "issues": [
+      {
+        "rule": "no-window-in-ssr",
+        "severity": "error",
+        "file": "tests/rules/no-window-in-ssr.test.ts",
+        "line": 2,
+        "column": 60,
+        "message": "Detected SSR unsafe API usage: window.",
+        "suggestion": "Wrap browser-only APIs inside onMounted() or process.client checks.",
+        "category": "ssr",
+        "fingerprint": "003b7ca0927b5fc271f3b7ab62990b89"
+      },
+      {
+        "rule": "no-document-in-ssr",
+        "severity": "error",
+        "file": "tests/rules/no-window-in-ssr.test.ts",
+        "line": 19,
+        "column": 17,
+        "message": "Detected SSR unsafe API usage: document.",
+        "suggestion": "Wrap browser-only APIs inside onMounted() or process.client checks.",
+        "category": "ssr",
+        "fingerprint": "14a1f2f365040a10f1e74d72ed0fea4a"
+      },
+      {
+        "rule": "no-localstorage-in-ssr",
+        "severity": "error",
+        "file": "tests/rules/no-window-in-ssr.test.ts",
+        "line": 19,
+        "column": 30,
+        "message": "Detected SSR unsafe API usage: localStorage.",
+        "suggestion": "Wrap browser-only APIs inside onMounted() or process.client checks.",
+        "category": "ssr",
+        "fingerprint": "771efdef5f77bee8042b9948b32ac55d"
+      },
+      {
+        "rule": "ai-monster-component",
+        "severity": "warning",
+        "file": "tests/rules/no-window-in-ssr.test.ts",
+        "message": "Component appears excessively complex (score 32 > 12).",
+        "suggestion": "Split this component into smaller pieces and extract reusable logic into composables or child components.",
+        "category": "ai",
+        "fingerprint": "f29f26e2b27675231c87af0ec586d905"
+      }
+    ]
+  },
+  "src/rules/nuxt/no-document-in-ssr.rule.ts": {
+    "hash": "9c9b312b40fde9b4720c1307d25ebb7c",
+    "issues": [
+      {
+        "rule": "no-document-in-ssr",
+        "severity": "error",
+        "file": "src/rules/nuxt/no-document-in-ssr.rule.ts",
+        "line": 9,
+        "column": 15,
+        "message": "Detected SSR unsafe API usage: document.",
+        "suggestion": "Wrap browser-only APIs inside onMounted() or process.client checks.",
+        "category": "ssr",
+        "fingerprint": "2b5b197de63ec05a5f4792ce58dd4441"
+      }
+    ]
+  },
+  "src/rules/nuxt/no-localstorage-in-ssr.rule.ts": {
+    "hash": "2646c74393afe37c07108097b14c6c48",
+    "issues": [
+      {
+        "rule": "no-localstorage-in-ssr",
+        "severity": "error",
+        "file": "src/rules/nuxt/no-localstorage-in-ssr.rule.ts",
+        "line": 14,
+        "column": 30,
+        "message": "Detected SSR unsafe API usage: localStorage.",
+        "suggestion": "Wrap browser-only APIs inside onMounted() or process.client checks.",
+        "category": "ssr",
+        "fingerprint": "653a52becd12babb320bf8c098160541"
+      }
+    ]
+  },
+  "src/rules/nuxt/no-sessionstorage-in-ssr.rule.ts": {
+    "hash": "e4e81da6a5f8592abff54e3b98146b2b",
+    "issues": [
+      {
+        "rule": "no-sessionstorage-in-ssr",
+        "severity": "error",
+        "file": "src/rules/nuxt/no-sessionstorage-in-ssr.rule.ts",
+        "line": 14,
+        "column": 30,
+        "message": "Detected SSR unsafe API usage: sessionStorage.",
+        "suggestion": "Wrap browser-only APIs inside onMounted() or process.client checks.",
+        "category": "ssr",
+        "fingerprint": "e0ee0784f51f787b7e5e52babddfe2ba"
+      }
+    ]
+  },
+  "src/rules/nuxt/no-window-in-ssr.rule.ts": {
+    "hash": "5248de15cfd803a527a5f1a5e5d90d33",
+    "issues": [
+      {
+        "rule": "no-window-in-ssr",
+        "severity": "error",
+        "file": "src/rules/nuxt/no-window-in-ssr.rule.ts",
+        "line": 9,
+        "column": 15,
+        "message": "Detected SSR unsafe API usage: window.",
+        "suggestion": "Wrap browser-only APIs inside onMounted() or process.client checks.",
+        "category": "ssr",
+        "fingerprint": "7ec5df78f4d953a53cd92ce4cc648c64"
+      }
+    ]
+  },
+  "src/cli/commands/baseline.ts": {
+    "hash": "881a3b19c6e6cdcd93cf9ca40e4c30d0",
+    "issues": []
+  },
+  "src/cli/commands/check.ts": {
+    "hash": "9a93f7a3c547ee499d65ee1ce28164ca",
+    "issues": []
+  },
+  "src/cli/commands/fix.ts": {
+    "hash": "16f68e163c1975a8af424b81e68f051b",
+    "issues": []
+  },
+  "src/cli/commands/graph.ts": {
+    "hash": "1fa674f22adc881d4e17c003fdfe2faa",
+    "issues": []
+  },
+  "src/cli/commands/init.ts": {
+    "hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "issues": []
+  },
+  "src/cli/commands/report.ts": {
+    "hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "issues": []
+  },
+  "src/cli/commands/rule.ts": {
+    "hash": "b292e278d5a9bfd9e95160e0ad4b639e",
+    "issues": []
+  },
+  "src/cli/commands/rules.ts": {
+    "hash": "0dea8e06f84048f80c78e936b2101eb8",
+    "issues": []
+  },
+  "src/rules/vue/ai-monster-component.rule.ts": {
+    "hash": "fba00b218f15d76f23f775b9727abb00",
+    "issues": []
+  },
+  "src/rules/vue/excessive-component-responsibility.rule.ts": {
+    "hash": "cfe52122dc01d895e08ed9e4bf111e09",
+    "issues": []
+  },
+  "src/rules/vue/excessive-computed-properties.rule.ts": {
+    "hash": "0bf07a80995ecd0f94c435d053db8b56",
+    "issues": []
+  },
+  "src/rules/vue/excessive-dom-depth.rule.ts": {
+    "hash": "ff7936524da74286374f0f1666deb6e2",
+    "issues": []
+  },
+  "src/rules/vue/excessive-props.rule.ts": {
+    "hash": "2366dd79b93ffeb465bdf527dbd3386b",
+    "issues": []
+  },
+  "src/rules/vue/excessive-reactive-state.rule.ts": {
+    "hash": "ff4f96f8f83ba63e6c7459051f3129b9",
+    "issues": []
+  },
+  "src/rules/vue/excessive-v-for-nesting.rule.ts": {
+    "hash": "1a045cf7a99c1d1a9ab55f79fe14e5b6",
+    "issues": []
+  },
+  "src/rules/vue/excessive-watchers.rule.ts": {
+    "hash": "5c6ed403c8ec197a64d5cdde09d5418d",
+    "issues": []
+  },
+  "src/rules/vue/no-console.rule.ts": {
+    "hash": "1a25b1f83e2ea278373d46281f0d7a34",
+    "issues": []
+  },
+  "src/rules/vue/no-debugger.rule.ts": {
+    "hash": "162820bb8d08a792005eb8671f20ba21",
+    "issues": []
+  },
+  "src/rules/vue/no-deep-watch.rule.ts": {
+    "hash": "33452c7420029a6229b5338435e56970",
+    "issues": []
+  },
+  "src/rules/vue/no-empty-catch.rule.ts": {
+    "hash": "d398795f9da353f5d9b838291e083216",
+    "issues": []
+  },
+  "src/rules/vue/no-large-component.rule.ts": {
+    "hash": "836a695065b6a3e8b43537c9b7766901",
+    "issues": []
+  },
+  "src/rules/vue/no-large-template.rule.ts": {
+    "hash": "cefc24a93a9e10efe474284d36cf2dd0",
+    "issues": []
+  },
+  "src/rules/vue/no-mutate-props.rule.ts": {
+    "hash": "8e31a4ee43ec0f239e0e75ede2d44b7f",
+    "issues": []
+  },
+  "src/rules/vue/no-side-effect-in-computed.rule.ts": {
+    "hash": "ae52a201a981f60c534a3988ae93ce17",
+    "issues": [
+      {
+        "rule": "no-localstorage-in-ssr",
+        "severity": "error",
+        "file": "src/rules/vue/no-side-effect-in-computed.rule.ts",
+        "line": 178,
+        "column": 11,
+        "message": "Detected SSR unsafe API usage: localStorage.",
+        "suggestion": "Wrap browser-only APIs inside onMounted() or process.client checks.",
+        "category": "ssr",
+        "fingerprint": "c1dcc46b9100c16379557c84601ad3c4"
+      },
+      {
+        "rule": "no-sessionstorage-in-ssr",
+        "severity": "error",
+        "file": "src/rules/vue/no-side-effect-in-computed.rule.ts",
+        "line": 178,
+        "column": 26,
+        "message": "Detected SSR unsafe API usage: sessionStorage.",
+        "suggestion": "Wrap browser-only APIs inside onMounted() or process.client checks.",
+        "category": "ssr",
+        "fingerprint": "8ee06a1277d952eefec5b7c1e48cc1e5"
+      }
+    ]
+  },
+  "src/rules/vue/no-unused-component-data.rule.ts": {
+    "hash": "576e1941b3be9b89498c817355fd88ec",
+    "issues": []
+  },
+  "src/rules/vue/no-v-html.rule.ts": {
+    "hash": "ed654c49db0db44507a243adc58bd81f",
+    "issues": []
+  },
+  "src/rules/vue/no-v-if-with-v-for.rule.ts": {
+    "hash": "d70ffd5f728ee69dd8522f4b9958fcfb",
+    "issues": []
+  },
+  "src/rules/vue/require-key-in-v-for.rule.ts": {
+    "hash": "3f8bb7b45a0fe1323a50247119cfdaad",
+    "issues": []
+  },
+  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780204577306/src/components/Test.vue": {
+    "hash": "c2b2f4e94c373362922c04634f5e3d0f",
+    "issues": []
+  },
+  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780204577306/src/composables/useTest.ts": {
+    "hash": "95a9437dcf4cc44f5c64d1dc89826725",
+    "issues": []
+  },
+  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780204638087/src/components/Test.vue": {
+    "hash": "c2b2f4e94c373362922c04634f5e3d0f",
+    "issues": []
+  },
+  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780204638087/src/composables/useTest.ts": {
+    "hash": "95a9437dcf4cc44f5c64d1dc89826725",
+    "issues": []
+  },
+  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780205336942/src/components/Test.vue": {
+    "hash": "c2b2f4e94c373362922c04634f5e3d0f",
+    "issues": []
+  },
+  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780205336942/src/composables/useTest.ts": {
+    "hash": "95a9437dcf4cc44f5c64d1dc89826725",
+    "issues": []
+  },
+  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780205387800/src/components/Test.vue": {
+    "hash": "c2b2f4e94c373362922c04634f5e3d0f",
+    "issues": []
+  },
+  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780205387800/src/composables/useTest.ts": {
+    "hash": "95a9437dcf4cc44f5c64d1dc89826725",
+    "issues": []
+  },
+  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780205429552/src/components/Test.vue": {
+    "hash": "c2b2f4e94c373362922c04634f5e3d0f",
+    "issues": []
+  },
+  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780205429552/src/composables/useTest.ts": {
+    "hash": "95a9437dcf4cc44f5c64d1dc89826725",
+    "issues": []
+  },
+  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780218073260/src/components/Test.vue": {
+    "hash": "c2b2f4e94c373362922c04634f5e3d0f",
+    "issues": []
+  },
+  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780218073260/src/composables/useTest.ts": {
+    "hash": "95a9437dcf4cc44f5c64d1dc89826725",
+    "issues": []
+  },
+  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780218101237/src/components/Test.vue": {
+    "hash": "c2b2f4e94c373362922c04634f5e3d0f",
+    "issues": []
+  },
+  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780218101237/src/composables/useTest.ts": {
+    "hash": "95a9437dcf4cc44f5c64d1dc89826725",
+    "issues": []
+  },
+  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780218386448/src/components/Test.vue": {
+    "hash": "c2b2f4e94c373362922c04634f5e3d0f",
+    "issues": []
+  },
+  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780218386448/src/composables/useTest.ts": {
+    "hash": "95a9437dcf4cc44f5c64d1dc89826725",
+    "issues": []
+  },
+  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780221218979/src/components/Test.vue": {
+    "hash": "c2b2f4e94c373362922c04634f5e3d0f",
+    "issues": []
+  },
+  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780221218979/src/composables/useTest.ts": {
+    "hash": "95a9437dcf4cc44f5c64d1dc89826725",
+    "issues": []
+  },
+  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780221244814/src/components/Test.vue": {
+    "hash": "c2b2f4e94c373362922c04634f5e3d0f",
+    "issues": []
+  },
+  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780221244814/src/composables/useTest.ts": {
+    "hash": "95a9437dcf4cc44f5c64d1dc89826725",
+    "issues": []
+  },
+  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780221269009/src/components/Test.vue": {
+    "hash": "c2b2f4e94c373362922c04634f5e3d0f",
+    "issues": []
+  },
+  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780221269009/src/composables/useTest.ts": {
+    "hash": "95a9437dcf4cc44f5c64d1dc89826725",
+    "issues": []
+  },
+  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780221288413/src/components/Test.vue": {
+    "hash": "c2b2f4e94c373362922c04634f5e3d0f",
+    "issues": []
+  },
+  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780221288413/src/composables/useTest.ts": {
+    "hash": "95a9437dcf4cc44f5c64d1dc89826725",
+    "issues": []
+  },
+  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780221336050/src/components/Test.vue": {
+    "hash": "c2b2f4e94c373362922c04634f5e3d0f",
+    "issues": []
+  },
+  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780221336050/src/composables/useTest.ts": {
+    "hash": "95a9437dcf4cc44f5c64d1dc89826725",
+    "issues": []
+  },
+  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780226632854/src/components/Test.vue": {
+    "hash": "c2b2f4e94c373362922c04634f5e3d0f",
+    "issues": []
+  },
+  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780226632854/src/composables/useTest.ts": {
+    "hash": "95a9437dcf4cc44f5c64d1dc89826725",
+    "issues": []
+  },
+  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780232696807/src/components/Test.vue": {
+    "hash": "c2b2f4e94c373362922c04634f5e3d0f",
+    "issues": []
+  },
+  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780232696807/src/composables/useTest.ts": {
+    "hash": "95a9437dcf4cc44f5c64d1dc89826725",
+    "issues": []
+  },
+  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780232757951/src/components/Test.vue": {
+    "hash": "c2b2f4e94c373362922c04634f5e3d0f",
+    "issues": []
+  },
+  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780232757951/src/composables/useTest.ts": {
+    "hash": "95a9437dcf4cc44f5c64d1dc89826725",
+    "issues": []
+  },
+  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780233391527/src/components/Test.vue": {
+    "hash": "c2b2f4e94c373362922c04634f5e3d0f",
+    "issues": []
+  },
+  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780233391527/src/composables/useTest.ts": {
+    "hash": "95a9437dcf4cc44f5c64d1dc89826725",
+    "issues": []
+  },
+  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780235282749/src/components/Test.vue": {
+    "hash": "c2b2f4e94c373362922c04634f5e3d0f",
+    "issues": []
+  },
+  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780235282749/src/composables/useTest.ts": {
+    "hash": "95a9437dcf4cc44f5c64d1dc89826725",
+    "issues": []
+  },
+  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780235304404/src/components/Test.vue": {
+    "hash": "c2b2f4e94c373362922c04634f5e3d0f",
+    "issues": []
+  },
+  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780235304404/src/composables/useTest.ts": {
+    "hash": "95a9437dcf4cc44f5c64d1dc89826725",
+    "issues": []
+  },
+  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780235325368/src/components/Test.vue": {
+    "hash": "c2b2f4e94c373362922c04634f5e3d0f",
+    "issues": []
+  },
+  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780235325368/src/composables/useTest.ts": {
+    "hash": "95a9437dcf4cc44f5c64d1dc89826725",
+    "issues": []
+  },
+  "tests/core/barrel-files.test.ts": {
+    "hash": "acdbac25e7b8779789b2a2b16e73ca83",
+    "issues": []
+  },
+  "tests/core/circular-deps-integration.test.ts": {
+    "hash": "ef5256c96c60c027e09cdb0bb39acfa2",
+    "issues": []
+  },
+  "tests/core/circular-deps.test.ts": {
+    "hash": "910ea643804175fd4646834972291896",
+    "issues": []
+  },
+  "tests/core/features.test.ts": {
+    "hash": "dc2a64dbeaf1cca5d4f974c0dc86f718",
+    "issues": []
+  },
+  "tests/core/graph-integration.test.ts": {
+    "hash": "626f1eac84f24daaded23bdf4a5cfff5",
+    "issues": []
+  },
+  "tests/core/layers.test.ts": {
+    "hash": "b72d979d5c57d2ee18a85715a034dc50",
+    "issues": []
+  },
+  "tests/core/path-resolution.test.ts": {
+    "hash": "1aa1d0d91ec9e0f707d8a4a557d9e799",
+    "issues": []
+  },
+  "tests/rules/coupling.test.ts": {
+    "hash": "af7ad748318446c06f09ce3c30ad2a0a",
+    "issues": []
+  },
+  "tests/utils/component-usage-tracker.test.ts": {
+    "hash": "19422de871c976c53e369b5807b69345",
+    "issues": [
+      {
+        "rule": "ai-monster-component",
+        "severity": "warning",
+        "file": "tests/utils/component-usage-tracker.test.ts",
+        "message": "Component appears excessively complex (score 211 > 12).",
+        "suggestion": "Split this component into smaller pieces and extract reusable logic into composables or child components.",
+        "category": "ai",
+        "fingerprint": "834a84ad147770b5d9c104e0dc04674a"
+      }
+    ]
+  },
+  "tests/utils/import-parser.test.ts": {
+    "hash": "7ed5fd04c9b5fa9bbc06d3a55b8b5e29",
+    "issues": []
+  },
+  "src/core/circular-deps.ts": {
+    "hash": "ffc587dafc129c91fb384d9c8af5b605",
+    "issues": []
+  },
+  "src/core/features.ts": {
+    "hash": "df4dd08c962c45a1c203c59ac0ae7a70",
+    "issues": []
+  },
+  "src/core/layers.ts": {
+    "hash": "4fa6cc573cd2870f8ba4db7d774e7410",
+    "issues": []
+  },
+  "src/utils/component-usage-tracker.ts": {
+    "hash": "b01112eaccf14c6cfc66953e894be623",
+    "issues": []
+  },
+  "src/utils/graph-visualization.ts": {
+    "hash": "e31ba8337ef11565389a4507fdf3661e",
+    "issues": []
+  },
+  "src/utils/import-parser.ts": {
+    "hash": "c486009d77308a983597095c47836bfb",
+    "issues": []
+  },
+  "src/rules/architecture/component-coupling.rule.ts": {
+    "hash": "cd1e673740633c17fb901831626d8b8f",
+    "issues": []
+  },
+  "src/rules/architecture/composable-coupling.rule.ts": {
+    "hash": "78dcb84dca6ec0f004a794df315cfdfe",
+    "issues": []
+  },
+  "src/rules/architecture/feature-leakage.rule.ts": {
+    "hash": "09215e4942a10af193df392c2a5766de",
+    "issues": []
+  },
+  "src/rules/architecture/forbidden-dependency.rule.ts": {
+    "hash": "1fd3c5fe37edb2476788569f83d3d01c",
+    "issues": []
+  },
+  "src/rules/architecture/layer-violation.rule.ts": {
+    "hash": "92862bc2e67bf314a1bbdc23b00a011c",
+    "issues": []
+  },
+  "src/rules/architecture/no-circular-dependency.rule.ts": {
+    "hash": "872f7773b5502d7b43f9e460a106235e",
+    "issues": []
+  },
+  "src/rules/architecture/store-coupling.rule.ts": {
+    "hash": "4c401cccd6254159e372bfda40e2892a",
+    "issues": []
   }
 }

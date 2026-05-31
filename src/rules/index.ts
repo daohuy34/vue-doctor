@@ -22,6 +22,13 @@ import { excessiveVForNestingRule } from './vue/excessive-v-for-nesting.rule';
 import { aiMonsterComponentRule } from './vue/ai-monster-component.rule';
 import { excessiveReactiveStateRule } from './vue/excessive-reactive-state.rule';
 import { excessiveComponentResponsibilityRule } from './vue/excessive-component-responsibility.rule';
+import { noCircularDependencyRule } from './architecture/no-circular-dependency.rule';
+import { componentCouplingRule } from './architecture/component-coupling.rule';
+import { composableCouplingRule } from './architecture/composable-coupling.rule';
+import { storeCouplingRule } from './architecture/store-coupling.rule';
+import { layerViolationRule } from './architecture/layer-violation.rule';
+import { forbiddenDependencyRule } from './architecture/forbidden-dependency.rule';
+import { featureLeakageRule } from './architecture/feature-leakage.rule';
 
 export const rules = [
     noLargeComponentRule,
@@ -48,4 +55,11 @@ export const rules = [
     aiMonsterComponentRule,
     excessiveReactiveStateRule,
     excessiveComponentResponsibilityRule,
+    noCircularDependencyRule,
+    componentCouplingRule,
+    composableCouplingRule,
+    storeCouplingRule,
+    layerViolationRule,
+    forbiddenDependencyRule,
+    featureLeakageRule,
 ];

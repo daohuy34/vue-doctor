@@ -1,5 +1,6 @@
 import type { Rule } from '../../types/rule';
 import { traverse } from '../../utils/ast';
+import { toFileLine } from '../../utils/line-utils';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Types
@@ -9,6 +10,7 @@ interface DataProp {
     name: string;
     line?: number;
     column?: number;
+    scriptStartLine: number;
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -18,8 +20,11 @@ interface DataProp {
 /**
  * Extracts the return object properties from an ObjectExpression.
  * Supports both shorthand `{ a, b }` and keyed `{ a: 1, b: 2 }` forms.
+ *
+ * @param objNode - The ObjectExpression node
+ * @param scriptStartLine - The line number where the script block starts
  */
-function extractPropsFromObject(objNode: any): DataProp[] {
+function extractPropsFromObject(objNode: any, scriptStartLine: number): DataProp[] {
     const props: DataProp[] = [];
     objNode.properties?.forEach((p: any) => {
         if (p.type !== 'ObjectProperty' && p.type !== 'ObjectMethod') return;
@@ -27,8 +32,9 @@ function extractPropsFromObject(objNode: any): DataProp[] {
         if (!name) return;
         props.push({
             name,
-            line: p.loc?.start.line,
+            line: toFileLine(p.loc?.start.line, scriptStartLine),
             column: p.loc?.start.column,
+            scriptStartLine,
         });
     });
     return props;
@@ -42,8 +48,11 @@ function extractPropsFromObject(objNode: any): DataProp[] {
  *   data: function() { return { a, b } }
  *   data: () => ({ a, b })            ← arrow with object expression body
  *   data: () => { return { a, b } }   ← arrow with block body
+ *
+ * @param fnNode - The function node
+ * @param scriptStartLine - The line number where the script block starts
  */
-function extractDataProps(fnNode: any): DataProp[] {
+function extractDataProps(fnNode: any, scriptStartLine: number): DataProp[] {
     // ObjectMethod or FunctionExpression — has .body BlockStatement
     const body = fnNode.body ?? fnNode.value?.body;
 
@@ -53,7 +62,7 @@ function extractDataProps(fnNode: any): DataProp[] {
                 stmt.type === 'ReturnStatement' &&
                 stmt.argument?.type === 'ObjectExpression'
             ) {
-                return extractPropsFromObject(stmt.argument);
+                return extractPropsFromObject(stmt.argument, scriptStartLine);
             }
         }
     }
@@ -61,7 +70,7 @@ function extractDataProps(fnNode: any): DataProp[] {
     // ArrowFunctionExpression with object expression body: () => ({ a, b })
     const arrowBody = fnNode.value?.body ?? fnNode.body;
     if (arrowBody?.type === 'ObjectExpression') {
-        return extractPropsFromObject(arrowBody);
+        return extractPropsFromObject(arrowBody, scriptStartLine);
     }
 
     return [];
@@ -244,7 +253,7 @@ export const noUnusedComponentDataRule: Rule = {
                 const key = path.node.key?.name ?? path.node.key?.value;
                 if (key !== 'data') return;
                 if (!isComponentDataKey(path)) return;
-                dataProps.push(...extractDataProps(path.node));
+                dataProps.push(...extractDataProps(path.node, context.scriptStartLine));
                 path.skip();
             },
 
@@ -253,7 +262,7 @@ export const noUnusedComponentDataRule: Rule = {
                 const key = path.node.key?.name ?? path.node.key?.value;
                 if (key !== 'data') return;
                 if (!isComponentDataKey(path)) return;
-                dataProps.push(...extractDataProps(path.node));
+                dataProps.push(...extractDataProps(path.node, context.scriptStartLine));
                 path.skip();
             },
         });

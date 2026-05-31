@@ -1,6 +1,7 @@
 import { traverse } from '../../utils/ast';
 import { createLineRemovalFix } from '../../utils/fix';
 import type { Rule } from '../../types/rule';
+import { toFileLine } from '../../utils/line-utils';
 
 export const noDebuggerRule: Rule = {
     name: 'no-debugger',
@@ -25,7 +26,7 @@ export const noDebuggerRule: Rule = {
                     rule: 'no-debugger',
                     severity: 'warning',
                     file: context.filePath,
-                    line: path.node.loc?.start.line,
+                    line: toFileLine(path.node.loc?.start.line, context.scriptStartLine),
                     column: path.node.loc?.start.column,
                     message: 'Unexpected debugger statement.',
                     suggestion:

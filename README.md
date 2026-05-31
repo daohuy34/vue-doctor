@@ -1,5 +1,9 @@
 # Vue Doctor
 
+![npm](https://img.shields.io/npm/v/@daohuy34/vue-doctor)
+![CI](https://github.com/daohuy34/vue-doctor/workflows/CI/badge.svg)
+![Tests](https://img.shields.io/badge/tests-203%20passing-brightgreen)
+
 Static Analysis and Architecture Analysis for Vue & Nuxt applications.
 
 Vue Doctor helps identify maintainability issues, SSR risks, and architectural smells before they become technical debt.
@@ -60,6 +64,63 @@ Inspect project dependencies:
 
 ```bash
 vue-doctor graph
+```
+
+### Graph Command Options
+
+**Filter by type:**
+
+```bash
+# Only components
+vue-doctor graph --type component
+
+# Only pages
+vue-doctor graph --type page
+
+# Only stores
+vue-doctor graph --type store
+
+# Only composables
+vue-doctor graph --type composable
+```
+
+**Output formats:**
+
+```bash
+# Text format (default)
+vue-doctor graph --format text
+
+# Tree view (hierarchical)
+vue-doctor graph --format tree
+
+# JSON output
+vue-doctor graph --format json
+
+# Statistics summary
+vue-doctor graph --format stats
+```
+
+**Filter by pattern:**
+
+```bash
+# Only files matching pattern
+vue-doctor graph --filter "components/"
+
+# Regex pattern
+vue-doctor graph --filter "\.vue$"
+```
+
+**Limit depth:**
+
+```bash
+# Maximum 2 levels deep
+vue-doctor graph --depth 2
+```
+
+**Combine options:**
+
+```bash
+vue-doctor graph --type component --format tree --depth 3
 ```
 
 Create a baseline:
@@ -141,6 +202,16 @@ Errors: 9
 ### AI Analysis
 
 - ai-monster-component
+
+### Architecture
+
+- no-circular-dependency
+- component-coupling
+- composable-coupling
+- store-coupling
+- layer-violation
+- forbidden-dependency
+- feature-leakage
 
 ---
 

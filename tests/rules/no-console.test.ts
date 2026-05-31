@@ -69,6 +69,6 @@ console.log('hello');
         const issues = await noConsoleRule.check(ctx);
 
         expect(issues).toHaveLength(1);
-        expect(issues[0].line).toBe(2);
+        expect(issues[0].line).toBe(3);
     });
 });

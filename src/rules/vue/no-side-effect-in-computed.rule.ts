@@ -6,6 +6,7 @@ import type {
 
 import { traverse } from '../../utils/ast';
 import type { Rule } from '../../types/rule';
+import { toFileLine } from '../../utils/line-utils';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Side-effect detection configuration
@@ -88,13 +89,17 @@ interface SideEffect {
     callee: string; // human-readable callee string
     line?: number;
     column?: number;
+    scriptStartLine: number;
 }
 
 /**
  * Inspects a CallExpression node and returns a SideEffect descriptor when
  * the call is considered a side effect, or null otherwise.
+ *
+ * @param callNode - The AST node to inspect
+ * @param scriptStartLine - The line number where the script block starts in the file
  */
-function detectCallSideEffect(callNode: any): SideEffect | null {
+function detectCallSideEffect(callNode: any, scriptStartLine: number): SideEffect | null {
     const callee = callNode.callee;
     const str = calleeToString(callee);
     const loc = callNode.loc;
@@ -110,6 +115,7 @@ function detectCallSideEffect(callNode: any): SideEffect | null {
             callee: str,
             line: loc?.start.line,
             column: loc?.start.column,
+            scriptStartLine,
         };
     }
 
@@ -120,6 +126,7 @@ function detectCallSideEffect(callNode: any): SideEffect | null {
             callee: str,
             line: loc?.start.line,
             column: loc?.start.column,
+            scriptStartLine,
         };
     }
 
@@ -130,6 +137,7 @@ function detectCallSideEffect(callNode: any): SideEffect | null {
             callee: str,
             line: loc?.start.line,
             column: loc?.start.column,
+            scriptStartLine,
         };
     }
 
@@ -145,6 +153,7 @@ function detectCallSideEffect(callNode: any): SideEffect | null {
                 callee: str,
                 line: loc?.start.line,
                 column: loc?.start.column,
+                scriptStartLine,
             };
         }
     }
@@ -161,6 +170,7 @@ function detectCallSideEffect(callNode: any): SideEffect | null {
                 callee: str,
                 line: loc?.start.line,
                 column: loc?.start.column,
+                scriptStartLine,
             };
         }
     }
@@ -177,6 +187,7 @@ function detectCallSideEffect(callNode: any): SideEffect | null {
                 callee: str,
                 line: loc?.start.line,
                 column: loc?.start.column,
+                scriptStartLine,
             };
         }
     }
@@ -198,6 +209,7 @@ function detectCallSideEffect(callNode: any): SideEffect | null {
                 callee: str,
                 line: loc?.start.line,
                 column: loc?.start.column,
+                scriptStartLine,
             };
         }
         // ref.value.push()  →  receiver.property.name === 'value'
@@ -210,6 +222,7 @@ function detectCallSideEffect(callNode: any): SideEffect | null {
                 callee: str,
                 line: loc?.start.line,
                 column: loc?.start.column,
+                scriptStartLine,
             };
         }
     }
@@ -221,6 +234,7 @@ function detectCallSideEffect(callNode: any): SideEffect | null {
             callee: str,
             line: loc?.start.line,
             column: loc?.start.column,
+            scriptStartLine,
         };
     }
 
@@ -235,6 +249,7 @@ function detectCallSideEffect(callNode: any): SideEffect | null {
             callee: str,
             line: loc?.start.line,
             column: loc?.start.column,
+            scriptStartLine,
         };
     }
 
@@ -244,8 +259,11 @@ function detectCallSideEffect(callNode: any): SideEffect | null {
 /**
  * Traverses only inside a single computed method body and collects all
  * side effects found.
+ *
+ * @param methodNode - The computed method node
+ * @param scriptStartLine - The line number where the script block starts in the file
  */
-function collectSideEffects(methodNode: any): SideEffect[] {
+function collectSideEffects(methodNode: any, scriptStartLine: number): SideEffect[] {
     const effects: SideEffect[] = [];
 
     // body: ObjectMethod has .body (BlockStatement)
@@ -284,13 +302,14 @@ function collectSideEffects(methodNode: any): SideEffect[] {
                     callee: `this.${propName}`,
                     line: path.node.loc?.start.line,
                     column: path.node.loc?.start.column,
+                    scriptStartLine,
                 });
             }
         },
 
         // ── All call expressions ───────────────────────────────────────────
         CallExpression(path) {
-            const effect = detectCallSideEffect(path.node);
+            const effect = detectCallSideEffect(path.node, scriptStartLine);
             if (effect) effects.push(effect);
         },
     });
@@ -445,14 +464,14 @@ export const noSideEffectInComputedRule: Rule = {
                         methodNode.key?.value ??
                         'unknown';
 
-                    const effects = collectSideEffects(targetNode);
+                    const effects = collectSideEffects(targetNode, context.scriptStartLine);
 
                     effects.forEach((effect) => {
                         issues.push({
                             rule: 'no-side-effect-in-computed',
                             severity: 'error',
                             file: context.filePath,
-                            line: effect.line,
+                            line: toFileLine(effect.line, effect.scriptStartLine),
                             column: effect.column,
                             message: buildMessage(computedName, effect),
                             suggestion: buildSuggestion(computedName, effect),
@@ -518,14 +537,14 @@ export const noSideEffectInComputedRule: Rule = {
 
                 if (!getterNode) return;
 
-                const effects = collectSideEffects(getterNode);
+                const effects = collectSideEffects(getterNode, context.scriptStartLine);
 
                 effects.forEach((effect) => {
                     issues.push({
                         rule: 'no-side-effect-in-computed',
                         severity: 'error',
                         file: context.filePath,
-                        line: effect.line,
+                        line: toFileLine(effect.line, effect.scriptStartLine),
                         column: effect.column,
                         message: buildMessage(computedName, effect),
                         suggestion: buildSuggestion(computedName, effect),

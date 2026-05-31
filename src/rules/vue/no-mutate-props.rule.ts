@@ -1,5 +1,6 @@
 import type { Rule } from '../../types/rule';
 import { traverse } from '../../utils/ast';
+import { toFileLine } from '../../utils/line-utils';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Constants
@@ -336,7 +337,7 @@ export const noMutatePropsRule: Rule = {
                             rule: 'no-mutate-props',
                             severity: 'error',
                             file: context.filePath,
-                            line: path.node.loc?.start.line,
+                            line: toFileLine(path.node.loc?.start.line, context.scriptStartLine),
                             column: path.node.loc?.start.column,
                             message: buildMessage(propName),
                             suggestion: buildSuggestion(propName),
@@ -357,7 +358,7 @@ export const noMutatePropsRule: Rule = {
                             rule: 'no-mutate-props',
                             severity: 'error',
                             file: context.filePath,
-                            line: path.node.loc?.start.line,
+                            line: toFileLine(path.node.loc?.start.line, context.scriptStartLine),
                             column: path.node.loc?.start.column,
                             message: buildMessage(propName),
                             suggestion: buildSuggestion(propName),
@@ -395,7 +396,7 @@ export const noMutatePropsRule: Rule = {
                             rule: 'no-mutate-props',
                             severity: 'error',
                             file: context.filePath,
-                            line: path.node.loc?.start.line,
+                            line: toFileLine(path.node.loc?.start.line, context.scriptStartLine),
                             column: path.node.loc?.start.column,
                             message: buildMessage(propName),
                             suggestion: buildSuggestion(propName),
@@ -416,7 +417,7 @@ export const noMutatePropsRule: Rule = {
                             rule: 'no-mutate-props',
                             severity: 'error',
                             file: context.filePath,
-                            line: path.node.loc?.start.line,
+                            line: toFileLine(path.node.loc?.start.line, context.scriptStartLine),
                             column: path.node.loc?.start.column,
                             message: buildMessage(propName),
                             suggestion: buildSuggestion(propName),

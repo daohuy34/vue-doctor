@@ -1,4 +1,5 @@
 import path from 'node:path';
+import { parseImports } from '../utils/import-parser';
 
 export type GraphNodeKind = 'page' | 'component' | 'store' | 'composable' | 'other';
 
@@ -6,12 +7,13 @@ export interface GraphNode {
     filePath: string;
     kind: GraphNodeKind;
     imports: string[];
+    dynamicImports: string[];
 }
 
 export interface GraphEdge {
     from: string;
     to: string;
-    kind: 'import';
+    kind: 'import' | 'dynamic';
 }
 
 export interface ProjectGraph {
@@ -65,19 +67,92 @@ export function extractImports(source: string): string[] {
         return [];
     }
 
+    // Strip line comments before processing
+    const stripped = source.replace(/\/\/.*$/gm, '');
+
     const imports = new Set<string>();
 
-    for (const match of source.matchAll(
-        /(?:import|export\s+[^'"\n]+from|require\s*\()\s*['"]([^'"]+)['"]/g,
-    )) {
-        const importPath = match[1];
+    // Match: import ... from 'path' or import 'path' (side-effect import)
+    const importRegex = /import\s+(?:(?:[\w*{}\s,]+\s+from\s+)?['"]([^'"]+)['"]|['"]([^'"]+)['"])/g;
+    for (const match of stripped.matchAll(importRegex)) {
+        const importPath = match[1] || match[2];
+        if (importPath) {
+            imports.add(importPath);
+        }
+    }
 
+    // Match: export ... from 'path'
+    const exportFromRegex = /export\s+(?:[\w*{}\s,]+\s+)?from\s+['"]([^'"]+)['"]/g;
+    for (const match of stripped.matchAll(exportFromRegex)) {
+        const importPath = match[1];
+        if (importPath) {
+            imports.add(importPath);
+        }
+    }
+
+    // Match: require('path') or require("path")
+    const requireRegex = /require\s*\(\s*['"]([^'"]+)['"]\s*\)/g;
+    for (const match of stripped.matchAll(requireRegex)) {
+        const importPath = match[1];
         if (importPath) {
             imports.add(importPath);
         }
     }
 
     return [...imports];
+}
+
+/**
+ * Extracts dynamic imports from source.
+ * Handles patterns like:
+ * - import('./module')
+ * - await import('./module')
+ * - defineAsyncComponent(() => import('./module'))
+ */
+export function extractDynamicImports(source: string): string[] {
+    if (!source) {
+        return [];
+    }
+
+    const dynamicImports = new Set<string>();
+
+    // Regex patterns for dynamic imports
+    // import('path') or import("path") - with or without await
+    const importCallRegex = /(?:await\s+)?import\s*\(\s*['"]([^'"]+)['"]\s*\)/g;
+
+    for (const match of source.matchAll(importCallRegex)) {
+        const path = match[1];
+        if (path) {
+            dynamicImports.add(path);
+        }
+    }
+
+    // defineAsyncComponent(() => import('path'))
+    const asyncComponentRegex = /defineAsyncComponent\s*\(\s*\(\s*\)\s*=>\s*import\s*\(\s*['"]([^'"]+)['"]\s*\)/g;
+
+    for (const match of source.matchAll(asyncComponentRegex)) {
+        const path = match[1];
+        if (path) {
+            dynamicImports.add(path);
+        }
+    }
+
+    return [...dynamicImports];
+}
+
+/**
+ * Extracts all imports (both static and dynamic) from source.
+ */
+export function extractAllImports(source: string): { staticImports: string[]; dynamicImports: string[] } {
+    if (!source) {
+        return { staticImports: [], dynamicImports: [] };
+    }
+
+    const result = parseImports(source);
+    return {
+        staticImports: result.imports.map(i => i.source),
+        dynamicImports: result.dynamicImports,
+    };
 }
 
 function isExternalImport(importPath: string) {
@@ -186,11 +261,13 @@ export function buildProjectGraph(
         filePath,
         kind: classifyGraphNode(filePath),
         imports: extractImports(sources.get(filePath) ?? ''),
+        dynamicImports: extractDynamicImports(sources.get(filePath) ?? ''),
     }));
 
     const edges = new Map<string, GraphEdge>();
 
     for (const node of nodes) {
+        // Process static imports
         for (const importPath of node.imports) {
             const target = resolveLocalImport(importPath, node.filePath, knownFiles);
 
@@ -203,6 +280,25 @@ export function buildProjectGraph(
                 to: target,
                 kind: 'import',
             });
+        }
+
+        // Process dynamic imports
+        for (const importPath of node.dynamicImports) {
+            const target = resolveLocalImport(importPath, node.filePath, knownFiles);
+
+            if (!target || target === node.filePath) {
+                continue;
+            }
+
+            const edgeKey = `${node.filePath}::${target}`;
+            // Don't override existing static import edge with dynamic
+            if (!edges.has(edgeKey)) {
+                edges.set(edgeKey, {
+                    from: node.filePath,
+                    to: target,
+                    kind: 'dynamic',
+                });
+            }
         }
     }
 

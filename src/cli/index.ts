@@ -36,9 +36,19 @@ cli.command('baseline', 'Generate baseline file').action(async () => {
     await baselineCommand();
 });
 
-cli.command('graph', 'Inspect project dependency graph').action(async () => {
-    await graphCommand();
-});
+// Graph command with options
+cli.command('graph', 'Inspect project dependency graph')
+    .option('--type <kind>', 'Filter by node type: page, component, store, composable, all', {
+        default: 'all',
+    })
+    .option('--depth <n>', 'Maximum depth to traverse')
+    .option('--format <fmt>', 'Output format: text, tree, json, stats', {
+        default: 'text',
+    })
+    .option('--filter <pattern>', 'Filter by file path pattern (regex)')
+    .action(async (options) => {
+        await graphCommand(options);
+    });
 
 cli.command('rules', 'List available rules').action(async () => {
     await rulesCommand();
