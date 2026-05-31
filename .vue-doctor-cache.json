@@ -1644,5 +1644,29 @@
   "src/rules/architecture/store-coupling.rule.ts": {
     "hash": "4c401cccd6254159e372bfda40e2892a",
     "issues": []
+  },
+  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780269545871/src/components/Test.vue": {
+    "hash": "c2b2f4e94c373362922c04634f5e3d0f",
+    "issues": []
+  },
+  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780269545871/src/composables/useTest.ts": {
+    "hash": "95a9437dcf4cc44f5c64d1dc89826725",
+    "issues": []
+  },
+  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780269575360/src/components/Test.vue": {
+    "hash": "c2b2f4e94c373362922c04634f5e3d0f",
+    "issues": []
+  },
+  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780269575360/src/composables/useTest.ts": {
+    "hash": "95a9437dcf4cc44f5c64d1dc89826725",
+    "issues": []
+  },
+  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780269593262/src/components/Test.vue": {
+    "hash": "c2b2f4e94c373362922c04634f5e3d0f",
+    "issues": []
+  },
+  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780269593262/src/composables/useTest.ts": {
+    "hash": "95a9437dcf4cc44f5c64d1dc89826725",
+    "issues": []
   }
 }

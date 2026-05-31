@@ -357,4 +357,17 @@ export const ruleMetadata: RuleMetadata[] = [
         recommended: false,
         docs: 'docs/rules/feature-leakage.md',
     },
+
+    // ── Nuxt ─────────────────────────────────────────────────────────
+
+    {
+        name: 'page-complexity',
+        description:
+            'Detect overly complex Nuxt page components. ' +
+            'Large pages can hurt performance and maintainability.',
+        severity: 'warning',
+        category: 'performance',
+        recommended: false,
+        docs: 'docs/rules/page-complexity.md',
+    },
 ];

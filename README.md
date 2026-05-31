@@ -213,6 +213,10 @@ Errors: 9
 - forbidden-dependency
 - feature-leakage
 
+### Nuxt
+
+- page-complexity
+
 ---
 
 ## Baseline Support

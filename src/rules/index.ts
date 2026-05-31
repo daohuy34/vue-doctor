@@ -3,6 +3,7 @@ import { noWindowInSsrRule } from './nuxt/no-window-in-ssr.rule';
 import { noDocumentInSsrRule } from './nuxt/no-document-in-ssr.rule';
 import { noLocalStorageInSsrRule } from './nuxt/no-localstorage-in-ssr.rule';
 import { noSessionStorageInSsrRule } from './nuxt/no-sessionstorage-in-ssr.rule';
+import { pageComplexityRule } from './nuxt/page-complexity.rule';
 import { noDeepWatchRule } from './vue/no-deep-watch.rule';
 import { noConsoleRule } from './vue/no-console.rule';
 import { noMutatePropsRule } from './vue/no-mutate-props.rule';
@@ -62,4 +63,5 @@ export const rules = [
     layerViolationRule,
     forbiddenDependencyRule,
     featureLeakageRule,
+    pageComplexityRule,
 ];

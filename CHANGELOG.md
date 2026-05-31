@@ -5,6 +5,42 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.9.0] - 2026-06-01
+
+### Added
+
+- **Nuxt Detection System**
+  - `src/core/nuxt.ts` - Nuxt framework detection
+  - Nuxt 2/3 version detection
+  - Directory structure detection (pages/, layouts/, components/, etc.)
+  - Auto-import configuration detection
+
+- **Nuxt Rules**
+  - `page-complexity` rule - detects large Nuxt page components
+  - Configurable maxLines threshold (default: 300)
+  - Detects multiple asyncData/fetch calls
+  - Detects excessive computed properties
+
+### Configuration
+
+```javascript
+// vue-doctor.config.js
+export default {
+  rules: {
+    'page-complexity': {
+      maxLines: 300,
+      maxAsyncCalls: 3,
+      severity: 'warning'
+    }
+  }
+}
+```
+
+### Tests
+
+- Added `nuxt.test.ts`
+- Total test coverage: 294 tests
+
 ## [1.8.0] - 2026-05-31
 
 ### Added
