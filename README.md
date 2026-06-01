@@ -220,6 +220,11 @@ Errors: 9
 - duplicate-fetch
 - hydration-risk
 
+### Pinia
+
+- store-bloat
+- store-god-object
+
 ---
 
 ## Baseline Support

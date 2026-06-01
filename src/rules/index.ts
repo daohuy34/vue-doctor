@@ -7,6 +7,8 @@ import { pageComplexityRule } from './nuxt/page-complexity.rule';
 import { asyncDataAbuseRule } from './nuxt/async-data-abuse.rule';
 import { duplicateFetchRule } from './nuxt/duplicate-fetch.rule';
 import { hydrationRiskRule } from './nuxt/hydration-risk.rule';
+import { storeBloatRule } from './pinia/store-bloat.rule';
+import { storeGodObjectRule } from './pinia/store-god-object.rule';
 import { noDeepWatchRule } from './vue/no-deep-watch.rule';
 import { noConsoleRule } from './vue/no-console.rule';
 import { noMutatePropsRule } from './vue/no-mutate-props.rule';
@@ -70,4 +72,6 @@ export const rules = [
     asyncDataAbuseRule,
     duplicateFetchRule,
     hydrationRiskRule,
+    storeBloatRule,
+    storeGodObjectRule,
 ];

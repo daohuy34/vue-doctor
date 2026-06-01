@@ -403,4 +403,28 @@ export const ruleMetadata: RuleMetadata[] = [
         recommended: false,
         docs: 'docs/rules/hydration-risk.md',
     },
+
+    // ── Pinia ─────────────────────────────────────────────────────────
+
+    {
+        name: 'store-bloat',
+        description:
+            'Detect overly large Pinia stores. ' +
+            'Large stores hurt maintainability.',
+        severity: 'warning',
+        category: 'maintainability',
+        recommended: false,
+        docs: 'docs/rules/store-bloat.md',
+    },
+
+    {
+        name: 'store-god-object',
+        description:
+            'Detect Pinia stores with too many responsibilities. ' +
+            'God objects are hard to maintain and test.',
+        severity: 'warning',
+        category: 'architecture',
+        recommended: false,
+        docs: 'docs/rules/store-god-object.md',
+    },
 ];

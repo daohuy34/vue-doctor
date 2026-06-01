@@ -5,6 +5,48 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.1.0] - 2026-06-01
+
+### Added
+
+- **Pinia Store Analysis**
+  - `src/utils/pinia-detector.ts` - Pinia store detection
+  - Extracts state, getters, actions from stores
+  - Analyzes store complexity
+
+- **Pinia Rules**
+  - `store-bloat` - detects large stores (>300 lines, >15 state properties)
+  - `store-god-object` - detects stores with too many responsibilities
+
+### Pinia Rules
+
+| Rule | Description | Default Threshold |
+|------|-------------|------------------|
+| `store-bloat` | Large stores hurt maintainability | 300 lines, 15 props |
+| `store-god-object` | Too many responsibilities | 20 props, 15 actions |
+
+### Configuration
+
+```javascript
+// vue-doctor.config.js
+export default {
+  rules: {
+    'store-bloat': {
+      maxLines: 300,
+      maxStateProperties: 15
+    },
+    'store-god-object': {
+      maxStateProperties: 20,
+      maxActions: 15
+    }
+  }
+}
+```
+
+### Tests
+
+- Total test coverage: 294 tests
+
 ## [2.0.0] - 2026-06-01
 
 ### Breaking Changes
