@@ -216,6 +216,9 @@ Errors: 9
 ### Nuxt
 
 - page-complexity
+- async-data-abuse
+- duplicate-fetch
+- hydration-risk
 
 ---
 

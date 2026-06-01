@@ -4,6 +4,9 @@ import { noDocumentInSsrRule } from './nuxt/no-document-in-ssr.rule';
 import { noLocalStorageInSsrRule } from './nuxt/no-localstorage-in-ssr.rule';
 import { noSessionStorageInSsrRule } from './nuxt/no-sessionstorage-in-ssr.rule';
 import { pageComplexityRule } from './nuxt/page-complexity.rule';
+import { asyncDataAbuseRule } from './nuxt/async-data-abuse.rule';
+import { duplicateFetchRule } from './nuxt/duplicate-fetch.rule';
+import { hydrationRiskRule } from './nuxt/hydration-risk.rule';
 import { noDeepWatchRule } from './vue/no-deep-watch.rule';
 import { noConsoleRule } from './vue/no-console.rule';
 import { noMutatePropsRule } from './vue/no-mutate-props.rule';
@@ -64,4 +67,7 @@ export const rules = [
     forbiddenDependencyRule,
     featureLeakageRule,
     pageComplexityRule,
+    asyncDataAbuseRule,
+    duplicateFetchRule,
+    hydrationRiskRule,
 ];

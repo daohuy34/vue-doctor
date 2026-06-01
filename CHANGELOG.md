@@ -5,6 +5,63 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.0] - 2026-06-01
+
+### Breaking Changes
+
+- **Major version bump** - New architecture analysis system
+- All new features below are available
+
+### Added
+
+- **Nuxt Performance Rules**
+  - `async-data-abuse` - detects excessive async data fetching
+  - `duplicate-fetch` - detects duplicate API calls
+  - `hydration-risk` - detects SSR hydration mismatch patterns
+
+- **Nuxt Detection Improvements**
+  - Enhanced page complexity detection
+  - Better async data call counting
+  - API endpoint normalization for duplicate detection
+
+### Nuxt Rules
+
+Total 7 Nuxt-specific rules:
+- `no-window-in-ssr`
+- `no-document-in-ssr`
+- `no-localstorage-in-ssr`
+- `no-sessionstorage-in-ssr`
+- `page-complexity`
+- `async-data-abuse`
+- `duplicate-fetch`
+- `hydration-risk`
+
+### Configuration
+
+```javascript
+// vue-doctor.config.js
+export default {
+  rules: {
+    'async-data-abuse': {
+      maxAsyncCalls: 3
+    },
+    'hydration-risk': {
+      severity: 'warning'
+    }
+  }
+}
+```
+
+### Documentation
+
+- Added `docs/rules/async-data-abuse.md`
+- Added `docs/rules/duplicate-fetch.md`
+- Added `docs/rules/hydration-risk.md`
+
+### Tests
+
+- Total test coverage: 294 tests
+
 ## [1.9.0] - 2026-06-01
 
 ### Added

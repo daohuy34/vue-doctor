@@ -370,4 +370,37 @@ export const ruleMetadata: RuleMetadata[] = [
         recommended: false,
         docs: 'docs/rules/page-complexity.md',
     },
+
+    {
+        name: 'async-data-abuse',
+        description:
+            'Detect pages with too many async data fetching calls. ' +
+            'Excessive parallel requests can hurt performance.',
+        severity: 'warning',
+        category: 'performance',
+        recommended: false,
+        docs: 'docs/rules/async-data-abuse.md',
+    },
+
+    {
+        name: 'duplicate-fetch',
+        description:
+            'Detect duplicate API fetch calls within the same component. ' +
+            'Duplicate fetches waste bandwidth and can cause race conditions.',
+        severity: 'warning',
+        category: 'performance',
+        recommended: false,
+        docs: 'docs/rules/duplicate-fetch.md',
+    },
+
+    {
+        name: 'hydration-risk',
+        description:
+            'Detect patterns that may cause SSR/hydration mismatches. ' +
+            'Hydration issues cause errors and poor user experience.',
+        severity: 'warning',
+        category: 'ssr',
+        recommended: false,
+        docs: 'docs/rules/hydration-risk.md',
+    },
 ];
