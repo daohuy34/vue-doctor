@@ -246,3 +246,136 @@ export function isStoreBloated(analysis: StoreAnalysis): boolean {
         (analysis.stateSize + analysis.getterCount + analysis.actionCount) > 30
     );
 }
+
+/**
+ * Store dependency info
+ */
+export interface StoreDependency {
+    sourceStore: string;
+    targetStore: string;
+    sourceFile: string;
+    targetFile: string;
+}
+
+/**
+ * Extract store-to-store dependencies from source code
+ */
+export function extractStoreDependencies(source: string, filePath: string): StoreDependency[] {
+    const dependencies: StoreDependency[] = [];
+
+    // Pattern to match store imports
+    const storeImportPattern = /use(\w+)Store/g;
+    const storeName = extractStoreName(source);
+
+    let match;
+    while ((match = storeImportPattern.exec(source)) !== null) {
+        const importedStore = match[1] + 'Store';
+        const targetFile = filePath.replace(/[^/]+$/, `use${match[1]}Store.ts`);
+
+        // Skip if importing itself
+        if (storeName && importedStore === storeName) {
+            continue;
+        }
+
+        dependencies.push({
+            sourceStore: storeName ?? 'unknown',
+            targetStore: importedStore,
+            sourceFile: filePath,
+            targetFile,
+        });
+    }
+
+    return dependencies;
+}
+
+/**
+ * Check if a store has cross-store dependencies
+ */
+export function hasCrossStoreDependencies(dependencies: StoreDependency[]): boolean {
+    return dependencies.length > 0;
+}
+
+/**
+ * Check if there's a circular store dependency in a dependency graph
+ */
+export function hasCircularStoreDependency(
+    dependencies: StoreDependency[],
+    storeName: string
+): boolean {
+    const visited = new Set<string>();
+    const stack = [storeName];
+
+    while (stack.length > 0) {
+        const current = stack.pop()!;
+
+        if (current === storeName && visited.has(current)) {
+            return true;
+        }
+
+        if (visited.has(current)) {
+            continue;
+        }
+
+        visited.add(current);
+
+        // Find dependencies of current store
+        const deps = dependencies.filter(d => d.sourceStore === current);
+        for (const dep of deps) {
+            stack.push(dep.targetStore);
+        }
+    }
+
+    return false;
+}
+
+/**
+ * Pinia best practice violation
+ */
+export interface BestPracticeViolation {
+    type: 'direct-mutation' | 'async-in-state' | 'side-effect-getter' | 'no-types';
+    message: string;
+    line?: number;
+}
+
+/**
+ * Check for Pinia best practice violations
+ */
+export function checkBestPractices(source: string): BestPracticeViolation[] {
+    const violations: BestPracticeViolation[] = [];
+
+    // Check for direct state mutation (Options API)
+    if (source.includes('defineStore')) {
+        // Check for direct assignment to state
+        const stateMutationPattern = /state\.\w+\s*=/g;
+        let match;
+        while ((match = stateMutationPattern.exec(source)) !== null) {
+            violations.push({
+                type: 'direct-mutation',
+                message: 'Direct state mutation detected. Use $patch or actions instead.',
+                line: source.substring(0, match.index).split('\n').length,
+            });
+        }
+
+        // Check for async in state (Options API)
+        if (source.includes('state()') && /\basync\b/.test(source)) {
+            const asyncInState = source.match(/state\s*\(\s*\)\s*\{[^}]*async/);
+            if (asyncInState) {
+                violations.push({
+                    type: 'async-in-state',
+                    message: 'Async code in state() is not recommended. Use actions for async operations.',
+                });
+            }
+        }
+
+        // Check for side effects in getters
+        const getterWithSideEffect = source.match(/getters\s*:\s*\{[^}]*\{[^}]*\.(?:fetch|axios|localStorage)/s);
+        if (getterWithSideEffect) {
+            violations.push({
+                type: 'side-effect-getter',
+                message: 'Side effects in getters are not recommended. Getters should be pure.',
+            });
+        }
+    }
+
+    return violations;
+}

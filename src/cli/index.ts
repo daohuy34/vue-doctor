@@ -4,7 +4,7 @@ import { cac } from 'cac';
 
 import { checkCommand } from './commands/check';
 import { fixCommand } from './commands/fix';
-
+import { metricsCommand } from './commands/metrics';
 import { baselineCommand } from './commands/baseline';
 import { graphCommand } from './commands/graph';
 import { rulesCommand } from './commands/rules';
@@ -57,6 +57,17 @@ cli.command('rules', 'List available rules').action(async () => {
 cli.command('rule <name>', 'Show rule details').action(async (name) => {
     await ruleCommand(name);
 });
+
+cli.command('metrics', 'Show architecture metrics and health scores')
+    .option('--profile <name>', 'Rule profile: strict, recommended, minimal', {
+        default: 'recommended',
+    })
+    .option('--format <type>', 'Output format: text, json, html', {
+        default: 'text',
+    })
+    .action(async (options) => {
+        await metricsCommand(options);
+    });
 
 cli.help();
 

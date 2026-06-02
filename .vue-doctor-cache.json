@@ -12,7 +12,7 @@
     "issues": []
   },
   "src/cli/index.ts": {
-    "hash": "3542a36098afb18fde04b66da5c0cd70",
+    "hash": "168fc0ef2d0d3ee884ccba5d050bf182",
     "issues": []
   },
   "src/core/baseline.ts": {
@@ -21,6 +21,10 @@
   },
   "src/core/cache.ts": {
     "hash": "1da6a3776edf199c436b8519d7d95f7d",
+    "issues": []
+  },
+  "src/core/circular-deps.ts": {
+    "hash": "ffc587dafc129c91fb384d9c8af5b605",
     "issues": []
   },
   "src/core/composable-graph.ts": {
@@ -39,6 +43,10 @@
     "hash": "405a080d74c81837c6446c2e376ae6f6",
     "issues": []
   },
+  "src/core/features.ts": {
+    "hash": "df4dd08c962c45a1c203c59ac0ae7a70",
+    "issues": []
+  },
   "src/core/graph.ts": {
     "hash": "a737bfacdd289a8f140f03e4518c5898",
     "issues": []
@@ -49,6 +57,18 @@
   },
   "src/core/index.ts": {
     "hash": "b0383ed054c31c4473c6e39d2f9706db",
+    "issues": []
+  },
+  "src/core/layers.ts": {
+    "hash": "4fa6cc573cd2870f8ba4db7d774e7410",
+    "issues": []
+  },
+  "src/core/metrics.ts": {
+    "hash": "a46ef7dc1c4bb1bc4fbbbb2e8050d7c6",
+    "issues": []
+  },
+  "src/core/nuxt.ts": {
+    "hash": "7b5a49ee72f597ea29a1338a32634873",
     "issues": []
   },
   "src/core/parser.ts": {
@@ -69,7 +89,19 @@
   },
   "src/core/store-graph.ts": {
     "hash": "2c1784e2733fdfbea6dce7f1bd05c413",
-    "issues": []
+    "issues": [
+      {
+        "rule": "store-bloat",
+        "severity": "warning",
+        "file": "src/core/store-graph.ts",
+        "line": 1,
+        "column": 1,
+        "message": "Store has 358 lines (max recommended: 300)",
+        "suggestion": "This store is getting large. Consider splitting it by domain or feature.",
+        "category": "maintainability",
+        "fingerprint": "7d1e952f630d7ade91383ade9d7a842f"
+      }
+    ]
   },
   "src/playground/AppButton.vue": {
     "hash": "66c415b8b5b8a6f68b3e0a58f381b23d",
@@ -107,6 +139,189 @@
         "suggestion": "Split this component into smaller pieces and extract reusable logic into composables or child components.",
         "category": "ai",
         "fingerprint": "b8a2ffd7e39866b7f719cb528ebe16bd"
+      }
+    ]
+  },
+  "src/playground/BloatedUserStore.ts": {
+    "hash": "d25c24b4a2d1b696e202b3214f350335",
+    "issues": [
+      {
+        "rule": "ai-monster-component",
+        "severity": "warning",
+        "file": "src/playground/BloatedUserStore.ts",
+        "message": "Component appears excessively complex (score 100 > 12).",
+        "suggestion": "Split this component into smaller pieces and extract reusable logic into composables or child components.",
+        "category": "ai",
+        "fingerprint": "f231867a9aa822bb7ef91f9678895782"
+      },
+      {
+        "rule": "cross-store-dependency",
+        "severity": "warning",
+        "file": "src/playground/BloatedUserStore.ts",
+        "line": 1,
+        "column": 1,
+        "message": "Store 'user' depends on store 'UserStore'",
+        "suggestion": "Consider using events or a shared composable instead of direct store-to-store dependency. Alternatively, merge related state into a single store or use dependency injection.",
+        "category": "architecture",
+        "fingerprint": "5526287ee24513a7451f2f4b03925f9b"
+      },
+      {
+        "rule": "pinia-best-practices",
+        "severity": "warning",
+        "file": "src/playground/BloatedUserStore.ts",
+        "line": 37,
+        "column": 1,
+        "message": "Direct state mutation detected. Use $patch or actions instead.",
+        "suggestion": "Use this.$patch() or actions to update state instead of direct assignment.",
+        "category": "best-practice",
+        "fingerprint": "29f941c7a27b47c1a3557a39302eaf28"
+      }
+    ]
+  },
+  "src/playground/CoupledDashboard.vue": {
+    "hash": "f06712299003257e255a6f24ed7e3866",
+    "issues": [
+      {
+        "rule": "ai-monster-component",
+        "severity": "warning",
+        "file": "src/playground/CoupledDashboard.vue",
+        "message": "Component appears excessively complex (score 52 > 12).",
+        "suggestion": "Split this component into smaller pieces and extract reusable logic into composables or child components.",
+        "category": "ai",
+        "fingerprint": "2707bdc1d69a4148437fc2be5c281a04"
+      }
+    ]
+  },
+  "src/playground/HydrationRisk.vue": {
+    "hash": "655c6b50abb53fab65065ae4160b4986",
+    "issues": [
+      {
+        "rule": "no-window-in-ssr",
+        "severity": "error",
+        "file": "src/playground/HydrationRisk.vue",
+        "line": 2,
+        "column": 32,
+        "message": "Detected SSR unsafe API usage: window.",
+        "suggestion": "Wrap browser-only APIs inside onMounted() or process.client checks.",
+        "category": "ssr",
+        "fingerprint": "5517f8cedede5c847a1eb7b1a4f43a58"
+      },
+      {
+        "rule": "no-localstorage-in-ssr",
+        "severity": "error",
+        "file": "src/playground/HydrationRisk.vue",
+        "line": 6,
+        "column": 15,
+        "message": "Detected SSR unsafe API usage: localStorage.",
+        "suggestion": "Wrap browser-only APIs inside onMounted() or process.client checks.",
+        "category": "ssr",
+        "fingerprint": "ce6b81bc25f98b95c842c279a5a197eb"
+      },
+      {
+        "rule": "ai-monster-component",
+        "severity": "warning",
+        "file": "src/playground/HydrationRisk.vue",
+        "message": "Component appears excessively complex (score 32 > 12).",
+        "suggestion": "Split this component into smaller pieces and extract reusable logic into composables or child components.",
+        "category": "ai",
+        "fingerprint": "28b1a7aa77fb5af582caea144283117c"
+      },
+      {
+        "rule": "hydration-risk",
+        "severity": "error",
+        "file": "src/playground/HydrationRisk.vue",
+        "line": 3,
+        "column": 1,
+        "message": "window access in component setup may cause hydration mismatch",
+        "suggestion": "Use onMounted or process.client to guard browser-only code.",
+        "category": "ssr",
+        "fingerprint": "c4d10e5d274383bd7ff5fb4b249dbb23"
+      },
+      {
+        "rule": "hydration-risk",
+        "severity": "warning",
+        "file": "src/playground/HydrationRisk.vue",
+        "line": 20,
+        "column": 1,
+        "message": "Date.now() in template causes hydration mismatch",
+        "suggestion": "Use a computed or reactive date value instead.",
+        "category": "ssr",
+        "fingerprint": "20dd2785ab9e86460c607c294dc1bfec"
+      },
+      {
+        "rule": "hydration-risk",
+        "severity": "error",
+        "file": "src/playground/HydrationRisk.vue",
+        "line": 7,
+        "column": 1,
+        "message": "Storage access in setup may cause hydration mismatch",
+        "suggestion": "Use onMounted or useNuxtApp to access storage safely.",
+        "category": "ssr",
+        "fingerprint": "006d418f36d2e1353c24d74c16d199ba"
+      }
+    ]
+  },
+  "src/playground/SimpleCartStore.ts": {
+    "hash": "31824bcfe4e05e00ea59a8eb6c0de8ab",
+    "issues": [
+      {
+        "rule": "ai-monster-component",
+        "severity": "warning",
+        "file": "src/playground/SimpleCartStore.ts",
+        "message": "Component appears excessively complex (score 70 > 12).",
+        "suggestion": "Split this component into smaller pieces and extract reusable logic into composables or child components.",
+        "category": "ai",
+        "fingerprint": "18e69a5781ecaa51895113da1add111f"
+      },
+      {
+        "rule": "cross-store-dependency",
+        "severity": "warning",
+        "file": "src/playground/SimpleCartStore.ts",
+        "line": 1,
+        "column": 1,
+        "message": "Store 'cart' depends on store 'CartStore'",
+        "suggestion": "Consider using events or a shared composable instead of direct store-to-store dependency. Alternatively, merge related state into a single store or use dependency injection.",
+        "category": "architecture",
+        "fingerprint": "4d7db2741b274077ca62444c78c2d676"
+      }
+    ]
+  },
+  "src/playground/StoreA.ts": {
+    "hash": "6df02dbb82c9dd84f0981a048e6ce16e",
+    "issues": [
+      {
+        "rule": "ai-monster-component",
+        "severity": "warning",
+        "file": "src/playground/StoreA.ts",
+        "message": "Component appears excessively complex (score 20 > 12).",
+        "suggestion": "Split this component into smaller pieces and extract reusable logic into composables or child components.",
+        "category": "ai",
+        "fingerprint": "30129b44aab27ab349a021d6e51a5d4e"
+      },
+      {
+        "rule": "cross-store-dependency",
+        "severity": "warning",
+        "file": "src/playground/StoreA.ts",
+        "line": 1,
+        "column": 1,
+        "message": "Store 'storeA' depends on store 'CartStore'",
+        "suggestion": "Consider using events or a shared composable instead of direct store-to-store dependency. Alternatively, merge related state into a single store or use dependency injection.",
+        "category": "architecture",
+        "fingerprint": "b39508286e6839ed3207faa8a7468851"
+      }
+    ]
+  },
+  "src/playground/StoreB.ts": {
+    "hash": "88e511ac11e70f73e4eff4039eb23eeb",
+    "issues": [
+      {
+        "rule": "ai-monster-component",
+        "severity": "warning",
+        "file": "src/playground/StoreB.ts",
+        "message": "Component appears excessively complex (score 20 > 12).",
+        "suggestion": "Split this component into smaller pieces and extract reusable logic into composables or child components.",
+        "category": "ai",
+        "fingerprint": "2bd94a78c322008e00178d09c799e00e"
       }
     ]
   },
@@ -370,6 +585,17 @@
         "suggestion": "Split the component into smaller responsibilities and move shared behavior into composables or child components.",
         "category": "ai",
         "fingerprint": "af5a8db5419db6a767d11eb374aeec15"
+      },
+      {
+        "rule": "hydration-risk",
+        "severity": "error",
+        "file": "src/playground/Test.vue",
+        "line": 210,
+        "column": 1,
+        "message": "Storage access in setup may cause hydration mismatch",
+        "suggestion": "Use onMounted or useNuxtApp to access storage safely.",
+        "category": "ssr",
+        "fingerprint": "158c9ee9a72af19e46b9ab2811addc20"
       }
     ]
   },
@@ -536,6 +762,17 @@
         "suggestion": "Split this component into smaller pieces and extract reusable logic into composables or child components.",
         "category": "ai",
         "fingerprint": "dae15be6607d95747951ba8ddb96fed4"
+      },
+      {
+        "rule": "hydration-risk",
+        "severity": "error",
+        "file": "src/playground/Test_2.vue",
+        "line": 210,
+        "column": 1,
+        "message": "Storage access in setup may cause hydration mismatch",
+        "suggestion": "Use onMounted or useNuxtApp to access storage safely.",
+        "category": "ssr",
+        "fingerprint": "82fcedb216f738a5b355280dfd4ebc36"
       }
     ]
   },
@@ -566,7 +803,19 @@
   },
   "src/playground/counterStore.ts": {
     "hash": "e74f15216ed2a9096b0a2ac06ac1d6e2",
-    "issues": []
+    "issues": [
+      {
+        "rule": "cross-store-dependency",
+        "severity": "warning",
+        "file": "src/playground/counterStore.ts",
+        "line": 1,
+        "column": 1,
+        "message": "Store 'counter' depends on store 'CounterStore'",
+        "suggestion": "Consider using events or a shared composable instead of direct store-to-store dependency. Alternatively, merge related state into a single store or use dependency injection.",
+        "category": "architecture",
+        "fingerprint": "30f4a04403f51fc56a474ca1354bc1de"
+      }
+    ]
   },
   "src/playground/useCounter.ts": {
     "hash": "8a52ef9a7503129de575f6b6e3047cc3",
@@ -589,11 +838,26 @@
         "suggestion": "Wrap browser-only APIs inside onMounted() or process.client checks.",
         "category": "ssr",
         "fingerprint": "8704ba4006d6eb99c11b5e76ebd6443f"
+      },
+      {
+        "rule": "cross-store-dependency",
+        "severity": "warning",
+        "file": "src/playground/userStore.ts",
+        "line": 1,
+        "column": 1,
+        "message": "Store 'user' depends on store 'UserStore'",
+        "suggestion": "Consider using events or a shared composable instead of direct store-to-store dependency. Alternatively, merge related state into a single store or use dependency injection.",
+        "category": "architecture",
+        "fingerprint": "afcca6402aeeb4513b6a1b52c6c9bbe2"
       }
     ]
   },
   "src/reporters/github.ts": {
     "hash": "bc971c82d76b5bcf4aa24f5d3797ab81",
+    "issues": []
+  },
+  "src/reporters/html.ts": {
+    "hash": "a1bd4ab8fd4bf30010a3a6f7e0fcc97e",
     "issues": []
   },
   "src/reporters/index.ts": {
@@ -609,7 +873,7 @@
     "issues": []
   },
   "src/rules/index.ts": {
-    "hash": "1e2fece5c0173e08cd557e761fb8092a",
+    "hash": "f07bc320a0b4e735d98fcac5b6e81926",
     "issues": [
       {
         "rule": "no-window-in-ssr",
@@ -636,7 +900,7 @@
     ]
   },
   "src/rules/metadata.ts": {
-    "hash": "262ccd14bbed1de9fbad87ec26dc535b",
+    "hash": "8d5e7b6ff1a7db7b2de6e23d0d552c93",
     "issues": [
       {
         "rule": "no-window-in-ssr",
@@ -681,6 +945,17 @@
         "suggestion": "Wrap browser-only APIs inside onMounted() or process.client checks.",
         "category": "ssr",
         "fingerprint": "46d21ab02c033d4ddf813a31fc9473f0"
+      },
+      {
+        "rule": "store-bloat",
+        "severity": "warning",
+        "file": "src/rules/metadata.ts",
+        "line": 1,
+        "column": 1,
+        "message": "Store has 464 lines (max recommended: 300)",
+        "suggestion": "This store is too large. Consider a major refactor: split into multiple focused stores.",
+        "category": "maintainability",
+        "fingerprint": "f09937a3d11f68092307ca644e20a811"
       }
     ]
   },
@@ -716,6 +991,10 @@
     "hash": "c3858a75d5338bbe4d57417660c9f677",
     "issues": []
   },
+  "src/utils/component-usage-tracker.ts": {
+    "hash": "b01112eaccf14c6cfc66953e894be623",
+    "issues": []
+  },
   "src/utils/file-collector.ts": {
     "hash": "fb58e592458d27599dec686bdbb4dca3",
     "issues": []
@@ -732,9 +1011,29 @@
     "hash": "8b01cbab989af28d52af89d4c48d6c11",
     "issues": []
   },
+  "src/utils/graph-visualization.ts": {
+    "hash": "e31ba8337ef11565389a4507fdf3661e",
+    "issues": []
+  },
   "src/utils/hash.ts": {
     "hash": "ee5748aad3350d9f5a860c44b1ef4265",
     "issues": []
+  },
+  "src/utils/import-parser.ts": {
+    "hash": "c486009d77308a983597095c47836bfb",
+    "issues": [
+      {
+        "rule": "store-bloat",
+        "severity": "warning",
+        "file": "src/utils/import-parser.ts",
+        "line": 1,
+        "column": 1,
+        "message": "Store has 351 lines (max recommended: 300)",
+        "suggestion": "This store is getting large. Consider splitting it by domain or feature.",
+        "category": "maintainability",
+        "fingerprint": "02e382a2ed4cc8f3ccdcc9afcb6c7d98"
+      }
+    ]
   },
   "src/utils/index.ts": {
     "hash": "e973c69385c97d217604a18fe5dcebd0",
@@ -752,6 +1051,33 @@
     "hash": "e48d229e9d53d099de260f83f6703d79",
     "issues": []
   },
+  "src/utils/pinia-detector.ts": {
+    "hash": "b5686c38fd13f4819e8189e921448993",
+    "issues": [
+      {
+        "rule": "no-localstorage-in-ssr",
+        "severity": "error",
+        "file": "src/utils/pinia-detector.ts",
+        "line": 371,
+        "column": 97,
+        "message": "Detected SSR unsafe API usage: localStorage.",
+        "suggestion": "Wrap browser-only APIs inside onMounted() or process.client checks.",
+        "category": "ssr",
+        "fingerprint": "850b560c04a69a232c4a220bb6df2973"
+      },
+      {
+        "rule": "store-bloat",
+        "severity": "warning",
+        "file": "src/utils/pinia-detector.ts",
+        "line": 1,
+        "column": 1,
+        "message": "Store has 382 lines (max recommended: 300)",
+        "suggestion": "This store is getting large. Consider splitting it by domain or feature.",
+        "category": "maintainability",
+        "fingerprint": "99809b642c296e0780a70eff0580fd55"
+      }
+    ]
+  },
   "src/utils/rule-options.ts": {
     "hash": "bda95be7ceb6bfcf5222fabcedd16f07",
     "issues": []
@@ -762,6 +1088,18 @@
   },
   "tests/cli/check-utils.test.ts": {
     "hash": "14a4e9f1237d7c6526c87b278fef4ea5",
+    "issues": []
+  },
+  "tests/core/barrel-files.test.ts": {
+    "hash": "acdbac25e7b8779789b2a2b16e73ca83",
+    "issues": []
+  },
+  "tests/core/circular-deps-integration.test.ts": {
+    "hash": "ef5256c96c60c027e09cdb0bb39acfa2",
+    "issues": []
+  },
+  "tests/core/circular-deps.test.ts": {
+    "hash": "910ea643804175fd4646834972291896",
     "issues": []
   },
   "tests/core/composable-graph.test.ts": {
@@ -792,17 +1130,105 @@
       }
     ]
   },
+  "tests/core/features.test.ts": {
+    "hash": "dc2a64dbeaf1cca5d4f974c0dc86f718",
+    "issues": []
+  },
+  "tests/core/graph-integration.test.ts": {
+    "hash": "626f1eac84f24daaded23bdf4a5cfff5",
+    "issues": []
+  },
   "tests/core/graph.test.ts": {
     "hash": "d79260705ad9317c2f17d8103799d7b5",
     "issues": []
   },
+  "tests/core/layers.test.ts": {
+    "hash": "b72d979d5c57d2ee18a85715a034dc50",
+    "issues": []
+  },
+  "tests/core/nuxt.test.ts": {
+    "hash": "04d96d2d25477a24225f34c50030a5ab",
+    "issues": []
+  },
+  "tests/core/path-resolution.test.ts": {
+    "hash": "1aa1d0d91ec9e0f707d8a4a557d9e799",
+    "issues": []
+  },
   "tests/core/project-context.test.ts": {
     "hash": "51d9a52680f86bbbbbe5ec5a6a11f7dd",
-    "issues": []
+    "issues": [
+      {
+        "rule": "cross-store-dependency",
+        "severity": "warning",
+        "file": "tests/core/project-context.test.ts",
+        "line": 1,
+        "column": 1,
+        "message": "Store 'cart' depends on store 'CartStore'",
+        "suggestion": "Consider using events or a shared composable instead of direct store-to-store dependency. Alternatively, merge related state into a single store or use dependency injection.",
+        "category": "architecture",
+        "fingerprint": "be62e5c5c3f89a5ab13b4caf4182f6ed"
+      },
+      {
+        "rule": "cross-store-dependency",
+        "severity": "warning",
+        "file": "tests/core/project-context.test.ts",
+        "line": 1,
+        "column": 1,
+        "message": "Store 'cart' depends on store 'UserStore'",
+        "suggestion": "Consider using events or a shared composable instead of direct store-to-store dependency. Alternatively, merge related state into a single store or use dependency injection.",
+        "category": "architecture",
+        "fingerprint": "88c270b94c55ef951f70dbafd5d48a89"
+      },
+      {
+        "rule": "cross-store-dependency",
+        "severity": "warning",
+        "file": "tests/core/project-context.test.ts",
+        "line": 1,
+        "column": 1,
+        "message": "Store 'cart' depends on store 'AuthStore'",
+        "suggestion": "Consider using events or a shared composable instead of direct store-to-store dependency. Alternatively, merge related state into a single store or use dependency injection.",
+        "category": "architecture",
+        "fingerprint": "0c9a0ff9af35cec317882fface74ccf4"
+      }
+    ]
   },
   "tests/core/store-graph.test.ts": {
     "hash": "1fe47bb7cdca200d95d455a72210d269",
-    "issues": []
+    "issues": [
+      {
+        "rule": "cross-store-dependency",
+        "severity": "warning",
+        "file": "tests/core/store-graph.test.ts",
+        "line": 1,
+        "column": 1,
+        "message": "Store 'cart' depends on store 'CartStore'",
+        "suggestion": "Consider using events or a shared composable instead of direct store-to-store dependency. Alternatively, merge related state into a single store or use dependency injection.",
+        "category": "architecture",
+        "fingerprint": "ad1557f3feed06eca48a8a350fb1dd3c"
+      },
+      {
+        "rule": "cross-store-dependency",
+        "severity": "warning",
+        "file": "tests/core/store-graph.test.ts",
+        "line": 1,
+        "column": 1,
+        "message": "Store 'cart' depends on store 'ProductStore'",
+        "suggestion": "Consider using events or a shared composable instead of direct store-to-store dependency. Alternatively, merge related state into a single store or use dependency injection.",
+        "category": "architecture",
+        "fingerprint": "ff804e702d619689ff97edeac23e33a0"
+      },
+      {
+        "rule": "cross-store-dependency",
+        "severity": "warning",
+        "file": "tests/core/store-graph.test.ts",
+        "line": 1,
+        "column": 1,
+        "message": "Store 'cart' depends on store 'TestStore'",
+        "suggestion": "Consider using events or a shared composable instead of direct store-to-store dependency. Alternatively, merge related state into a single store or use dependency injection.",
+        "category": "architecture",
+        "fingerprint": "2c36f48abbedf307d2f0b3d4e67ae38c"
+      }
+    ]
   },
   "tests/reporters/json.test.ts": {
     "hash": "c81dcf8a3dfd84801e7aa23bd7ce87c7",
@@ -810,32 +1236,6 @@
   },
   "tests/reporters/stylish.test.ts": {
     "hash": "ac57f1a8d1bc092839343adcf1e5d806",
-    "issues": []
-  },
-  "tests/utils/component-resolver.test.ts": {
-    "hash": "ce09cc5cb00d21c9a81726a6c99a0098",
-    "issues": [
-      {
-        "rule": "ai-monster-component",
-        "severity": "warning",
-        "file": "tests/utils/component-resolver.test.ts",
-        "message": "Component appears excessively complex (score 171 > 12).",
-        "suggestion": "Split this component into smaller pieces and extract reusable logic into composables or child components.",
-        "category": "ai",
-        "fingerprint": "8fe182f0b8c1c6585b6ca0d124ec3903"
-      }
-    ]
-  },
-  "tests/utils/file-collector.test.ts": {
-    "hash": "32ecde709a342912252c4171a1b2bced",
-    "issues": []
-  },
-  "tests/utils/fix.test.ts": {
-    "hash": "20036e5d9cece17596d446caf0a5e992",
-    "issues": []
-  },
-  "tests/utils/tsconfig-resolver.test.ts": {
-    "hash": "8672776f68f5503f9bb9ff8349c572cd",
     "issues": []
   },
   "tests/rules/ai-monster-component.test.ts": {
@@ -851,6 +1251,10 @@
         "fingerprint": "7a4b818f8be99059739b78469abd84ba"
       }
     ]
+  },
+  "tests/rules/coupling.test.ts": {
+    "hash": "af7ad748318446c06f09ce3c30ad2a0a",
+    "issues": []
   },
   "tests/rules/excessive-component-responsibility.test.ts": {
     "hash": "193a251acb65d5b0ac8bab28c7432c70",
@@ -1109,6 +1513,17 @@
         "suggestion": "Split this component into smaller pieces and extract reusable logic into composables or child components.",
         "category": "ai",
         "fingerprint": "e09327f23453f91279f980c4f60db207"
+      },
+      {
+        "rule": "hydration-risk",
+        "severity": "error",
+        "file": "tests/rules/no-localstorage-in-ssr.test.ts",
+        "line": 9,
+        "column": 1,
+        "message": "Storage access in setup may cause hydration mismatch",
+        "suggestion": "Use onMounted or useNuxtApp to access storage safely.",
+        "category": "ssr",
+        "fingerprint": "e6ee5c0e4e74751c287dab0bab316412"
       }
     ]
   },
@@ -1134,6 +1549,17 @@
         "suggestion": "Split this component into smaller pieces and extract reusable logic into composables or child components.",
         "category": "ai",
         "fingerprint": "fbc0a3ce66f389dc4a1e58180ebcd62f"
+      },
+      {
+        "rule": "hydration-risk",
+        "severity": "error",
+        "file": "tests/rules/no-sessionstorage-in-ssr.test.ts",
+        "line": 9,
+        "column": 1,
+        "message": "Storage access in setup may cause hydration mismatch",
+        "suggestion": "Use onMounted or useNuxtApp to access storage safely.",
+        "category": "ssr",
+        "fingerprint": "e2ad3c56777dc053f3e341bc0b5cbbbd"
       }
     ]
   },
@@ -1181,6 +1607,171 @@
         "suggestion": "Split this component into smaller pieces and extract reusable logic into composables or child components.",
         "category": "ai",
         "fingerprint": "f29f26e2b27675231c87af0ec586d905"
+      }
+    ]
+  },
+  "tests/utils/component-usage-tracker.test.ts": {
+    "hash": "19422de871c976c53e369b5807b69345",
+    "issues": [
+      {
+        "rule": "ai-monster-component",
+        "severity": "warning",
+        "file": "tests/utils/component-usage-tracker.test.ts",
+        "message": "Component appears excessively complex (score 211 > 12).",
+        "suggestion": "Split this component into smaller pieces and extract reusable logic into composables or child components.",
+        "category": "ai",
+        "fingerprint": "834a84ad147770b5d9c104e0dc04674a"
+      }
+    ]
+  },
+  "tests/utils/file-collector.test.ts": {
+    "hash": "32ecde709a342912252c4171a1b2bced",
+    "issues": []
+  },
+  "tests/utils/fix.test.ts": {
+    "hash": "20036e5d9cece17596d446caf0a5e992",
+    "issues": []
+  },
+  "tests/utils/import-parser.test.ts": {
+    "hash": "7ed5fd04c9b5fa9bbc06d3a55b8b5e29",
+    "issues": []
+  },
+  "tests/utils/tsconfig-resolver.test.ts": {
+    "hash": "8672776f68f5503f9bb9ff8349c572cd",
+    "issues": []
+  },
+  "src/cli/commands/baseline.ts": {
+    "hash": "881a3b19c6e6cdcd93cf9ca40e4c30d0",
+    "issues": []
+  },
+  "src/cli/commands/check.ts": {
+    "hash": "9a93f7a3c547ee499d65ee1ce28164ca",
+    "issues": []
+  },
+  "src/cli/commands/fix.ts": {
+    "hash": "16f68e163c1975a8af424b81e68f051b",
+    "issues": []
+  },
+  "src/cli/commands/graph.ts": {
+    "hash": "1fa674f22adc881d4e17c003fdfe2faa",
+    "issues": []
+  },
+  "src/cli/commands/init.ts": {
+    "hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "issues": []
+  },
+  "src/cli/commands/metrics.ts": {
+    "hash": "e6f7b5bb9ca3e34c8651ac904551d70b",
+    "issues": []
+  },
+  "src/cli/commands/report.ts": {
+    "hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "issues": []
+  },
+  "src/cli/commands/rule.ts": {
+    "hash": "b292e278d5a9bfd9e95160e0ad4b639e",
+    "issues": []
+  },
+  "src/cli/commands/rules.ts": {
+    "hash": "0dea8e06f84048f80c78e936b2101eb8",
+    "issues": []
+  },
+  "src/playground/pages/dashboard.vue": {
+    "hash": "505fc1c7ac648f3eeb1006d7d1ff412c",
+    "issues": [
+      {
+        "rule": "ai-monster-component",
+        "severity": "warning",
+        "file": "src/playground/pages/dashboard.vue",
+        "message": "Component appears excessively complex (score 27 > 12).",
+        "suggestion": "Split this component into smaller pieces and extract reusable logic into composables or child components.",
+        "category": "ai",
+        "fingerprint": "00dccec8af0675115edf40ace813f690"
+      }
+    ]
+  },
+  "src/rules/architecture/component-coupling.rule.ts": {
+    "hash": "cd1e673740633c17fb901831626d8b8f",
+    "issues": []
+  },
+  "src/rules/architecture/composable-coupling.rule.ts": {
+    "hash": "78dcb84dca6ec0f004a794df315cfdfe",
+    "issues": []
+  },
+  "src/rules/architecture/feature-leakage.rule.ts": {
+    "hash": "09215e4942a10af193df392c2a5766de",
+    "issues": []
+  },
+  "src/rules/architecture/forbidden-dependency.rule.ts": {
+    "hash": "1fd3c5fe37edb2476788569f83d3d01c",
+    "issues": []
+  },
+  "src/rules/architecture/layer-violation.rule.ts": {
+    "hash": "92862bc2e67bf314a1bbdc23b00a011c",
+    "issues": []
+  },
+  "src/rules/architecture/no-circular-dependency.rule.ts": {
+    "hash": "872f7773b5502d7b43f9e460a106235e",
+    "issues": []
+  },
+  "src/rules/architecture/store-coupling.rule.ts": {
+    "hash": "4c401cccd6254159e372bfda40e2892a",
+    "issues": []
+  },
+  "src/rules/nuxt/async-data-abuse.rule.ts": {
+    "hash": "6a36cf2c562eebe26b05486debff8c78",
+    "issues": []
+  },
+  "src/rules/nuxt/duplicate-fetch.rule.ts": {
+    "hash": "4b9613800ba543be8d050c992883fbc4",
+    "issues": []
+  },
+  "src/rules/nuxt/hydration-risk.rule.ts": {
+    "hash": "8f4b35355537115c9749f15876ec0363",
+    "issues": [
+      {
+        "rule": "no-window-in-ssr",
+        "severity": "error",
+        "file": "src/rules/nuxt/hydration-risk.rule.ts",
+        "line": 38,
+        "column": 22,
+        "message": "Detected SSR unsafe API usage: window.",
+        "suggestion": "Wrap browser-only APIs inside onMounted() or process.client checks.",
+        "category": "ssr",
+        "fingerprint": "40a7210048e4c8c95c1a1a867b577073"
+      },
+      {
+        "rule": "no-document-in-ssr",
+        "severity": "error",
+        "file": "src/rules/nuxt/hydration-risk.rule.ts",
+        "line": 38,
+        "column": 29,
+        "message": "Detected SSR unsafe API usage: document.",
+        "suggestion": "Wrap browser-only APIs inside onMounted() or process.client checks.",
+        "category": "ssr",
+        "fingerprint": "919d63058d9349c94b203e0768c30148"
+      },
+      {
+        "rule": "no-localstorage-in-ssr",
+        "severity": "error",
+        "file": "src/rules/nuxt/hydration-risk.rule.ts",
+        "line": 102,
+        "column": 22,
+        "message": "Detected SSR unsafe API usage: localStorage.",
+        "suggestion": "Wrap browser-only APIs inside onMounted() or process.client checks.",
+        "category": "ssr",
+        "fingerprint": "275203ed9a476f767382b046e12b7185"
+      },
+      {
+        "rule": "no-sessionstorage-in-ssr",
+        "severity": "error",
+        "file": "src/rules/nuxt/hydration-risk.rule.ts",
+        "line": 102,
+        "column": 35,
+        "message": "Detected SSR unsafe API usage: sessionStorage.",
+        "suggestion": "Wrap browser-only APIs inside onMounted() or process.client checks.",
+        "category": "ssr",
+        "fingerprint": "0cbf9e59f38c3bbcba45d14f721700b4"
       }
     ]
   },
@@ -1248,37 +1839,63 @@
       }
     ]
   },
-  "src/cli/commands/baseline.ts": {
-    "hash": "881a3b19c6e6cdcd93cf9ca40e4c30d0",
+  "src/rules/nuxt/page-complexity.rule.ts": {
+    "hash": "7ec1591a6714339887c406867a59d0ca",
     "issues": []
   },
-  "src/cli/commands/check.ts": {
-    "hash": "9a93f7a3c547ee499d65ee1ce28164ca",
+  "src/rules/pinia/circular-store-dependency.rule.ts": {
+    "hash": "f1c1914d6726913db4b77ca282f8febf",
     "issues": []
   },
-  "src/cli/commands/fix.ts": {
-    "hash": "16f68e163c1975a8af424b81e68f051b",
+  "src/rules/pinia/cross-store-dependency.rule.ts": {
+    "hash": "2701658e18ff32de42aae3c5f42d5111",
     "issues": []
   },
-  "src/cli/commands/graph.ts": {
-    "hash": "1fa674f22adc881d4e17c003fdfe2faa",
+  "src/rules/pinia/pinia-best-practices.rule.ts": {
+    "hash": "272280cc75d28bfa0879cac98a649287",
     "issues": []
   },
-  "src/cli/commands/init.ts": {
-    "hash": "d41d8cd98f00b204e9800998ecf8427e",
+  "src/rules/pinia/store-bloat.rule.ts": {
+    "hash": "fbc24f407feb467398e124e9337dfad4",
     "issues": []
   },
-  "src/cli/commands/report.ts": {
-    "hash": "d41d8cd98f00b204e9800998ecf8427e",
-    "issues": []
-  },
-  "src/cli/commands/rule.ts": {
-    "hash": "b292e278d5a9bfd9e95160e0ad4b639e",
-    "issues": []
-  },
-  "src/cli/commands/rules.ts": {
-    "hash": "0dea8e06f84048f80c78e936b2101eb8",
-    "issues": []
+  "src/rules/pinia/store-god-object.rule.ts": {
+    "hash": "9b6f8a0c8294e64a2d79af430140c840",
+    "issues": [
+      {
+        "rule": "cross-store-dependency",
+        "severity": "warning",
+        "file": "src/rules/pinia/store-god-object.rule.ts",
+        "line": 1,
+        "column": 1,
+        "message": "Store 'unknown' depends on store 'rStore'",
+        "suggestion": "Consider using events or a shared composable instead of direct store-to-store dependency. Alternatively, merge related state into a single store or use dependency injection.",
+        "category": "architecture",
+        "fingerprint": "01962641523e3a924ad888bb0bf701e6"
+      },
+      {
+        "rule": "cross-store-dependency",
+        "severity": "warning",
+        "file": "src/rules/pinia/store-god-object.rule.ts",
+        "line": 1,
+        "column": 1,
+        "message": "Store 'unknown' depends on store 'rAuthStore'",
+        "suggestion": "Consider using events or a shared composable instead of direct store-to-store dependency. Alternatively, merge related state into a single store or use dependency injection.",
+        "category": "architecture",
+        "fingerprint": "9e9941ae0727cec4b34d266d6ca5943c"
+      },
+      {
+        "rule": "cross-store-dependency",
+        "severity": "warning",
+        "file": "src/rules/pinia/store-god-object.rule.ts",
+        "line": 1,
+        "column": 1,
+        "message": "Store 'unknown' depends on store 'rProfileStore'",
+        "suggestion": "Consider using events or a shared composable instead of direct store-to-store dependency. Alternatively, merge related state into a single store or use dependency injection.",
+        "category": "architecture",
+        "fingerprint": "f6af9053a9bed2eddbfce609715ab6ae"
+      }
+    ]
   },
   "src/rules/vue/ai-monster-component.rule.ts": {
     "hash": "fba00b218f15d76f23f775b9727abb00",
@@ -1364,6 +1981,17 @@
         "suggestion": "Wrap browser-only APIs inside onMounted() or process.client checks.",
         "category": "ssr",
         "fingerprint": "8ee06a1277d952eefec5b7c1e48cc1e5"
+      },
+      {
+        "rule": "store-bloat",
+        "severity": "warning",
+        "file": "src/rules/vue/no-side-effect-in-computed.rule.ts",
+        "line": 1,
+        "column": 1,
+        "message": "Store has 559 lines (max recommended: 300)",
+        "suggestion": "This store is too large. Consider a major refactor: split into multiple focused stores.",
+        "category": "maintainability",
+        "fingerprint": "b6cad4c866a89f5e32f95d30fecbe4eb"
       }
     ]
   },
@@ -1383,306 +2011,113 @@
     "hash": "3f8bb7b45a0fe1323a50247119cfdaad",
     "issues": []
   },
-  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780204577306/src/components/Test.vue": {
-    "hash": "c2b2f4e94c373362922c04634f5e3d0f",
-    "issues": []
-  },
-  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780204577306/src/composables/useTest.ts": {
-    "hash": "95a9437dcf4cc44f5c64d1dc89826725",
-    "issues": []
-  },
-  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780204638087/src/components/Test.vue": {
-    "hash": "c2b2f4e94c373362922c04634f5e3d0f",
-    "issues": []
-  },
-  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780204638087/src/composables/useTest.ts": {
-    "hash": "95a9437dcf4cc44f5c64d1dc89826725",
-    "issues": []
-  },
-  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780205336942/src/components/Test.vue": {
-    "hash": "c2b2f4e94c373362922c04634f5e3d0f",
-    "issues": []
-  },
-  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780205336942/src/composables/useTest.ts": {
-    "hash": "95a9437dcf4cc44f5c64d1dc89826725",
-    "issues": []
-  },
-  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780205387800/src/components/Test.vue": {
-    "hash": "c2b2f4e94c373362922c04634f5e3d0f",
-    "issues": []
-  },
-  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780205387800/src/composables/useTest.ts": {
-    "hash": "95a9437dcf4cc44f5c64d1dc89826725",
-    "issues": []
-  },
-  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780205429552/src/components/Test.vue": {
-    "hash": "c2b2f4e94c373362922c04634f5e3d0f",
-    "issues": []
-  },
-  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780205429552/src/composables/useTest.ts": {
-    "hash": "95a9437dcf4cc44f5c64d1dc89826725",
-    "issues": []
-  },
-  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780218073260/src/components/Test.vue": {
-    "hash": "c2b2f4e94c373362922c04634f5e3d0f",
-    "issues": []
-  },
-  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780218073260/src/composables/useTest.ts": {
-    "hash": "95a9437dcf4cc44f5c64d1dc89826725",
-    "issues": []
-  },
-  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780218101237/src/components/Test.vue": {
-    "hash": "c2b2f4e94c373362922c04634f5e3d0f",
-    "issues": []
-  },
-  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780218101237/src/composables/useTest.ts": {
-    "hash": "95a9437dcf4cc44f5c64d1dc89826725",
-    "issues": []
-  },
-  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780218386448/src/components/Test.vue": {
-    "hash": "c2b2f4e94c373362922c04634f5e3d0f",
-    "issues": []
-  },
-  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780218386448/src/composables/useTest.ts": {
-    "hash": "95a9437dcf4cc44f5c64d1dc89826725",
-    "issues": []
-  },
-  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780221218979/src/components/Test.vue": {
-    "hash": "c2b2f4e94c373362922c04634f5e3d0f",
-    "issues": []
-  },
-  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780221218979/src/composables/useTest.ts": {
-    "hash": "95a9437dcf4cc44f5c64d1dc89826725",
-    "issues": []
-  },
-  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780221244814/src/components/Test.vue": {
-    "hash": "c2b2f4e94c373362922c04634f5e3d0f",
-    "issues": []
-  },
-  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780221244814/src/composables/useTest.ts": {
-    "hash": "95a9437dcf4cc44f5c64d1dc89826725",
-    "issues": []
-  },
-  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780221269009/src/components/Test.vue": {
-    "hash": "c2b2f4e94c373362922c04634f5e3d0f",
-    "issues": []
-  },
-  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780221269009/src/composables/useTest.ts": {
-    "hash": "95a9437dcf4cc44f5c64d1dc89826725",
-    "issues": []
-  },
-  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780221288413/src/components/Test.vue": {
-    "hash": "c2b2f4e94c373362922c04634f5e3d0f",
-    "issues": []
-  },
-  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780221288413/src/composables/useTest.ts": {
-    "hash": "95a9437dcf4cc44f5c64d1dc89826725",
-    "issues": []
-  },
-  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780221336050/src/components/Test.vue": {
-    "hash": "c2b2f4e94c373362922c04634f5e3d0f",
-    "issues": []
-  },
-  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780221336050/src/composables/useTest.ts": {
-    "hash": "95a9437dcf4cc44f5c64d1dc89826725",
-    "issues": []
-  },
-  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780226632854/src/components/Test.vue": {
-    "hash": "c2b2f4e94c373362922c04634f5e3d0f",
-    "issues": []
-  },
-  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780226632854/src/composables/useTest.ts": {
-    "hash": "95a9437dcf4cc44f5c64d1dc89826725",
-    "issues": []
-  },
-  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780232696807/src/components/Test.vue": {
-    "hash": "c2b2f4e94c373362922c04634f5e3d0f",
-    "issues": []
-  },
-  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780232696807/src/composables/useTest.ts": {
-    "hash": "95a9437dcf4cc44f5c64d1dc89826725",
-    "issues": []
-  },
-  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780232757951/src/components/Test.vue": {
-    "hash": "c2b2f4e94c373362922c04634f5e3d0f",
-    "issues": []
-  },
-  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780232757951/src/composables/useTest.ts": {
-    "hash": "95a9437dcf4cc44f5c64d1dc89826725",
-    "issues": []
-  },
-  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780233391527/src/components/Test.vue": {
-    "hash": "c2b2f4e94c373362922c04634f5e3d0f",
-    "issues": []
-  },
-  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780233391527/src/composables/useTest.ts": {
-    "hash": "95a9437dcf4cc44f5c64d1dc89826725",
-    "issues": []
-  },
-  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780235282749/src/components/Test.vue": {
-    "hash": "c2b2f4e94c373362922c04634f5e3d0f",
-    "issues": []
-  },
-  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780235282749/src/composables/useTest.ts": {
-    "hash": "95a9437dcf4cc44f5c64d1dc89826725",
-    "issues": []
-  },
-  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780235304404/src/components/Test.vue": {
-    "hash": "c2b2f4e94c373362922c04634f5e3d0f",
-    "issues": []
-  },
-  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780235304404/src/composables/useTest.ts": {
-    "hash": "95a9437dcf4cc44f5c64d1dc89826725",
-    "issues": []
-  },
-  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780235325368/src/components/Test.vue": {
-    "hash": "c2b2f4e94c373362922c04634f5e3d0f",
-    "issues": []
-  },
-  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780235325368/src/composables/useTest.ts": {
-    "hash": "95a9437dcf4cc44f5c64d1dc89826725",
-    "issues": []
-  },
-  "tests/core/barrel-files.test.ts": {
-    "hash": "acdbac25e7b8779789b2a2b16e73ca83",
-    "issues": []
-  },
-  "tests/core/circular-deps-integration.test.ts": {
-    "hash": "ef5256c96c60c027e09cdb0bb39acfa2",
-    "issues": []
-  },
-  "tests/core/circular-deps.test.ts": {
-    "hash": "910ea643804175fd4646834972291896",
-    "issues": []
-  },
-  "tests/core/features.test.ts": {
-    "hash": "dc2a64dbeaf1cca5d4f974c0dc86f718",
-    "issues": []
-  },
-  "tests/core/graph-integration.test.ts": {
-    "hash": "626f1eac84f24daaded23bdf4a5cfff5",
-    "issues": []
-  },
-  "tests/core/layers.test.ts": {
-    "hash": "b72d979d5c57d2ee18a85715a034dc50",
-    "issues": []
-  },
-  "tests/core/path-resolution.test.ts": {
-    "hash": "1aa1d0d91ec9e0f707d8a4a557d9e799",
-    "issues": []
-  },
-  "tests/rules/coupling.test.ts": {
-    "hash": "af7ad748318446c06f09ce3c30ad2a0a",
-    "issues": []
-  },
-  "tests/utils/component-usage-tracker.test.ts": {
-    "hash": "19422de871c976c53e369b5807b69345",
+  "src/playground/features/auth/stores/useAuthStore.ts": {
+    "hash": "7882199557ef7485677aa913d4241e25",
     "issues": [
       {
         "rule": "ai-monster-component",
         "severity": "warning",
-        "file": "tests/utils/component-usage-tracker.test.ts",
-        "message": "Component appears excessively complex (score 211 > 12).",
+        "file": "src/playground/features/auth/stores/useAuthStore.ts",
+        "message": "Component appears excessively complex (score 43 > 12).",
         "suggestion": "Split this component into smaller pieces and extract reusable logic into composables or child components.",
         "category": "ai",
-        "fingerprint": "834a84ad147770b5d9c104e0dc04674a"
+        "fingerprint": "2552aa67d055e9dab77b9301b12af29b"
+      },
+      {
+        "rule": "cross-store-dependency",
+        "severity": "warning",
+        "file": "src/playground/features/auth/stores/useAuthStore.ts",
+        "line": 1,
+        "column": 1,
+        "message": "Store 'auth' depends on store 'AuthStore'",
+        "suggestion": "Consider using events or a shared composable instead of direct store-to-store dependency. Alternatively, merge related state into a single store or use dependency injection.",
+        "category": "architecture",
+        "fingerprint": "4a0aca52937931a5bd9c74d3e56d7276"
       }
     ]
   },
-  "tests/utils/import-parser.test.ts": {
-    "hash": "7ed5fd04c9b5fa9bbc06d3a55b8b5e29",
-    "issues": []
+  "src/playground/features/cart/stores/useCartStore.ts": {
+    "hash": "0d01318a2823505760b89d8293087ebe",
+    "issues": [
+      {
+        "rule": "ai-monster-component",
+        "severity": "warning",
+        "file": "src/playground/features/cart/stores/useCartStore.ts",
+        "message": "Component appears excessively complex (score 33 > 12).",
+        "suggestion": "Split this component into smaller pieces and extract reusable logic into composables or child components.",
+        "category": "ai",
+        "fingerprint": "9364b2f3dbbd74cad063fcbd96b044e1"
+      },
+      {
+        "rule": "cross-store-dependency",
+        "severity": "warning",
+        "file": "src/playground/features/cart/stores/useCartStore.ts",
+        "line": 1,
+        "column": 1,
+        "message": "Store 'cart' depends on store 'AuthStore'",
+        "suggestion": "Consider using events or a shared composable instead of direct store-to-store dependency. Alternatively, merge related state into a single store or use dependency injection.",
+        "category": "architecture",
+        "fingerprint": "87e7a76848c4aed12b5ff1a9ebd701a0"
+      },
+      {
+        "rule": "cross-store-dependency",
+        "severity": "warning",
+        "file": "src/playground/features/cart/stores/useCartStore.ts",
+        "line": 1,
+        "column": 1,
+        "message": "Store 'cart' depends on store 'CartStore'",
+        "suggestion": "Consider using events or a shared composable instead of direct store-to-store dependency. Alternatively, merge related state into a single store or use dependency injection.",
+        "category": "architecture",
+        "fingerprint": "297da0bdfc679ddd995040cdf2040fa7"
+      }
+    ]
   },
-  "src/core/circular-deps.ts": {
-    "hash": "ffc587dafc129c91fb384d9c8af5b605",
-    "issues": []
-  },
-  "src/core/features.ts": {
-    "hash": "df4dd08c962c45a1c203c59ac0ae7a70",
-    "issues": []
-  },
-  "src/core/layers.ts": {
-    "hash": "4fa6cc573cd2870f8ba4db7d774e7410",
-    "issues": []
-  },
-  "src/utils/component-usage-tracker.ts": {
-    "hash": "b01112eaccf14c6cfc66953e894be623",
-    "issues": []
-  },
-  "src/utils/graph-visualization.ts": {
-    "hash": "e31ba8337ef11565389a4507fdf3661e",
-    "issues": []
-  },
-  "src/utils/import-parser.ts": {
-    "hash": "c486009d77308a983597095c47836bfb",
-    "issues": []
-  },
-  "src/rules/architecture/component-coupling.rule.ts": {
-    "hash": "cd1e673740633c17fb901831626d8b8f",
-    "issues": []
-  },
-  "src/rules/architecture/composable-coupling.rule.ts": {
-    "hash": "78dcb84dca6ec0f004a794df315cfdfe",
-    "issues": []
-  },
-  "src/rules/architecture/feature-leakage.rule.ts": {
-    "hash": "09215e4942a10af193df392c2a5766de",
-    "issues": []
-  },
-  "src/rules/architecture/forbidden-dependency.rule.ts": {
-    "hash": "1fd3c5fe37edb2476788569f83d3d01c",
-    "issues": []
-  },
-  "src/rules/architecture/layer-violation.rule.ts": {
-    "hash": "92862bc2e67bf314a1bbdc23b00a011c",
-    "issues": []
-  },
-  "src/rules/architecture/no-circular-dependency.rule.ts": {
-    "hash": "872f7773b5502d7b43f9e460a106235e",
-    "issues": []
-  },
-  "src/rules/architecture/store-coupling.rule.ts": {
-    "hash": "4c401cccd6254159e372bfda40e2892a",
-    "issues": []
-  },
-  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780269545871/src/components/Test.vue": {
+  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780327765233/src/components/Test.vue": {
     "hash": "c2b2f4e94c373362922c04634f5e3d0f",
     "issues": []
   },
-  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780269545871/src/composables/useTest.ts": {
+  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780327765233/src/composables/useTest.ts": {
     "hash": "95a9437dcf4cc44f5c64d1dc89826725",
     "issues": []
   },
-  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780269575360/src/components/Test.vue": {
+  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780353242002/src/components/Test.vue": {
     "hash": "c2b2f4e94c373362922c04634f5e3d0f",
     "issues": []
   },
-  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780269575360/src/composables/useTest.ts": {
+  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780353242002/src/composables/useTest.ts": {
     "hash": "95a9437dcf4cc44f5c64d1dc89826725",
     "issues": []
   },
-  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780269593262/src/components/Test.vue": {
+  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780355863555/src/components/Test.vue": {
     "hash": "c2b2f4e94c373362922c04634f5e3d0f",
     "issues": []
   },
-  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780269593262/src/composables/useTest.ts": {
+  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780355863555/src/composables/useTest.ts": {
     "hash": "95a9437dcf4cc44f5c64d1dc89826725",
     "issues": []
   },
-  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780323287058/src/components/Test.vue": {
-    "hash": "c2b2f4e94c373362922c04634f5e3d0f",
+  "src/config/loader.ts": {
+    "hash": "263f822fdd1acd2642f0f6fcf075ae4b",
     "issues": []
   },
-  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780323287058/src/composables/useTest.ts": {
-    "hash": "95a9437dcf4cc44f5c64d1dc89826725",
+  "src/config/policies.ts": {
+    "hash": "88dd8d7be2b33c72f866ddcaf7ef2f96",
     "issues": []
   },
-  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780323950732/src/components/Test.vue": {
-    "hash": "c2b2f4e94c373362922c04634f5e3d0f",
+  "src/config/profiles.ts": {
+    "hash": "35946fb9554c1c0146dba0a473367995",
     "issues": []
   },
-  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780323950732/src/composables/useTest.ts": {
-    "hash": "95a9437dcf4cc44f5c64d1dc89826725",
+  "src/reporters/charts.ts": {
+    "hash": "30379d205fefbcaaffa6df88ac0c21e7",
+    "issues": []
+  },
+  "src/reporters/sarif.ts": {
+    "hash": "96149deca39cbe096b8b64b72d21cb62",
+    "issues": []
+  },
+  "src/utils/ci-detector.ts": {
+    "hash": "9c6a75aade2068946482662d3761cf73",
     "issues": []
   }
 }

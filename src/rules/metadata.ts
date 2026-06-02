@@ -427,4 +427,37 @@ export const ruleMetadata: RuleMetadata[] = [
         recommended: false,
         docs: 'docs/rules/store-god-object.md',
     },
+
+    {
+        name: 'cross-store-dependency',
+        description:
+            'Detect when Pinia stores depend on other stores. ' +
+            'Cross-store dependencies can create tight coupling.',
+        severity: 'warning',
+        category: 'architecture',
+        recommended: false,
+        docs: 'docs/rules/cross-store-dependency.md',
+    },
+
+    {
+        name: 'circular-store-dependency',
+        description:
+            'Detect circular dependencies between Pinia stores. ' +
+            'Circular store dependencies cause initialization issues.',
+        severity: 'error',
+        category: 'architecture',
+        recommended: true,
+        docs: 'docs/rules/circular-store-dependency.md',
+    },
+
+    {
+        name: 'pinia-best-practices',
+        description:
+            'Detect Pinia best practice violations. ' +
+            'Follow Pinia best practices for better maintainability.',
+        severity: 'warning',
+        category: 'best-practice',
+        recommended: false,
+        docs: 'docs/rules/pinia-best-practices.md',
+    },
 ];

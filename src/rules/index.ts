@@ -9,6 +9,9 @@ import { duplicateFetchRule } from './nuxt/duplicate-fetch.rule';
 import { hydrationRiskRule } from './nuxt/hydration-risk.rule';
 import { storeBloatRule } from './pinia/store-bloat.rule';
 import { storeGodObjectRule } from './pinia/store-god-object.rule';
+import { crossStoreDependencyRule } from './pinia/cross-store-dependency.rule';
+import { circularStoreDependencyRule } from './pinia/circular-store-dependency.rule';
+import { piniaBestPracticesRule } from './pinia/pinia-best-practices.rule';
 import { noDeepWatchRule } from './vue/no-deep-watch.rule';
 import { noConsoleRule } from './vue/no-console.rule';
 import { noMutatePropsRule } from './vue/no-mutate-props.rule';
@@ -74,4 +77,7 @@ export const rules = [
     hydrationRiskRule,
     storeBloatRule,
     storeGodObjectRule,
+    crossStoreDependencyRule,
+    circularStoreDependencyRule,
+    piniaBestPracticesRule,
 ];

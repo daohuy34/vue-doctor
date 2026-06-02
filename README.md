@@ -224,6 +224,121 @@ Errors: 9
 
 - store-bloat
 - store-god-object
+- cross-store-dependency
+- circular-store-dependency
+- pinia-best-practices
+
+## CLI Commands
+
+```bash
+# Run analysis
+vue-doctor check
+
+# Inspect dependency graph
+vue-doctor graph
+
+# Show architecture metrics
+vue-doctor metrics
+
+# List available rules
+vue-doctor rules
+
+# Fix issues
+vue-doctor fix
+
+# Create baseline
+vue-doctor baseline
+```
+
+---
+
+## CI/CD Integration
+
+Vue Doctor supports GitHub Actions and SARIF output for CI/CD integration.
+
+### GitHub Actions
+
+```yaml
+name: Vue Doctor
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    permissions:
+      security-events: write
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: npm ci
+      - run: npx vue-doctor check --reporter sarif --output results.sarif
+      - uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: results.sarif
+          category: vue-doctor
+```
+
+### SARIF Support
+
+Vue Doctor generates SARIF 2.1.0 output for integration with GitHub Security tab.
+
+```bash
+# Generate SARIF
+vue-doctor check --reporter sarif --output results.sarif
+
+# With GitHub Actions (auto-detected)
+vue-doctor check --reporter sarif
+```
+
+---
+
+## Configuration
+
+Create `vue-doctor.config.js` in your project root:
+
+```javascript
+export default {
+  // Rule profile: strict, recommended, minimal
+  profile: 'recommended',
+
+  // Override specific rules
+  rules: {
+    'ai-monster-component': {
+      enabled: true,
+      severity: 'warning',
+      options: { maxScore: 25 },
+    },
+  },
+
+  // Custom thresholds
+  thresholds: {
+    maxComponentSize: 400,
+    maxFanOut: 10,
+  },
+
+  // Reporter
+  reporter: 'stylish',
+
+  // Fail on severity
+  failOn: 'error',
+}
+```
+
+### Rule Profiles
+
+| Profile | Description |
+|---------|-------------|
+| `strict` | Maximum quality for enterprise |
+| `recommended` | Balanced for most projects |
+| `minimal` | Lightweight for quick iterations |
 
 ---
 

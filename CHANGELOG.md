@@ -5,6 +5,258 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.7.0] - 2026-06-02
+
+### Added
+
+- **Rule Profiles System**
+  - `strict` - Maximum code quality for enterprise
+  - `recommended` - Balanced rules for most projects
+  - `minimal` - Lightweight checks for quick iterations
+  - Profile merging with custom overrides
+
+- **Architecture Policies**
+  - Component size limits
+  - Circular dependency detection
+  - Store size limits
+  - Fan-out limits
+  - SSR compatibility checks
+  - Policy violation reporting
+
+- **Config Loader**
+  - Load from `vue-doctor.config.js/ts/mjs`
+  - Load from `package.json`
+  - CLI args override
+  - Config validation
+
+### Profiles
+
+| Profile | Use Case |
+|---------|----------|
+| `strict` | Enterprise, production |
+| `recommended` | Most Vue projects |
+| `minimal` | Quick iterations |
+
+### Usage
+
+```bash
+# Use profile
+vue-doctor check --profile strict
+
+# Or in vue-doctor.config.js
+export default {
+  profile: 'recommended',
+  thresholds: {
+    maxComponentSize: 300,
+  },
+}
+```
+
+### Tests
+
+- Total test coverage: 294 tests
+
+## [2.6.0] - 2026-06-02
+
+### Added
+
+- **SARIF Reporter**
+  - SARIF 2.1.0 output format
+  - GitHub Code Scanning integration
+  - Proper severity mapping
+  - Partial fingerprints for deduplication
+
+- **CI Environment Detection**
+  - GitHub Actions detection
+  - Automatic SARIF metadata
+  - Environment variable parsing
+
+- **GitHub Actions Workflow**
+  - `.github/workflows/vue-doctor.yml`
+  - SARIF upload example
+  - Baseline workflow example
+  - Security tab integration
+
+### CI/CD Features
+
+| Feature | Description |
+|---------|-------------|
+| `--reporter sarif` | SARIF output for GitHub |
+| Auto env detection | Detect GITHUB_* vars |
+| Security tab | View in GitHub Security |
+
+### GitHub Actions Example
+
+```yaml
+- name: Run Vue Doctor
+  run: npx vue-doctor check --reporter sarif --output results.sarif
+
+- name: Upload SARIF
+  uses: github/codeql-action/upload-sarif@v3
+  with:
+    sarif_file: results.sarif
+    category: vue-doctor
+```
+
+### Tests
+
+- Total test coverage: 294 tests
+
+## [2.5.0] - 2026-06-01
+
+### Added
+
+- **SVG Visualization Library**
+  - Pure SVG-based charts (no external dependencies)
+  - Bar charts for distribution
+  - Donut charts for categories
+  - Gauge charts for scores
+  - Line charts for trends
+  - Dependency graph visualization
+
+### Chart Types
+
+| Chart | Use Case |
+|-------|----------|
+| `generateBarChart` | Size distribution |
+| `generateDonutChart` | Category breakdown |
+| `generateGaugeChart` | Score display |
+| `generateLineChart` | Trend over time |
+| `generateDependencyGraph` | Architecture visualization |
+
+### Features
+
+- Dark theme compatible
+- Tooltips on hover
+- Responsive sizing
+- Accessibility labels
+
+### Tests
+
+- Total test coverage: 294 tests
+
+## [2.4.0] - 2026-06-01
+
+### Added
+
+- **HTML Reporter**
+  - Beautiful dark-themed HTML report
+  - Architecture health score visualization
+  - Interactive issues table
+  - Metrics integration
+  - Responsive design
+
+### Features
+
+| Feature | Description |
+|---------|-------------|
+| Dark theme | Modern dark UI with gradients |
+| Score visualization | Circular progress indicator |
+| Stats grid | Error/warning/file counts |
+| Issues table | Sortable by severity/rule/file |
+| Metrics section | Technical debt, coupling stats |
+
+### CLI Usage
+
+```bash
+# Generate HTML report
+vue-doctor check --reporter html
+
+# Output to file
+vue-doctor check --reporter html > report.html
+```
+
+### Tests
+
+- Total test coverage: 294 tests
+
+## [2.3.0] - 2026-06-01
+
+### Added
+
+- **Architecture Metrics Engine**
+  - `src/core/metrics.ts` - Comprehensive metrics calculation
+  - Project-wide architecture health scoring (0-100)
+  - Component health scoring
+  - Dependency health metrics (fan-in/fan-out analysis)
+  - Maintainability score
+  - Technical debt index
+
+- **Metrics CLI Command**
+  - `vue-doctor metrics` - Display architecture metrics
+  - Overall architecture score
+  - Dependency statistics
+  - Technical debt estimation
+
+### Metrics Features
+
+| Metric | Description |
+|--------|-------------|
+| `architectureScore` | Overall health (0-100) |
+| `componentHealth` | Per-component scores |
+| `dependencyHealth` | Coupling analysis |
+| `maintainability` | Size distribution |
+| `technicalDebt` | Estimated fix time |
+
+### CLI Usage
+
+```bash
+# Show full metrics report
+vue-doctor metrics
+
+# Show only score
+vue-doctor metrics --only-score
+
+# JSON output
+vue-doctor metrics --json
+```
+
+### Tests
+
+- Total test coverage: 294 tests
+
+## [2.2.0] - 2026-06-01
+
+### Added
+
+- **Pinia Store Dependency Analysis**
+  - Store-to-store dependency detection
+  - Cross-store dependency detection
+  - Circular store dependency detection
+  - Best practices violation detection
+
+- **New Pinia Rules**
+  - `cross-store-dependency` - detects store-to-store imports
+  - `circular-store-dependency` - detects circular store dependencies
+  - `pinia-best-practices` - detects best practice violations
+
+### Pinia Rules
+
+| Rule | Description | Severity |
+|------|-------------|----------|
+| `store-bloat` | Large stores | warning |
+| `store-god-object` | Too many responsibilities | warning |
+| `cross-store-dependency` | Store-to-store imports | warning |
+| `circular-store-dependency` | Circular store deps | error |
+| `pinia-best-practices` | Best practice violations | warning |
+
+### Configuration
+
+```javascript
+// vue-doctor.config.js
+export default {
+  rules: {
+    'circular-store-dependency': {
+      severity: 'error'
+    }
+  }
+}
+```
+
+### Tests
+
+- Total test coverage: 294 tests
+
 ## [2.1.0] - 2026-06-01
 
 ### Added
