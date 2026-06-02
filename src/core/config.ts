@@ -1,23 +1,9 @@
-import { cosmiconfig } from 'cosmiconfig';
+/**
+ * Config Loader
+ *
+ * Re-exports from unified config system at src/config/loader.ts
+ * This file is kept for backward compatibility.
+ */
 
-import type { VueDoctorConfig } from '../types/config';
-
-export async function loadConfig(): Promise<VueDoctorConfig> {
-    const explorer = cosmiconfig('vue-doctor');
-
-    const result = await explorer.search();
-
-    const userConfig = result?.config ?? {};
-
-    return {
-        rules: userConfig.rules ?? {},
-
-        ruleOptions: userConfig.ruleOptions ?? {},
-
-        failOn: userConfig.failOn,
-
-        failOnWarning: userConfig.failOnWarning ?? true,
-
-        plugins: userConfig.plugins ?? [],
-    };
-}
+export { loadConfig, clearConfigCache } from '../config/loader';
+export type { VueDoctorConfig } from '../config/loader';

@@ -169,11 +169,8 @@ export const noVIfWithVForRule: Rule = {
                 rule: 'no-v-if-with-v-for',
                 severity: 'error',
                 file: context.filePath,
-
-                // Use the element's own location for the most useful line number
                 line: elementNode.loc?.start.line,
                 column: elementNode.loc?.start.column,
-
                 message: buildMessage(condName, forSource),
                 suggestion: buildSuggestion(
                     elementNode.tag,
@@ -181,9 +178,52 @@ export const noVIfWithVForRule: Rule = {
                     forSource,
                     ifCondition,
                 ),
+                _ast: elementNode, // Store for fix
+                _vforDir: vforDir,
+                _conditionalDir: conditionalDir,
             });
         });
 
         return issues;
+    },
+
+    async fix(context, issue) {
+        const elementNode = (issue as any)._ast;
+        const vforDir = (issue as any)._vforDir;
+        const conditionalDir = (issue as any)._conditionalDir;
+
+        if (!elementNode || !vforDir || !conditionalDir) {
+            return null;
+        }
+
+        const forSource = extractForSource(vforDir);
+        const ifCondition = extractIfCondition(conditionalDir);
+        const condName = conditionalDir.name as string;
+
+        const vifContent = conditionalDir.name === 'if'
+            ? ifCondition || 'condition'
+            : '';
+
+        const elementTag = elementNode.tag;
+        const elementSource = context.source.slice(
+            elementNode.loc.start.offset,
+            elementNode.loc.end.offset
+        );
+
+        const newTemplate = conditionalDir.name === 'if'
+            ? `<template v-if="${vifContent}">\n  <${elementTag} v-for="${vforDir.exp?.content || 'item in items'}" :key="item.id">${elementSource}</${elementTag}>\n</template>`
+            : `<template v-${condName}>`;
+
+        const start = elementNode.loc.start.offset;
+        const end = elementNode.loc.end.offset + (elementNode.loc.end.line > elementNode.loc.start.line ? 0 : 0);
+
+        return {
+            description: 'Move v-if to wrapper <template>',
+            replacements: [{
+                start,
+                end,
+                text: `<template v-${condName}="${ifCondition || ''}">\n  <${elementTag} v-for="${vforDir.exp?.content || 'item in items'}">${elementSource}</${elementTag}>\n</template>`,
+            }],
+        };
     },
 };

@@ -12,7 +12,7 @@
     "issues": []
   },
   "src/cli/index.ts": {
-    "hash": "168fc0ef2d0d3ee884ccba5d050bf182",
+    "hash": "8ee40ef94824c820f45f6ad7715124ae",
     "issues": []
   },
   "src/core/baseline.ts": {
@@ -20,7 +20,7 @@
     "issues": []
   },
   "src/core/cache.ts": {
-    "hash": "1da6a3776edf199c436b8519d7d95f7d",
+    "hash": "78f36837204e5d41ed4740e4a81947d3",
     "issues": []
   },
   "src/core/circular-deps.ts": {
@@ -32,7 +32,7 @@
     "issues": []
   },
   "src/core/config.ts": {
-    "hash": "156a501693273350408a706d839decaa",
+    "hash": "fab077d1d9569ee9e785fab51d1a289f",
     "issues": []
   },
   "src/core/engine-v2.ts": {
@@ -64,7 +64,7 @@
     "issues": []
   },
   "src/core/metrics.ts": {
-    "hash": "a46ef7dc1c4bb1bc4fbbbb2e8050d7c6",
+    "hash": "75d4f5636adbe49e49ccae5716cf7fff",
     "issues": []
   },
   "src/core/nuxt.ts": {
@@ -861,7 +861,7 @@
     "issues": []
   },
   "src/reporters/index.ts": {
-    "hash": "35840fdb584ebf01095ac70c867f6613",
+    "hash": "e01ecf4d943d8e8c35392d5f428add18",
     "issues": []
   },
   "src/reporters/json.ts": {
@@ -1008,7 +1008,7 @@
     "issues": []
   },
   "src/utils/git.ts": {
-    "hash": "8b01cbab989af28d52af89d4c48d6c11",
+    "hash": "fe068908474eac168a2c8bf47530c65a",
     "issues": []
   },
   "src/utils/graph-visualization.ts": {
@@ -1645,7 +1645,7 @@
     "issues": []
   },
   "src/cli/commands/check.ts": {
-    "hash": "9a93f7a3c547ee499d65ee1ce28164ca",
+    "hash": "671cdbc61c377275058f8256ddade066",
     "issues": []
   },
   "src/cli/commands/fix.ts": {
@@ -1661,7 +1661,7 @@
     "issues": []
   },
   "src/cli/commands/metrics.ts": {
-    "hash": "e6f7b5bb9ca3e34c8651ac904551d70b",
+    "hash": "680c24f48e4a17d298e43644f1bad3c6",
     "issues": []
   },
   "src/cli/commands/report.ts": {
@@ -1942,7 +1942,7 @@
     "issues": []
   },
   "src/rules/vue/no-empty-catch.rule.ts": {
-    "hash": "d398795f9da353f5d9b838291e083216",
+    "hash": "dd1aafe7c4b89ed0cff2122437ec6255",
     "issues": []
   },
   "src/rules/vue/no-large-component.rule.ts": {
@@ -2004,11 +2004,11 @@
     "issues": []
   },
   "src/rules/vue/no-v-if-with-v-for.rule.ts": {
-    "hash": "d70ffd5f728ee69dd8522f4b9958fcfb",
+    "hash": "fd6a415d68623f81d99ac3da794f72e0",
     "issues": []
   },
   "src/rules/vue/require-key-in-v-for.rule.ts": {
-    "hash": "3f8bb7b45a0fe1323a50247119cfdaad",
+    "hash": "aee845178fe99e6f79fad4783719e489",
     "issues": []
   },
   "src/playground/features/auth/stores/useAuthStore.ts": {
@@ -2105,8 +2105,20 @@
     "issues": []
   },
   "src/config/profiles.ts": {
-    "hash": "35946fb9554c1c0146dba0a473367995",
-    "issues": []
+    "hash": "20828f31c5f45cdc0c6896a43fc75764",
+    "issues": [
+      {
+        "rule": "no-window-in-ssr",
+        "severity": "error",
+        "file": "src/config/profiles.ts",
+        "line": 49,
+        "column": 21,
+        "message": "Detected SSR unsafe API usage: window.",
+        "suggestion": "Wrap browser-only APIs inside onMounted() or process.client checks.",
+        "category": "ssr",
+        "fingerprint": "72bb928023537b36eb38f5c2cb890289"
+      }
+    ]
   },
   "src/reporters/charts.ts": {
     "hash": "30379d205fefbcaaffa6df88ac0c21e7",
@@ -2118,6 +2130,84 @@
   },
   "src/utils/ci-detector.ts": {
     "hash": "9c6a75aade2068946482662d3761cf73",
+    "issues": []
+  },
+  "vue-doctor.config.example.js": {
+    "hash": "24cf6f35c29ff26d3802848d6f71eb13",
+    "issues": []
+  },
+  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780439862765/src/components/Test.vue": {
+    "hash": "c2b2f4e94c373362922c04634f5e3d0f",
+    "issues": []
+  },
+  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780439862765/src/composables/useTest.ts": {
+    "hash": "95a9437dcf4cc44f5c64d1dc89826725",
+    "issues": []
+  },
+  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780442269636/src/components/Test.vue": {
+    "hash": "c2b2f4e94c373362922c04634f5e3d0f",
+    "issues": []
+  },
+  "/var/folders/1g/c085hshd4ml_55c0bqppw9nw0000gn/T/vue-doctor-engine-test-1780442269636/src/composables/useTest.ts": {
+    "hash": "95a9437dcf4cc44f5c64d1dc89826725",
+    "issues": []
+  },
+  "packages/vscode/src/extension.ts": {
+    "hash": "769e99adc4e4f24889606ab786546bda",
+    "issues": [
+      {
+        "rule": "no-window-in-ssr",
+        "severity": "error",
+        "file": "packages/vscode/src/extension.ts",
+        "line": 21,
+        "column": 28,
+        "message": "Detected SSR unsafe API usage: window.",
+        "suggestion": "Wrap browser-only APIs inside onMounted() or process.client checks.",
+        "category": "ssr",
+        "fingerprint": "d41af3abede535157c8c87dfde92af6f"
+      },
+      {
+        "rule": "no-document-in-ssr",
+        "severity": "error",
+        "file": "packages/vscode/src/extension.ts",
+        "line": 45,
+        "column": 53,
+        "message": "Detected SSR unsafe API usage: document.",
+        "suggestion": "Wrap browser-only APIs inside onMounted() or process.client checks.",
+        "category": "ssr",
+        "fingerprint": "a0eec5505faf12e1c0fc8f86c81286cf"
+      }
+    ]
+  },
+  "src/cli/commands/dashboard.ts": {
+    "hash": "d92e421d506a0ed9882460ce8f437e56",
+    "issues": [
+      {
+        "rule": "no-document-in-ssr",
+        "severity": "error",
+        "file": "src/cli/commands/dashboard.ts",
+        "line": 489,
+        "column": 26,
+        "message": "Detected SSR unsafe API usage: document.",
+        "suggestion": "Wrap browser-only APIs inside onMounted() or process.client checks.",
+        "category": "ssr",
+        "fingerprint": "28a2bfb0ee453d7b2b6d105a28836f34"
+      },
+      {
+        "rule": "store-bloat",
+        "severity": "warning",
+        "file": "src/cli/commands/dashboard.ts",
+        "line": 1,
+        "column": 1,
+        "message": "Store has 599 lines (max recommended: 300)",
+        "suggestion": "This store is too large. Consider a major refactor: split into multiple focused stores.",
+        "category": "maintainability",
+        "fingerprint": "53cee033939485348e100e0246e6bb53"
+      }
+    ]
+  },
+  "src/cli/commands/trend.ts": {
+    "hash": "7d7e3cb365a73f0e9bd04f5ccedffdd4",
     "issues": []
   }
 }

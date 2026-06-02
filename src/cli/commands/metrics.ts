@@ -8,6 +8,7 @@ import { buildProjectContext } from '../../core/project';
 import { calculateArchitectureScore, formatMetrics } from '../../core/metrics';
 import { collectFiles } from '../../utils/file-collector';
 import { getProfile, type RuleProfile } from '../../config/profiles';
+import { runEngine } from '../../core/engine';
 
 export async function metricsCommand(options: {
     path?: string;
@@ -32,16 +33,24 @@ export async function metricsCommand(options: {
         console.log(`Analyzing ${files.length} files...`);
 
         const context = await buildProjectContext(files);
-        const metrics = calculateArchitectureScore(context);
 
-        // Get profile if specified
-        let profile: RuleProfile | undefined;
-        if (options.profile) {
-            profile = getProfile(options.profile);
-            if (profile) {
-                console.log(`Using profile: ${profile.name} (${profile.description})`);
-            }
+        // Run engine to get issues
+        const profileName = options.profile || 'recommended';
+        const profile = getProfile(profileName);
+        if (profile) {
+            console.log(`Using profile: ${profile.name} (${profile.description})`);
         }
+
+        const engineResult = await runEngine(files);
+
+        // Count issues by severity
+        const issues = {
+            errors: engineResult.issues.filter((i) => i.severity === 'error').length,
+            warnings: engineResult.issues.filter((i) => i.severity === 'warning').length,
+            info: engineResult.issues.filter((i) => i.severity === 'info').length,
+        };
+
+        const metrics = calculateArchitectureScore(context, { issues });
 
         if (options.json || options.format === 'json') {
             console.log(JSON.stringify({ metrics, profile: profile?.name }, null, 2));

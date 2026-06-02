@@ -1,0 +1,16 @@
+[
+  {
+    "timestamp": 1780439833768,
+    "score": 73.5,
+    "errors": 12,
+    "warnings": 5,
+    "info": 0
+  },
+  {
+    "timestamp": 1780444217751,
+    "score": 30,
+    "errors": 57,
+    "warnings": 80,
+    "info": 0
+  }
+]

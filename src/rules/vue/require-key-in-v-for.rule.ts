@@ -198,9 +198,37 @@ export const requireKeyInVForRule: Rule = {
                 column: elementNode.loc?.start.column,
                 message: buildMessage(elementNode.tag, source),
                 suggestion: buildSuggestion(elementNode.tag, alias, source),
+                _elementNode: elementNode,
+                _vforDir: vforDir,
+                _alias: alias,
+                _source: source,
             });
         });
 
         return issues;
+    },
+
+    async fix(context, issue) {
+        const elementNode = (issue as any)._elementNode;
+        const vforDir = (issue as any)._vforDir;
+        const alias = (issue as any)._alias || 'item';
+
+        if (!elementNode || !vforDir) {
+            return null;
+        }
+
+        const vforContent = vforDir.exp?.content || `${alias} in items`;
+
+        const propStart = vforDir.loc?.start.offset ?? elementNode.loc.start.offset;
+        const propEnd = vforDir.loc?.end.offset ?? propStart;
+
+        return {
+            description: 'Add :key binding to v-for element',
+            replacements: [{
+                start: propEnd,
+                end: propEnd,
+                text: ` :key="${alias}.id"`,
+            }],
+        };
     },
 };

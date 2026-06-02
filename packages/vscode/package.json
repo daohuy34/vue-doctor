@@ -1,0 +1,143 @@
+{
+  "name": "@vue-doctor/vscode",
+  "version": "2.7.0",
+  "displayName": "Vue Doctor",
+  "description": "Vue Doctor - Static analysis for Vue/Nuxt applications",
+  "publisher": "vue-doctor",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/daohuy34/vue-doctor"
+  },
+  "engines": {
+    "vscode": "^1.75.0",
+    "node": ">=18.0.0"
+  },
+  "categories": [
+    "Linters",
+    "Other"
+  ],
+  "keywords": [
+    "vue",
+    "nuxt",
+    "vue3",
+    "analysis",
+    "linting",
+    "code-quality"
+  ],
+  "activationEvents": [
+    "onLanguage:vue",
+    "onLanguage:typescript",
+    "workspaceContains:**/*.vue",
+    "workspaceContains:**/*.ts"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "configuration": {
+      "title": "Vue Doctor",
+      "properties": {
+        "vueDoctor.enable": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable Vue Doctor diagnostics"
+        },
+        "vueDoctor.profile": {
+          "type": "string",
+          "default": "recommended",
+          "enum": ["strict", "recommended", "minimal"],
+          "description": "Rule profile to use"
+        },
+        "vueDoctor.autoFix": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable auto-fix on save"
+        },
+        "vueDoctor.runOnSave": {
+          "type": "boolean",
+          "default": true,
+          "description": "Run analysis on file save"
+        },
+        "vueDoctor.failOn": {
+          "type": "string",
+          "default": "error",
+          "enum": ["error", "warning", "info", "none"],
+          "description": "Minimum severity to show"
+        }
+      }
+    },
+    "commands": [
+      {
+        "command": "vue-doctor.runAnalysis",
+        "title": "Vue Doctor: Run Analysis",
+        "category": "Vue Doctor"
+      },
+      {
+        "command": "vue-doctor.showDashboard",
+        "title": "Vue Doctor: Show Dashboard",
+        "category": "Vue Doctor"
+      },
+      {
+        "command": "vue-doctor.showMetrics",
+        "title": "Vue Doctor: Show Metrics",
+        "category": "Vue Doctor"
+      },
+      {
+        "command": "vue-doctor.fixIssues",
+        "title": "Vue Doctor: Fix Issues",
+        "category": "Vue Doctor"
+      }
+    ],
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "vue-doctor.runAnalysis",
+          "when": "resourceExtname == .vue || resourceExtname == .ts || resourceExtname == .tsx"
+        }
+      ],
+      "explorer/context": [
+        {
+          "command": "vue-doctor.runAnalysis",
+          "when": "resourceExtname == .vue || resourceExtname == .ts",
+          "group": "Vue Doctor"
+        }
+      ]
+    },
+    "statusBar": {
+      "id": "vue-doctor.status",
+      "name": "Vue Doctor Status"
+    },
+    "problemMatchers": [
+      {
+        "name": "vue-doctor",
+        "owner": "vue-doctor",
+        "fileLocation": ["relative", "${workspaceRoot}"],
+        "pattern": {
+          "regexp": "^(.+?)\\s*(✖|⚠|💡)\\s*(.+?)\\s*\\(\\s*(\\d+)\\s*(occurrences)?\\)",
+          "file": 1,
+          "message": 3,
+          "line": 4,
+          "severity": 2
+        },
+        "severity": {
+          "2": "error",
+          "1": "warning"
+        }
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "lint": "eslint src --ext ts"
+  },
+  "devDependencies": {
+    "@types/node": "^18.0.0",
+    "@types/vscode": "^1.75.0",
+    "@vscode/test-electron": "^2.3.0",
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "vue-doctor": "^2.7.0"
+  }
+}

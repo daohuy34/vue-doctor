@@ -9,12 +9,18 @@ import { baselineCommand } from './commands/baseline';
 import { graphCommand } from './commands/graph';
 import { rulesCommand } from './commands/rules';
 import { ruleCommand } from './commands/rule';
+import { dashboardCommand } from './commands/dashboard';
+import { trendCommand } from './commands/trend';
 
 const cli = cac('vue-doctor');
 
 cli.command('check', 'Run project analysis')
 
     .option('--changed', 'Analyze changed files only')
+
+    .option('--since <ref>', 'Analyze files changed since a commit/date/ref')
+
+    .option('--cache-only', 'Use cached results only (for CI)')
 
     .option('--reporter <type>', 'Reporter type', {
         default: 'stylish',
@@ -67,6 +73,23 @@ cli.command('metrics', 'Show architecture metrics and health scores')
     })
     .action(async (options) => {
         await metricsCommand(options);
+    });
+
+cli.command('dashboard', 'Start interactive web dashboard')
+    .option('--port <number>', 'Port to run dashboard on', {
+        default: 3000,
+    })
+    .action(async (options) => {
+        await dashboardCommand(options);
+    });
+
+cli.command('trend', 'Show metrics trends over time')
+    .option('--since <date>', 'Show trends since date')
+    .option('--format <type>', 'Output format: text, json, chart', {
+        default: 'text',
+    })
+    .action(async (options) => {
+        await trendCommand(options);
     });
 
 cli.help();

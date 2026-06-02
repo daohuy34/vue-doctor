@@ -18,6 +18,22 @@ export interface ProjectMetrics {
     maintainability: MaintainabilityScore;
     /** Technical debt index */
     technicalDebt: TechnicalDebtIndex;
+    /** Total issues found by rules */
+    totalIssues: {
+        errors: number;
+        warnings: number;
+        info: number;
+        total: number;
+    };
+}
+
+export interface MetricsOptions {
+    /** Issues from rule checking */
+    issues?: {
+        errors: number;
+        warnings: number;
+        info: number;
+    };
 }
 
 export interface ComponentHealthScore {
@@ -87,18 +103,34 @@ export interface TechnicalDebtIndex {
 /**
  * Calculate overall architecture score
  */
-export function calculateArchitectureScore(context: ProjectContext): ProjectMetrics {
+export function calculateArchitectureScore(
+    context: ProjectContext,
+    options: MetricsOptions = {}
+): ProjectMetrics {
     const componentHealth = calculateComponentHealth(context);
     const dependencyHealth = calculateDependencyHealth(context);
     const maintainability = calculateMaintainability(context);
     const technicalDebt = calculateTechnicalDebt(context, componentHealth, dependencyHealth);
 
+    const { errors = 0, warnings = 0, info = 0 } = options.issues || {};
+    const totalIssues = errors + warnings + info;
+
+    // Calculate issues-based score penalty
+    // More issues = lower score
+    let issuesScore = 100;
+    if (totalIssues > 0) {
+        // Deduct based on error/warning severity
+        issuesScore -= Math.min(40, errors * 2);      // 2 points per error, max 40
+        issuesScore -= Math.min(30, warnings * 0.5); // 0.5 points per warning, max 30
+        issuesScore -= Math.min(10, info * 0.2);     // 0.2 points per info, max 10
+    }
+
     // Weighted average for overall score
     const architectureScore = Math.round(
-        dependencyHealth.distributionScore * 0.3 +
-        maintainability.score * 0.3 +
-        (100 - technicalDebt.score) * 0.2 +
-        componentHealth.reduce((sum, c) => sum + c.score, 0) / Math.max(componentHealth.length, 1) * 0.2
+        dependencyHealth.distributionScore * 0.25 +
+        maintainability.score * 0.25 +
+        issuesScore * 0.30 +  // Higher weight for issues
+        componentHealth.reduce((sum, c) => sum + c.score, 0) / Math.max(componentHealth.length, 1) * 0.20
     );
 
     return {
@@ -107,6 +139,12 @@ export function calculateArchitectureScore(context: ProjectContext): ProjectMetr
         dependencyHealth,
         maintainability,
         technicalDebt,
+        totalIssues: {
+            errors,
+            warnings,
+            info,
+            total: totalIssues,
+        },
     };
 }
 
@@ -364,6 +402,22 @@ export function formatMetrics(metrics: ProjectMetrics): string {
     lines.push('');
     lines.push(`  Overall Score: ${metrics.architectureScore}/100 ${getScoreEmoji(metrics.architectureScore)}`);
     lines.push('');
+
+    // Issues summary
+    if (metrics.totalIssues.total > 0) {
+        lines.push('  Issues Found:');
+        if (metrics.totalIssues.errors > 0) {
+            lines.push(`    • Errors: ${metrics.totalIssues.errors}`);
+        }
+        if (metrics.totalIssues.warnings > 0) {
+            lines.push(`    • Warnings: ${metrics.totalIssues.warnings}`);
+        }
+        if (metrics.totalIssues.info > 0) {
+            lines.push(`    • Info: ${metrics.totalIssues.info}`);
+        }
+        lines.push(`    • Total: ${metrics.totalIssues.total}`);
+        lines.push('');
+    }
 
     lines.push('  Dependency Health:');
     lines.push(`    • Fan-out: avg=${metrics.dependencyHealth.fanOutStats.average}, max=${metrics.dependencyHealth.fanOutStats.max}`);

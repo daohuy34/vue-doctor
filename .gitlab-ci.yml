@@ -1,0 +1,78 @@
+# GitLab CI Template for Vue Doctor
+#
+# Usage:
+# 1. Add to your .gitlab-ci.yml:
+#    include:
+#      - remote: 'https://raw.githubusercontent.com/daohuy34/vue-doctor/main/.gitlab-ci.yml'
+#
+# 2. Or copy this file directly to your .gitlab-ci.yml
+
+.vue-doctor-base:
+  image: node:20
+  before_script:
+    - npm ci --legacy-peer-deps
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+      - node_modules/
+
+vue-doctor:strict:
+  extends: .vue-doctor-base
+  stage: test
+  script:
+    - npx vue-doctor check --profile strict --reporter stylish --fail-on error
+  rules:
+    - if: $CI_MERGE_REQUEST_IID
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+
+vue-doctor:recommended:
+  extends: .vue-doctor-base
+  stage: test
+  script:
+    - npx vue-doctor check --profile recommended --reporter stylish --fail-on warning
+  rules:
+    - if: $CI_COMMIT_BRANCH != $CI_DEFAULT_BRANCH
+
+vue-doctor:sarif:
+  extends: .vue-doctor-base
+  stage: test
+  script:
+    - npx vue-doctor check --profile strict --reporter sarif --output vue-doctor-results.sarif
+  artifacts:
+    reports:
+      security: vue-doctor-results.sarif
+    expire_in: 30 days
+    when: always
+  rules:
+    - if: $CI_MERGE_REQUEST_IID
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+
+vue-doctor:baseline:
+  extends: .vue-doctor-base
+  stage: test
+  script:
+    - |
+      if [ "$CI_COMMIT_BRANCH" == "$CI_DEFAULT_BRANCH" ]; then
+        npx vue-doctor baseline
+        git config user.email "ci@gitlab"
+        git config user.name "GitLab CI"
+        git add .vue-doctor-baseline.json
+        git commit -m "chore: update vue-doctor baseline [skip ci]" || true
+        git push origin $CI_COMMIT_BRANCH || true
+      fi
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+
+# Dashboard deployment (optional)
+vue-doctor:dashboard:
+  image: node:20
+  stage: deploy
+  script:
+    - npm install -g vue-doctor
+    - npx vue-doctor dashboard --port $DASHBOARD_PORT
+  environment:
+    name: vue-doctor-dashboard
+    url: https://$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN
+  rules:
+    - if: $ENABLE_DASHBOARD == "true"
+  when: manual

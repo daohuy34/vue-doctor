@@ -1,0 +1,55 @@
+name: Vue Doctor
+description: Run Vue Doctor static analysis for Vue/Nuxt applications
+
+inputs:
+  profile:
+    description: Rule profile to use (strict, recommended, minimal)
+    required: false
+    default: recommended
+  fail-on:
+    description: Minimum severity that should fail the command (error, warning, info)
+    required: false
+    default: error
+  reporter:
+    description: Output reporter (stylish, json, github, sarif)
+    required: false
+    default: stylish
+  output-file:
+    description: Output file for JSON/SARIF results
+    required: false
+    default: ''
+  install-command:
+    description: Command to install vue-doctor
+    required: false
+    default: 'npm install -g vue-doctor'
+
+runs:
+  using: composite
+  steps:
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: 'npm'
+
+    - name: Install Vue Doctor
+      shell: bash
+      run: ${{ inputs.install-command }}
+
+    - name: Run Vue Doctor
+      shell: bash
+      run: |
+        if [ -n "${{ inputs.output-file }}" ]; then
+          vue-doctor check --profile ${{ inputs.profile }} --reporter ${{ inputs.reporter }} --output ${{ inputs.output-file }} --fail-on ${{ inputs.fail-on }}
+        else
+          vue-doctor check --profile ${{ inputs.profile }} --reporter ${{ inputs.reporter }} --fail-on ${{ inputs.fail-on }}
+        fi
+
+outputs:
+  issues-count:
+    description: Total number of issues found
+    value: ${{ steps.vue-doctor.outputs.issues-count }}
+
+branding:
+  icon: 'check-circle'
+  color: 'green'
