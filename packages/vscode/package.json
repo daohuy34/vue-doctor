@@ -1,8 +1,8 @@
 {
   "name": "@vue-doctor/vscode",
-  "version": "2.7.0",
+  "version": "2.8.0",
   "displayName": "Vue Doctor",
-  "description": "Vue Doctor - Static analysis for Vue/Nuxt applications",
+  "description": "Vue Doctor - Architecture Intelligence for Vue/Nuxt applications",
   "publisher": "vue-doctor",
   "license": "MIT",
   "repository": {
@@ -15,15 +15,18 @@
   },
   "categories": [
     "Linters",
+    "Programming Languages",
     "Other"
   ],
   "keywords": [
     "vue",
     "nuxt",
     "vue3",
+    "architecture",
     "analysis",
     "linting",
-    "code-quality"
+    "code-quality",
+    "metrics"
   ],
   "activationEvents": [
     "onLanguage:vue",
@@ -62,6 +65,21 @@
           "default": "error",
           "enum": ["error", "warning", "info", "none"],
           "description": "Minimum severity to show"
+        },
+        "vueDoctor.showArchitectureMetrics": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show architecture metrics (hotspots, cycles) in status bar"
+        },
+        "vueDoctor.hotspotThreshold": {
+          "type": "number",
+          "default": 60,
+          "description": "Hotspot detection threshold (0-100)"
+        },
+        "vueDoctor.scanOnOpen": {
+          "type": "boolean",
+          "default": false,
+          "description": "Run full scan when workspace opens"
         }
       }
     },
@@ -84,6 +102,21 @@
       {
         "command": "vue-doctor.fixIssues",
         "title": "Vue Doctor: Fix Issues",
+        "category": "Vue Doctor"
+      },
+      {
+        "command": "vue-doctor.showReport",
+        "title": "Vue Doctor: Show Architecture Report",
+        "category": "Vue Doctor"
+      },
+      {
+        "command": "vue-doctor.showSmell",
+        "title": "Vue Doctor: Detect Architecture Smells",
+        "category": "Vue Doctor"
+      },
+      {
+        "command": "vue-doctor.showGraph",
+        "title": "Vue Doctor: Show Dependency Graph",
         "category": "Vue Doctor"
       }
     ],

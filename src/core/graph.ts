@@ -1,57 +1,115 @@
 import path from 'node:path';
 import { parseImports } from '../utils/import-parser';
+import { createAliasResolver, resolveAlias, type AliasResolver } from '../utils/alias-resolver';
 
-export type GraphNodeKind = 'page' | 'component' | 'store' | 'composable' | 'other';
+export type NodeType =
+    | 'page'
+    | 'component'
+    | 'composable'
+    | 'store'
+    | 'service'
+    | 'layout'
+    | 'middleware'
+    | 'plugin'
+    | 'util'
+    | 'other';
+
+export type EdgeType = 'imports' | 'depends-on' | 'calls' | 'uses';
 
 export interface GraphNode {
     filePath: string;
-    kind: GraphNodeKind;
+    type: NodeType;
+    name: string;
+    loc: number;
     imports: string[];
     dynamicImports: string[];
+    fanIn: number;
+    fanOut: number;
+    violations: number;
 }
 
 export interface GraphEdge {
     from: string;
     to: string;
-    kind: 'import' | 'dynamic';
+    type: EdgeType;
 }
 
 export interface ProjectGraph {
+    nodes: GraphNode[];
+    edges: GraphEdge[];
+    meta: {
+        generatedAt: number;
+        fileCount: number;
+        version: string;
+    };
     counts: {
         pages: number;
         components: number;
         stores: number;
         composables: number;
+        services: number;
+        layouts: number;
+        middlewares: number;
+        plugins: number;
+        utils: number;
         others: number;
     };
-    nodes: GraphNode[];
-    edges: GraphEdge[];
+}
+
+export interface HotspotInfo {
+    node: GraphNode;
+    score: number;
+    rank: number;
+}
+
+export interface CircularDependency {
+    nodes: string[];
+    length: number;
+    severity: 'low' | 'medium' | 'high' | 'critical';
 }
 
 function normalize(filePath: string) {
     return filePath.replace(/\\/g, '/');
 }
 
-export function classifyGraphNode(filePath: string): GraphNodeKind {
+function getNodeName(filePath: string): string {
+    const normalized = normalize(filePath);
+    const parts = normalized.split('/');
+    return parts[parts.length - 1].replace(/\.(vue|ts|js|tsx|jsx)$/, '');
+}
+
+export function classifyGraphNode(filePath: string): NodeType {
     const normalized = normalize(filePath);
 
-    if (normalized.includes('/pages/')) {
-        return 'page';
-    }
+    // Nuxt conventions
+    if (normalized.includes('/pages/')) return 'page';
+    if (normalized.includes('/layouts/')) return 'layout';
+    if (normalized.includes('/middleware/')) return 'middleware';
+    if (normalized.includes('/plugins/')) return 'plugin';
 
-    if (normalized.includes('/stores/')) {
+    // Standard conventions
+    if (normalized.includes('/stores/') || /(^|\/)(store|stores)(\/|$)/i.test(normalized)) {
         return 'store';
     }
 
-    if (normalized.includes('/composables/')) {
+    if (normalized.includes('/composables/') || normalized.includes('/composable/')) {
         return 'composable';
     }
 
+    if (normalized.includes('/services/') || normalized.includes('/api/')) {
+        return 'service';
+    }
+
+    if (normalized.includes('/utils/') || normalized.includes('/helpers/')) {
+        return 'util';
+    }
+
+    // Pattern-based detection
     if (/^src\/.*\/use[A-Z][A-Za-z0-9_-]*\.(ts|js|vue)$/.test(normalized)) {
         return 'composable';
     }
 
-    if (/(^|\/)(store|stores)(\/|$)/i.test(normalized)) {
+    if (/^src\/.*store[A-Z][A-Za-z0-9_-]*\.(ts|js|vue)$/.test(normalized)) {
         return 'store';
     }
 
@@ -250,86 +308,302 @@ function resolveLocalImport(
     return null;
 }
 
+/**
+ * Build the complete project graph with all features
+ */
 export function buildProjectGraph(
     files: string[],
     sources: Map<string, string>,
+    projectRoot: string = process.cwd(),
 ): ProjectGraph {
     const normalizedFiles = files.map((filePath) => normalize(filePath));
     const knownFiles = new Set(normalizedFiles);
 
-    const nodes = normalizedFiles.map((filePath) => ({
-        filePath,
-        kind: classifyGraphNode(filePath),
-        imports: extractImports(sources.get(filePath) ?? ''),
-        dynamicImports: extractDynamicImports(sources.get(filePath) ?? ''),
-    }));
+    // Create alias resolver
+    const aliasResolver = createAliasResolver(projectRoot);
 
-    const edges = new Map<string, GraphEdge>();
+    // Build nodes with enhanced metadata
+    const nodes: GraphNode[] = normalizedFiles.map((filePath) => {
+        const source = sources.get(filePath) ?? '';
+        const loc = source.split('\n').length;
+
+        return {
+            filePath,
+            type: classifyGraphNode(filePath),
+            name: getNodeName(filePath),
+            loc,
+            imports: extractImports(source),
+            dynamicImports: extractDynamicImports(source),
+            fanIn: 0,
+            fanOut: 0,
+            violations: 0,
+        };
+    });
+
+    // Build edges
+    const edges: GraphEdge[] = [];
+    const nodeMap = new Map(nodes.map((n) => [n.filePath, n]));
 
     for (const node of nodes) {
         // Process static imports
         for (const importPath of node.imports) {
-            const target = resolveLocalImport(importPath, node.filePath, knownFiles);
+            const target = resolveLocalImport(
+                importPath,
+                node.filePath,
+                knownFiles,
+            );
 
             if (!target || target === node.filePath) {
                 continue;
             }
 
-            edges.set(`${node.filePath}::${target}`, {
+            edges.push({
                 from: node.filePath,
                 to: target,
-                kind: 'import',
+                type: 'imports',
             });
+
+            node.fanOut++;
+            const targetNode = nodeMap.get(target);
+            if (targetNode) {
+                targetNode.fanIn++;
+            }
         }
 
         // Process dynamic imports
         for (const importPath of node.dynamicImports) {
-            const target = resolveLocalImport(importPath, node.filePath, knownFiles);
+            const target = resolveLocalImport(
+                importPath,
+                node.filePath,
+                knownFiles,
+            );
 
             if (!target || target === node.filePath) {
                 continue;
             }
 
-            const edgeKey = `${node.filePath}::${target}`;
-            // Don't override existing static import edge with dynamic
-            if (!edges.has(edgeKey)) {
-                edges.set(edgeKey, {
+            // Skip if already have a static import edge
+            if (!edges.some((e) => e.from === node.filePath && e.to === target)) {
+                edges.push({
                     from: node.filePath,
                     to: target,
-                    kind: 'dynamic',
+                    type: 'imports',
                 });
+
+                node.fanOut++;
+                const targetNode = nodeMap.get(target);
+                if (targetNode) {
+                    targetNode.fanIn++;
+                }
             }
         }
     }
 
-    const counts = nodes.reduce(
-        (accumulator, node) => {
-            if (node.kind === 'page') {
-                accumulator.pages += 1;
-            } else if (node.kind === 'component') {
-                accumulator.components += 1;
-            } else if (node.kind === 'store') {
-                accumulator.stores += 1;
-            } else if (node.kind === 'composable') {
-                accumulator.composables += 1;
-            } else {
-                accumulator.others += 1;
-            }
-
-            return accumulator;
-        },
-        {
-            pages: 0,
-            components: 0,
-            stores: 0,
-            composables: 0,
-            others: 0,
-        },
-    );
+    // Calculate counts
+    const counts = {
+        pages: nodes.filter((n) => n.type === 'page').length,
+        components: nodes.filter((n) => n.type === 'component').length,
+        stores: nodes.filter((n) => n.type === 'store').length,
+        composables: nodes.filter((n) => n.type === 'composable').length,
+        services: nodes.filter((n) => n.type === 'service').length,
+        layouts: nodes.filter((n) => n.type === 'layout').length,
+        middlewares: nodes.filter((n) => n.type === 'middleware').length,
+        plugins: nodes.filter((n) => n.type === 'plugin').length,
+        utils: nodes.filter((n) => n.type === 'util').length,
+        others: nodes.filter((n) => n.type === 'other').length,
+    };
 
     return {
-        counts,
         nodes,
-        edges: [...edges.values()],
+        edges,
+        meta: {
+            generatedAt: Date.now(),
+            fileCount: nodes.length,
+            version: '2.7.0',
+        },
+        counts,
     };
+}
+
+/**
+ * Calculate hotspot score for a node
+ * Score = (Fan-In × 0.3) + (Fan-Out × 0.2) + (LOC/10 × 0.2) + (Violations × 0.3)
+ */
+export function calculateHotspotScore(node: GraphNode): number {
+    return (
+        node.fanIn * 0.3 +
+        node.fanOut * 0.2 +
+        (node.loc / 10) * 0.2 +
+        node.violations * 0.3
+    );
+}
+
+/**
+ * Get top hotspots from graph
+ */
+export function getHotspots(graph: ProjectGraph, limit: number = 10): HotspotInfo[] {
+    return graph.nodes
+        .map((node) => ({
+            node,
+            score: calculateHotspotScore(node),
+            rank: 0,
+        }))
+        .sort((a, b) => b.score - a.score)
+        .slice(0, limit)
+        .map((item, index) => ({
+            ...item,
+            rank: index + 1,
+        }));
+}
+
+/**
+ * Calculate instability index for a node
+ * Instability = Fan-Out / (Fan-In + Fan-Out)
+ */
+export function calculateInstability(node: GraphNode): number {
+    const total = node.fanIn + node.fanOut;
+    if (total === 0) return 0;
+    return node.fanOut / total;
+}
+
+/**
+ * Find circular dependencies using DFS
+ */
+export function findCircularDependencies(graph: ProjectGraph): CircularDependency[] {
+    const adjacencyList = new Map<string, string[]>();
+
+    // Build adjacency list
+    for (const edge of graph.edges) {
+        if (!adjacencyList.has(edge.from)) {
+            adjacencyList.set(edge.from, []);
+        }
+        adjacencyList.get(edge.from)!.push(edge.to);
+    }
+
+    const cycles: CircularDependency[] = [];
+    const visited = new Set<string>();
+    const recursionStack = new Set<string>();
+    const path: string[] = [];
+
+    function dfs(node: string): void {
+        visited.add(node);
+        recursionStack.add(node);
+        path.push(node);
+
+        const neighbors = adjacencyList.get(node) || [];
+
+        for (const neighbor of neighbors) {
+            if (!visited.has(neighbor)) {
+                dfs(neighbor);
+            } else if (recursionStack.has(neighbor)) {
+                // Found a cycle
+                const cycleStart = path.indexOf(neighbor);
+                const cycleNodes = path.slice(cycleStart);
+                cycleNodes.push(neighbor); // Close the cycle
+
+                const length = cycleNodes.length - 1;
+                let severity: CircularDependency['severity'];
+
+                if (length >= 6) severity = 'critical';
+                else if (length >= 4) severity = 'high';
+                else severity = 'medium';
+
+                cycles.push({
+                    nodes: cycleNodes,
+                    length,
+                    severity,
+                });
+            }
+        }
+
+        path.pop();
+        recursionStack.delete(node);
+    }
+
+    // Run DFS from each unvisited node
+    for (const node of graph.nodes) {
+        if (!visited.has(node.filePath)) {
+            dfs(node.filePath);
+        }
+    }
+
+    // Sort by severity and length
+    return cycles.sort((a, b) => {
+        const severityOrder = { critical: 0, high: 1, medium: 2, low: 3 };
+        const severityDiff = severityOrder[a.severity] - severityOrder[b.severity];
+        if (severityDiff !== 0) return severityDiff;
+        return b.length - a.length;
+    });
+}
+
+/**
+ * Find orphan nodes (not imported by any other node)
+ */
+export function findOrphanNodes(
+    graph: ProjectGraph,
+    ignorePatterns: string[] = ['*.stories.*', '*.spec.*', '*.test.*'],
+): GraphNode[] {
+    const nodeMap = new Map(graph.nodes.map((n) => [n.filePath, n]));
+
+    return graph.nodes.filter((node) => {
+        // Check if imported by anyone
+        const isImported = graph.edges.some((e) => e.to === node.filePath);
+
+        if (isImported) return false;
+
+        // Check ignore patterns
+        const fileName = node.filePath.split('/').pop() || '';
+
+        for (const pattern of ignorePatterns) {
+            const regex = new RegExp(
+                pattern
+                    .replace(/\./g, '\\.')
+                    .replace(/\*/g, '.*'),
+            );
+            if (regex.test(fileName)) {
+                return false;
+            }
+        }
+
+        // Pages, layouts, middleware, plugins are often auto-loaded in Nuxt
+        const autoLoadedTypes: NodeType[] = ['page', 'layout', 'middleware', 'plugin'];
+        if (autoLoadedTypes.includes(node.type)) {
+            return false;
+        }
+
+        return true;
+    });
+}
+
+/**
+ * Get shared modules (imported by many files)
+ */
+export function getSharedModules(graph: ProjectGraph, threshold: number = 50): GraphNode[] {
+    return graph.nodes
+        .filter((node) => node.fanIn >= threshold)
+        .sort((a, b) => b.fanIn - a.fanIn);
+}
+
+/**
+ * Calculate coupling between two features
+ */
+export function calculateFeatureCoupling(
+    graph: ProjectGraph,
+    feature1: string,
+    feature2: string,
+): number {
+    let crossBoundaryImports = 0;
+
+    for (const edge of graph.edges) {
+        const fromInFeature1 = edge.from.includes(feature1);
+        const toInFeature2 = edge.to.includes(feature2);
+        const fromInFeature2 = edge.from.includes(feature2);
+        const toInFeature1 = edge.to.includes(feature1);
+
+        if ((fromInFeature1 && toInFeature2) || (fromInFeature2 && toInFeature1)) {
+            crossBoundaryImports++;
+        }
+    }
+
+    return crossBoundaryImports;
 }

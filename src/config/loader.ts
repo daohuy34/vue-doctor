@@ -20,6 +20,13 @@ import {
 } from './profiles';
 import { ARCHITECTURE_POLICIES } from './policies';
 
+export interface FeatureBoundary {
+    name: string;
+    pattern: string;
+    allowedBy?: string[];
+    children?: boolean;
+}
+
 export interface VueDoctorConfig {
     /** Profile name or custom profile */
     profile?: string | RuleProfile;
@@ -42,6 +49,22 @@ export interface VueDoctorConfig {
         maxFanOut?: number;
         maxStoreSize?: number;
         maxWatchers?: number;
+    };
+    /** Feature boundaries */
+    boundaries?: FeatureBoundary[];
+    /** Hotspot detection threshold (0-100) */
+    hotspotThreshold?: number;
+    /** Shared module threshold (max imports from shared/) */
+    sharedModuleThreshold?: number;
+    /** Cache configuration */
+    cache?: {
+        enabled?: boolean;
+        ttl?: number;
+    };
+    /** Report settings */
+    report?: {
+        formats?: string[];
+        output?: string;
     };
 }
 

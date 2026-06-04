@@ -4,15 +4,25 @@
  * Options:
  * --type <kind>   Filter by node type: page, component, store, composable, all
  * --depth <n>     Maximum depth to traverse (default: unlimited)
- * --format <fmt>  Output format: text, tree, json, stats
+ * --format <fmt>  Output format: text, tree, json, stats, hotspots, cycles
  * --filter <str>  Filter by file path pattern
+ * --hotspots      Show top hotspots
+ * --cycles        Show circular dependencies
+ * --orphans       Show orphan nodes
  */
 
 import fs from 'node:fs/promises';
 import fg from 'fast-glob';
 import path from 'node:path';
 
-import { buildProjectGraph } from '../../core/graph';
+import {
+    buildProjectGraph,
+    findCircularDependencies,
+    findOrphanNodes,
+    getHotspots,
+    calculateInstability,
+    type ProjectGraph,
+} from '../../core/graph';
 import {
     createGraphVisualization,
     buildGraphTree,
@@ -24,8 +34,11 @@ import {
 export interface GraphCommandOptions {
     type?: 'page' | 'component' | 'store' | 'composable' | 'all';
     depth?: number;
-    format?: 'text' | 'tree' | 'json' | 'stats';
+    format?: 'text' | 'tree' | 'json' | 'stats' | 'hotspots' | 'cycles' | 'orphans';
     filter?: string;
+    hotspots?: boolean;
+    cycles?: boolean;
+    orphans?: boolean;
 }
 
 async function collectGraphFiles(): Promise<string[]> {
@@ -252,6 +265,109 @@ function formatJson(viz: GraphVisualization): string {
     return exportGraphToJson(viz);
 }
 
+function formatHotspots(graph: ProjectGraph): string {
+    const hotspots = getHotspots(graph, 10);
+    const lines: string[] = [];
+
+    lines.push('Top Hotspots');
+    lines.push('═'.repeat(60));
+    lines.push('');
+    lines.push('Rank  File                           Score  Fan-In  Fan-Out  LOC');
+    lines.push('─'.repeat(60));
+
+    for (const hotspot of hotspots) {
+        const { node, score, rank } = hotspot;
+        const fileName = path.basename(node.filePath);
+        const filePath = node.filePath.replace(/^.*\/src\//, 'src/');
+
+        lines.push(
+            `${rank.toString().padStart(4)}  ${fileName.padEnd(30)} ${score.toFixed(0).padStart(5)}  ${node.fanIn.toString().padStart(6)}  ${node.fanOut.toString().padStart(7)}  ${node.loc.toString().padStart(3)}`
+        );
+        lines.push(`      ${filePath}`);
+    }
+
+    lines.push('');
+    lines.push('Hotspot Score = (Fan-In × 0.3) + (Fan-Out × 0.2) + (LOC/10 × 0.2)');
+
+    return lines.join('\n');
+}
+
+function formatCycles(graph: ProjectGraph): string {
+    const cycles = findCircularDependencies(graph);
+    const lines: string[] = [];
+
+    lines.push('Circular Dependencies');
+    lines.push('═'.repeat(60));
+
+    if (cycles.length === 0) {
+        lines.push('');
+        lines.push('✅ No circular dependencies found!');
+        return lines.join('\n');
+    }
+
+    lines.push(`Found ${cycles.length} cycle(s)`);
+    lines.push('');
+
+    const severityEmoji: Record<string, string> = {
+        critical: '🔴',
+        high: '🟠',
+        medium: '🟡',
+        low: '🟢',
+    };
+
+    for (let i = 0; i < cycles.length; i++) {
+        const cycle = cycles[i];
+        const emoji = severityEmoji[cycle.severity] || '⚪';
+
+        lines.push(`${emoji} ${cycle.severity.toUpperCase()} Cycle (length: ${cycle.length})`);
+
+        for (let j = 0; j < cycle.nodes.length; j++) {
+            const nodeName = path.basename(cycle.nodes[j]);
+            const prefix = j === 0 ? '├─▶ ' : '└──▶ ';
+            const suffix = j === cycle.nodes.length - 1 ? ` → ${path.basename(cycle.nodes[0])}` : '';
+            lines.push(`   ${prefix}${nodeName}${suffix}`);
+        }
+
+        lines.push('');
+    }
+
+    lines.push('Severity:');
+    lines.push('  Length 2  → Medium');
+    lines.push('  Length 4  → High');
+    lines.push('  Length 6+ → Critical');
+
+    return lines.join('\n');
+}
+
+function formatOrphans(graph: ProjectGraph): string {
+    const orphans = findOrphanNodes(graph);
+    const lines: string[] = [];
+
+    lines.push('Orphan Nodes');
+    lines.push('═'.repeat(60));
+
+    if (orphans.length === 0) {
+        lines.push('');
+        lines.push('✅ No orphan nodes found!');
+        return lines.join('\n');
+    }
+
+    lines.push(`Found ${orphans.length} orphan(s) (not imported by any file)`);
+    lines.push('');
+    lines.push('Type        File');
+    lines.push('─'.repeat(60));
+
+    for (const node of orphans) {
+        const fileName = path.basename(node.filePath);
+        lines.push(`${node.type.padEnd(11)} ${fileName}`);
+    }
+
+    lines.push('');
+    lines.push('Note: Pages, layouts, middleware, plugins are excluded (often auto-loaded).');
+
+    return lines.join('\n');
+}
+
 // ─────────────────────────────────────────────────────────────────────────────
 // Main Command
 // ─────────────────────────────────────────────────────────────────────────────
@@ -262,6 +378,9 @@ export async function graphCommand(options: GraphCommandOptions = {}) {
         depth,
         format = 'text',
         filter,
+        hotspots,
+        cycles,
+        orphans,
     } = options;
 
     const files = await collectGraphFiles();
@@ -289,23 +408,32 @@ export async function graphCommand(options: GraphCommandOptions = {}) {
     viz = filterByPattern(viz, filter);
     viz = limitDepth(viz, depth);
 
-    // Format output
+    // Format output based on options
     let output: string;
 
-    switch (format) {
-        case 'tree':
-            output = formatTree(viz);
-            break;
-        case 'stats':
-            output = formatStats(viz);
-            break;
-        case 'json':
-            output = formatJson(viz);
-            break;
-        case 'text':
-        default:
-            output = formatText(viz);
-            break;
+    // Special formats
+    if (hotspots || format === 'hotspots') {
+        output = formatHotspots(graph);
+    } else if (cycles || format === 'cycles') {
+        output = formatCycles(graph);
+    } else if (orphans || format === 'orphans') {
+        output = formatOrphans(graph);
+    } else {
+        switch (format) {
+            case 'tree':
+                output = formatTree(viz);
+                break;
+            case 'stats':
+                output = formatStats(viz);
+                break;
+            case 'json':
+                output = formatJson(viz);
+                break;
+            case 'text':
+            default:
+                output = formatText(viz);
+                break;
+        }
     }
 
     console.log(output);

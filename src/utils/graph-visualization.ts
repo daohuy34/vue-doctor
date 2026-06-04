@@ -14,7 +14,7 @@ export type GraphFormat = 'tree' | 'list' | 'matrix' | 'adjacency';
 export interface GraphVisualizationNode {
     id: string;
     label: string;
-    type: 'page' | 'component' | 'store' | 'composable' | 'other';
+    type: 'page' | 'component' | 'store' | 'composable' | 'service' | 'layout' | 'middleware' | 'plugin' | 'util' | 'other';
     /** File path for reference */
     filePath: string;
     /** Number of incoming edges (how many files use this) */
@@ -81,7 +81,7 @@ export function createGraphVisualization(
     const nodes: GraphVisualizationNode[] = baseGraph.nodes.map((node) => ({
         id: node.filePath,
         label: getNodeLabel(node),
-        type: node.kind,
+        type: node.type as GraphVisualizationNode['type'],
         filePath: node.filePath,
         inDegree: inDegree.get(node.filePath) ?? 0,
         outDegree: outDegree.get(node.filePath) ?? 0,
@@ -96,7 +96,7 @@ export function createGraphVisualization(
         id: `edge-${index}`,
         source: edge.from,
         target: edge.to,
-        type: edge.kind === 'dynamic' ? 'dynamic' : 'static',
+        type: 'static',
     }));
 
     // Find orphaned nodes (no connections)
@@ -112,7 +112,7 @@ export function createGraphVisualization(
     // Count by type
     const byType: Record<string, number> = {};
     for (const node of baseGraph.nodes) {
-        byType[node.kind] = (byType[node.kind] ?? 0) + 1;
+        byType[node.type] = (byType[node.type] ?? 0) + 1;
     }
 
     return {

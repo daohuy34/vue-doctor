@@ -56,7 +56,7 @@ describe('Integration: Full Graph System', () => {
             expect(graph.counts.components).toBe(1);
             expect(graph.counts.stores).toBe(1);
             expect(graph.counts.composables).toBe(1);
-            expect(graph.counts.others).toBe(1);
+            expect(graph.counts.utils).toBe(1);
         });
 
         it('should track dynamic imports', () => {

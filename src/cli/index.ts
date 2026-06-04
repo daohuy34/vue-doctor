@@ -11,6 +11,10 @@ import { rulesCommand } from './commands/rules';
 import { ruleCommand } from './commands/rule';
 import { dashboardCommand } from './commands/dashboard';
 import { trendCommand } from './commands/trend';
+import { nuxtCommand } from './commands/nuxt';
+import { reportCommand } from './commands/report';
+import { smellCommand } from './commands/smell';
+import { initCommand } from './commands/init';
 
 const cli = cac('vue-doctor');
 
@@ -34,6 +38,7 @@ cli.command('check', 'Run project analysis')
 
 cli.command('fix', 'Apply safe autofixes for supported rules')
     .option('--changed', 'Apply fixes only to changed files')
+    .option('--dry', 'Preview changes without modifying files')
     .action(async (options) => {
         await fixCommand(options);
     });
@@ -48,10 +53,13 @@ cli.command('graph', 'Inspect project dependency graph')
         default: 'all',
     })
     .option('--depth <n>', 'Maximum depth to traverse')
-    .option('--format <fmt>', 'Output format: text, tree, json, stats', {
+    .option('--format <fmt>', 'Output format: text, tree, json, stats, hotspots, cycles, orphans', {
         default: 'text',
     })
     .option('--filter <pattern>', 'Filter by file path pattern (regex)')
+    .option('--hotspots', 'Show top hotspots')
+    .option('--cycles', 'Show circular dependencies')
+    .option('--orphans', 'Show orphan nodes')
     .action(async (options) => {
         await graphCommand(options);
     });
@@ -68,9 +76,12 @@ cli.command('metrics', 'Show architecture metrics and health scores')
     .option('--profile <name>', 'Rule profile: strict, recommended, minimal', {
         default: 'recommended',
     })
-    .option('--format <type>', 'Output format: text, json, html', {
+    .option('--format <type>', 'Output format: text, json, html, boundaries, routes, shared', {
         default: 'text',
     })
+    .option('--boundaries', 'Show feature boundary violations')
+    .option('--routes', 'Show route complexity analysis')
+    .option('--shared', 'Show shared module analysis')
     .action(async (options) => {
         await metricsCommand(options);
     });
@@ -90,6 +101,44 @@ cli.command('trend', 'Show metrics trends over time')
     })
     .action(async (options) => {
         await trendCommand(options);
+    });
+
+cli.command('nuxt', 'Analyze Nuxt-specific patterns')
+    .option('--async', 'Analyze async data fetching patterns')
+    .option('--hydration', 'Analyze hydration risks')
+    .option('--apis', 'Analyze API usage patterns')
+    .option('--format <type>', 'Output format: text, json', {
+        default: 'text',
+    })
+    .action(async (options) => {
+        await nuxtCommand(options);
+    });
+
+cli.command('report', 'Generate architecture score report')
+    .option('--json', 'Output as JSON')
+    .option('--html', 'Generate HTML report')
+    .option('--open', 'Open HTML report in browser')
+    .option('--output <file>', 'Output file for HTML report')
+    .option('--history', 'Show score history')
+    .option('--delta', 'Show score delta from previous scan')
+    .option('--no-save', 'Do not save to history')
+    .action(async (options) => {
+        await reportCommand(options);
+    });
+
+cli.command('smell', 'Detect architecture smells')
+    .option('--json', 'Output as JSON')
+    .option('--only <type>', 'Only detect specific smell: god-component, god-composable, smart-component, service-layer, drift')
+    .action(async (options) => {
+        await smellCommand(options);
+    });
+
+cli.command('init', 'Initialize Vue Doctor in a project')
+    .option('--force', 'Force reinitialize even if config exists')
+    .option('--type <type>', 'Project type: vue3, nuxt3, auto')
+    .option('--ci', 'Generate GitHub Actions workflow')
+    .action(async (options) => {
+        await initCommand(options);
     });
 
 cli.help();

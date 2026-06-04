@@ -56,12 +56,12 @@ describe('graph core', () => {
             {
                 from: 'src/pages/Home.vue',
                 to: 'src/components/Button.vue',
-                kind: 'import',
+                type: 'imports',
             },
             {
                 from: 'src/pages/Home.vue',
                 to: 'src/composables/useAuth.ts',
-                kind: 'import',
+                type: 'imports',
             },
         ]);
     });

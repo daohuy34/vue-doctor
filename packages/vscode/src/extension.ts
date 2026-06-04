@@ -35,7 +35,10 @@ export function activate(context: vscode.ExtensionContext) {
         vscode.commands.registerCommand('vue-doctor.runAnalysis', runAnalysis),
         vscode.commands.registerCommand('vue-doctor.showDashboard', showDashboard),
         vscode.commands.registerCommand('vue-doctor.showMetrics', showMetrics),
-        vscode.commands.registerCommand('vue-doctor.fixIssues', fixIssues)
+        vscode.commands.registerCommand('vue-doctor.fixIssues', fixIssues),
+        vscode.commands.registerCommand('vue-doctor.showReport', showReport),
+        vscode.commands.registerCommand('vue-doctor.showSmell', showSmell),
+        vscode.commands.registerCommand('vue-doctor.showGraph', showGraph)
     );
 
     // Auto-run on save if enabled
@@ -236,6 +239,88 @@ async function fixIssues() {
         });
 
         child.on('error', reject);
+    });
+}
+
+async function showReport() {
+    const workspaceFolder = vscode.workspace.workspaceFolders?.[0];
+    if (!workspaceFolder) {
+        vscode.window.showInformationMessage('No workspace folder found');
+        return;
+    }
+
+    const output = vscode.window.createOutputChannel('Vue Doctor - Architecture Report');
+    output.show();
+
+    return new Promise<void>((resolve) => {
+        const child = spawn('npx', ['vue-doctor', 'report'], {
+            cwd: workspaceFolder.uri.fsPath,
+            shell: true,
+        });
+
+        child.stdout.on('data', (data) => {
+            output.append(data.toString());
+        });
+
+        child.stderr.on('data', (data) => {
+            output.append(data.toString());
+        });
+
+        child.on('close', () => {
+            resolve();
+        });
+    });
+}
+
+async function showSmell() {
+    const workspaceFolder = vscode.workspace.workspaceFolders?.[0];
+    if (!workspaceFolder) {
+        vscode.window.showInformationMessage('No workspace folder found');
+        return;
+    }
+
+    const output = vscode.window.createOutputChannel('Vue Doctor - Smell Detection');
+    output.show();
+
+    return new Promise<void>((resolve) => {
+        const child = spawn('npx', ['vue-doctor', 'smell'], {
+            cwd: workspaceFolder.uri.fsPath,
+            shell: true,
+        });
+
+        child.stdout.on('data', (data) => {
+            output.append(data.toString());
+        });
+
+        child.on('close', () => {
+            resolve();
+        });
+    });
+}
+
+async function showGraph() {
+    const workspaceFolder = vscode.workspace.workspaceFolders?.[0];
+    if (!workspaceFolder) {
+        vscode.window.showInformationMessage('No workspace folder found');
+        return;
+    }
+
+    const output = vscode.window.createOutputChannel('Vue Doctor - Dependency Graph');
+    output.show();
+
+    return new Promise<void>((resolve) => {
+        const child = spawn('npx', ['vue-doctor', 'graph', '--format', 'text'], {
+            cwd: workspaceFolder.uri.fsPath,
+            shell: true,
+        });
+
+        child.stdout.on('data', (data) => {
+            output.append(data.toString());
+        });
+
+        child.on('close', () => {
+            resolve();
+        });
     });
 }
 
