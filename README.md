@@ -8,37 +8,38 @@
 
 **Static Analysis & Architecture Intelligence for Vue & Nuxt applications.**
 
-Vue Doctor giúp phát hiện các vấn đề về maintainability, SSR risks, và architectural smells trước khi chúng trở thành technical debt.
+Vue Doctor helps detect maintainability issues, SSR risks, and architectural smells before they become technical debt.
 
-Không giống như traditional linters tập trung vào syntax/style, Vue Doctor tập trung vào **chất lượng code**, **sức khỏe project**, và **khả năng bảo trì dài hạn**.
+Unlike traditional linters that focus on syntax/style, Vue Doctor focuses on **code quality**, **project health**, and **long-term maintainability**.
 
 ---
 
-## Mục lục
+## Table of Contents
 
-- [Tại sao nên dùng Vue Doctor?](#tại-sao-nên-dùng-vue-doctor)
-- [Cài đặt](#cài-đặt)
+- [Why Vue Doctor?](#why-vue-doctor)
+- [Installation](#installation)
 - [Quick Start](#quick-start)
 - [Commands](#commands)
-  - [check](#check---phân-tích-toàn-diện)
-  - [graph](#graph---xem-dependency-graph)
-  - [metrics](#metrics---chỉ-số-kiến-trúc)
-  - [report](#report---báo-cáo-điểm-số-kiến-trúc)
-  - [smell](#smell---phát-hiện-architecture-smells)
-  - [rules](#rules---danh-sách-rules)
-  - [fix](#fix---tự-động-sửa)
-  - [baseline](#baseline---so-sánh-với-baseline)
-  - [nuxt](#nuxt---phân-tích-nuxt)
-  - [init](#init---khởi-tạo-cấu-hình)
-  - [dashboard](#dashboard---giao-diện-trực-quan)
+  - [check](#check---comprehensive-analysis)
+  - [graph](#graph---dependency-graph)
+  - [metrics](#metrics---architecture-metrics)
+  - [report](#report---architecture-score-report)
+  - [smell](#smell---architecture-smell-detection)
+  - [rules](#rules---rule-list)
+  - [fix](#fix---auto-fix)
+  - [baseline](#baseline---baseline-comparison)
+  - [nuxt](#nuxt---nuxt-analysis)
+  - [init](#init---initialize-configuration)
+  - [dashboard](#dashboard---visual-dashboard)
+  - [asset](#asset---asset-analysis)
 - [Rules](#rules-1)
-- [Configuration](#cấu-hình)
+- [Configuration](#configuration)
 - [CI/CD Integration](#cicd-integration)
 - [VSCode Extension](#vscode-extension)
 
 ---
 
-## Tại sao nên dùng Vue Doctor?
+## Why Vue Doctor?
 
 ### Traditional Linters (ESLint, Prettier)
 - Semicolons
@@ -47,19 +48,19 @@ Không giống như traditional linters tập trung vào syntax/style, Vue Docto
 - Console statements
 
 ### Vue Doctor
-- **Oversized components** - Component quá lớn cần tách
+- **Oversized components** - Components that need to be split
 - **Deep watchers** - Watch performance issues
-- **SSR unsafe APIs** - Browser APIs trong SSR context
+- **SSR unsafe APIs** - Browser APIs in SSR context
 - **Excessive reactive state** - State bloat
 - **Circular dependencies** - Dependency hell
-- **Layer violations** - Kiến trúc bị vi phạm
+- **Layer violations** - Architecture violations
 - **Architecture smells** - God components, smart component abuse
-- **Feature leakage** - Feature cross-import
-- **Hotspots** - Files cần refactor gấp
+- **Feature leakage** - Feature cross-imports
+- **Hotspots** - Files that need urgent refactoring
 
 ---
 
-## Cài đặt
+## Installation
 
 ```bash
 # npm
@@ -72,7 +73,7 @@ yarn add -D @daohuy34/vue-doctor
 pnpm add -D @daohuy34/vue-doctor
 ```
 
-### Global install (cho CLI usage)
+### Global install (for CLI usage)
 
 ```bash
 npm install -g @daohuy34/vue-doctor
@@ -88,28 +89,28 @@ npx @daohuy34/vue-doctor check
 
 ## Quick Start
 
-### 1. Khởi tạo cấu hình
+### 1. Initialize configuration
 
 ```bash
 npx vue-doctor init
 ```
 
-Tạo file `vue-doctor.config.js` với cấu hình mặc định.
+Creates a `vue-doctor.config.js` file with default configuration.
 
-### 2. Chạy phân tích
+### 2. Run analysis
 
 ```bash
-# Phân tích toàn bộ project
+# Analyze entire project
 vue-doctor check
 
-# Chỉ định thư mục
+# Specify directories
 vue-doctor check src
 
-# Với nhiều thư mục
+# Multiple directories
 vue-doctor check src pages components
 ```
 
-### 3. Xem kết quả
+### 3. View results
 
 ```
 src/components/ProductEditor.vue
@@ -135,23 +136,23 @@ Errors: 9
 
 ## Commands
 
-### `check` - Phân tích toàn diện
+### `check` - Comprehensive Analysis
 
-Phân tích toàn bộ project và báo cáo issues.
+Analyzes the entire project and reports issues.
 
 ```bash
 vue-doctor check [paths...] [options]
 
 # Options:
-#   --baseline        Sử dụng baseline để bỏ qua existing issues
-#   --reporter        Định dạng output: stylish, json, html, sarif
-#   --output          File output cho reporter
+#   --baseline        Use baseline to ignore existing issues
+#   --reporter        Output format: stylish, json, html, sarif
+#   --output          Output file for reporter
 #   --profile         Profile: strict, recommended, minimal
-#   --cache           Sử dụng cache
-#   --fix             Tự động sửa một số issues
+#   --cache           Use cache
+#   --fix             Auto-fix some issues
 ```
 
-**Ví dụ:**
+**Examples:**
 
 ```bash
 # Standard check
@@ -166,34 +167,37 @@ vue-doctor check --reporter sarif --output results.sarif
 # Strict mode
 vue-doctor check --profile strict
 
-# Với cache
+# With cache
 vue-doctor check --cache
 ```
 
 ---
 
-### `graph` - Xem Dependency Graph
+### `graph` - Dependency Graph
 
-Hiển thị dependency graph của project.
+Displays the project dependency graph.
 
 ```bash
 vue-doctor graph [options]
 
 # Options:
-#   --type            Filter theo type: component, page, store, composable
-#   --format          Định dạng: text, tree, json, stats
+#   --type            Filter by type: component, page, store, composable
+#   --format          Format: text, tree, json, stats
 #   --filter          Pattern filter: "components/"
-#   --depth           Độ sâu hiển thị: 1-5
-#   --no-color        Không màu
+#   --depth           Display depth: 1-5
+#   --no-color        No colors
+#   --hotspots        Show top hotspots
+#   --cycles          Show circular dependencies
+#   --orphans         Show orphan nodes
 ```
 
-**Ví dụ:**
+**Examples:**
 
 ```bash
-# Tree view mặc định
+# Default tree view
 vue-doctor graph
 
-# Chỉ components
+# Components only
 vue-doctor graph --type component
 
 # JSON output
@@ -205,7 +209,7 @@ vue-doctor graph --filter "features/"
 # Depth limit
 vue-doctor graph --depth 2
 
-# Combine
+# Combine options
 vue-doctor graph --type component --format tree --depth 3
 ```
 
@@ -231,20 +235,19 @@ src/
 
 ---
 
-### `metrics` - Chỉ số Kiến trúc
+### `metrics` - Architecture Metrics
 
-Xem các chỉ số kiến trúc của project.
+View project architecture metrics.
 
 ```bash
 vue-doctor metrics [options]
 
 # Options:
 #   --json            JSON output
-#   --trend           Hiển thị xu hướng
-#   --boundaries      Phân tích feature boundary violations
-#   --routes          Phân tích route complexity
-#   --shared          Phân tích shared modules
-#   --coupling        Phân tích feature coupling
+#   --boundaries      Analyze feature boundary violations
+#   --routes          Analyze route complexity
+#   --shared          Analyze shared modules
+#   --coupling        Analyze feature coupling
 ```
 
 **Output:**
@@ -270,20 +273,21 @@ vue-doctor metrics [options]
 
 ---
 
-### `report` - Báo cáo Điểm số Kiến trúc
+### `report` - Architecture Score Report
 
-Tính toán và theo dõi điểm số kiến trúc theo thời gian.
+Calculate and track architecture scores over time.
 
 ```bash
 vue-doctor report [options]
 
 # Options:
 #   --json            JSON output
-#   --delta           Hiển thị thay đổi so với lần trước
-#   --save            Lưu vào history
+#   --delta           Show changes from previous run
+#   --save            Save to history
 #   --html            Generate HTML report
-#   --open            Mở HTML report trong browser
+#   --open            Open HTML report in browser
 #   --output          Output file path
+#   --history         Show score history
 ```
 
 **Output:**
@@ -305,16 +309,16 @@ Architecture Debt: ~4.5 hours
 
 ---
 
-### `smell` - Phát hiện Architecture Smells
+### `smell` - Architecture Smell Detection
 
-Phát hiện các mùi kiến trúc: God Components, Smart Component Abuse, Service Layer Violations.
+Detect architectural smells: God Components, Smart Component Abuse, Service Layer Violations.
 
 ```bash
 vue-doctor smell [options]
 
 # Options:
 #   --json            JSON output
-#   --only            Chỉ detect type cụ thể:
+#   --only            Only detect specific types:
 #                     god-component, god-composable, smart-component,
 #                     service-layer, drift
 ```
@@ -348,80 +352,83 @@ vue-doctor smell [options]
 
 ---
 
-### `rules` - Danh sách Rules
+### `rules` - Rule List
 
-Liệt kê tất cả available rules.
+List all available rules.
 
 ```bash
 vue-doctor rules [options]
 
 # Options:
 #   --json            JSON output
-#   --category        Filter theo category
-#   --severity        Filter theo severity
+#   --category        Filter by category
+#   --severity        Filter by severity
 ```
 
 ---
 
-### `fix` - Tự động Sửa
+### `fix` - Auto Fix
 
-Tự động sửa một số issues có thể fix được.
+Automatically fix some fixable issues.
 
 ```bash
 vue-doctor fix [paths...]
 
 # Options:
-#   --dry-run         Xem trước thay đổi
+#   --dry-run         Preview changes
 #   --force           Force overwrite
 ```
 
 ---
 
-### `baseline` - So sánh với Baseline
+### `baseline` - Baseline Comparison
 
-Tạo hoặc sử dụng baseline để bỏ qua existing issues.
+Create or use a baseline to ignore existing issues.
 
 ```bash
-# Tạo baseline
+# Create baseline
 vue-doctor baseline
 
-# Sử dụng baseline
+# Use baseline
 vue-doctor check --baseline
 ```
 
-**Use case:** Khi adopt Vue Doctor vào project có sẵn, tạo baseline để tập trung vào issues mới thay vì fix tất cả cùng lúc.
+**Use case:** When adopting Vue Doctor into an existing project, create a baseline to focus on new issues instead of fixing everything at once.
 
 ---
 
-### `nuxt` - Phân tích Nuxt
+### `nuxt` - Nuxt Analysis
 
-Phân tích sâu Nuxt-specific issues.
+Deep analyze Nuxt-specific issues.
 
 ```bash
 vue-doctor nuxt [options]
 
 # Options:
 #   --json            JSON output
+#   --async          Analyze async data patterns
+#   --hydration       Analyze hydration risks
+#   --apis           Analyze API usage
 ```
 
-Kiểm tra:
+Checks:
 - Nuxt auto-imports
 - Page complexity
 - Hydration risks
 - SSR safety
-- API routes patterns
+- API route patterns
 
 ---
 
-### `init` - Khởi tạo Cấu hình
+### `init` - Initialize Configuration
 
-Tạo file cấu hình mặc định.
+Create a default configuration file.
 
 ```bash
 vue-doctor init [--profile strict|recommended|minimal]
 ```
 
-Tạo `vue-doctor.config.js`:
+Creates `vue-doctor.config.js`:
 
 ```javascript
 export default {
@@ -434,9 +441,9 @@ export default {
 
 ---
 
-### `dashboard` - Giao diện Trực quan
+### `dashboard` - Visual Dashboard
 
-Mở dashboard tương tác trên browser.
+Open an interactive dashboard in the browser.
 
 ```bash
 vue-doctor dashboard
@@ -444,9 +451,9 @@ vue-doctor dashboard
 
 ---
 
-### `trend` - Xu hướng Điểm số
+### `trend` - Score Trends
 
-Xem lịch sử thay đổi điểm số kiến trúc.
+View history of architecture score changes.
 
 ```bash
 vue-doctor trend
@@ -454,17 +461,17 @@ vue-doctor trend
 
 ---
 
-### `asset` - Phân tích Assets
+### `asset` - Asset Analysis
 
-Phân tích kích thước static assets (images, SVGs, fonts).
+Analyze static asset sizes (images, SVGs, fonts).
 
 ```bash
 vue-doctor asset [options]
 
 # Options:
 #   --json            JSON output
-#   --threshold <kb>  Ngưỡng size (KB), mặc định: 50
-#   --dirs <dirs>    Thư mục cần scan (comma-separated)
+#   --threshold <kb>  Size threshold in KB (default: 50)
+#   --dirs <dirs>     Directories to scan (comma-separated)
 ```
 
 **Output:**
@@ -494,36 +501,36 @@ Summary:
 
 | Rule | Severity | Description |
 |------|----------|-------------|
-| `no-deep-watch` | warning | Tránh deep watch gây performance issues |
-| `no-large-asset` | warning | Asset (image/svg/font) quá lớn |
-| `page-complexity` | warning | Phát hiện page quá phức tạp |
-| `async-data-abuse` | warning | Quá nhiều async data calls |
+| `no-deep-watch` | warning | Avoid deep watch causing performance issues |
+| `no-large-asset` | warning | Asset (image/svg/font) too large |
+| `page-complexity` | warning | Detect overly complex pages |
+| `async-data-abuse` | warning | Too many async data calls |
 | `duplicate-fetch` | warning | Duplicate API calls |
-| `excessive-watchers` | warning | Quá nhiều watchers |
-| `excessive-v-for-nesting` | warning | Nested v-for quá sâu |
+| `excessive-watchers` | warning | Too many watchers |
+| `excessive-v-for-nesting` | warning | Nested v-for too deep |
 
 ### Maintainability (9 rules)
 
 | Rule | Severity | Description |
 |------|----------|-------------|
 | `no-large-component` | warning | Component > 400 LOC |
-| `no-large-template` | warning | Template quá lớn |
+| `no-large-template` | warning | Template too large |
 | `no-unused-component-data` | warning | Unused reactive properties |
-| `excessive-props` | warning | Quá nhiều props |
-| `excessive-computed-properties` | info | Quá nhiều computed |
-| `excessive-dom-depth` | warning | DOM nesting quá sâu |
-| `store-bloat` | warning | Pinia store quá lớn |
-| `ai-monster-component` | warning | Component quá phức tạp |
-| `excessive-reactive-state` | warning | Quá nhiều reactive state |
+| `excessive-props` | warning | Too many props |
+| `excessive-computed-properties` | info | Too many computed |
+| `excessive-dom-depth` | warning | DOM nesting too deep |
+| `store-bloat` | warning | Pinia store too large |
+| `ai-monster-component` | warning | Component too complex |
+| `excessive-reactive-state` | warning | Too much reactive state |
 
 ### SSR Safety (5 rules)
 
 | Rule | Severity | Description |
 |------|----------|-------------|
-| `no-window-in-ssr` | error | window trong SSR context |
-| `no-document-in-ssr` | error | document trong SSR context |
-| `no-localstorage-in-ssr` | error | localStorage trong SSR context |
-| `no-sessionstorage-in-ssr` | error | sessionStorage trong SSR context |
+| `no-window-in-ssr` | error | window in SSR context |
+| `no-document-in-ssr` | error | document in SSR context |
+| `no-localstorage-in-ssr` | error | localStorage in SSR context |
+| `no-sessionstorage-in-ssr` | error | sessionStorage in SSR context |
 | `hydration-risk` | warning | SSR/hydration mismatch patterns |
 
 ### Architecture (7 rules)
@@ -542,7 +549,7 @@ Summary:
 
 | Rule | Severity | Description |
 |------|----------|-------------|
-| `store-god-object` | warning | Store quá nhiều responsibilities |
+| `store-god-object` | warning | Store with too many responsibilities |
 | `cross-store-dependency` | warning | Cross-store dependencies |
 | `circular-store-dependency` | error | Circular store dependencies |
 | `pinia-best-practices` | warning | Best practice violations |
@@ -566,11 +573,11 @@ Summary:
 
 ---
 
-## Cấu hình
+## Configuration
 
-### File cấu hình
+### Configuration File
 
-Tạo `vue-doctor.config.js` trong project root:
+Create `vue-doctor.config.js` in the project root:
 
 ```javascript
 export default {
@@ -605,6 +612,9 @@ export default {
     { name: 'dashboard', pattern: 'features/dashboard/**' },
   ],
 
+  // Shared module threshold
+  sharedModuleThreshold: 50,
+
   // Reporter
   reporter: 'stylish',
 
@@ -620,11 +630,11 @@ export default {
 
 | Profile | Description |
 |---------|-------------|
-| `strict` | Maximum quality cho enterprise projects |
-| `recommended` | Balanced cho hầu hết projects |
-| `minimal` | Lightweight cho quick iterations |
+| `strict` | Maximum quality for enterprise projects |
+| `recommended` | Balanced for most projects |
+| `minimal` | Lightweight for quick iterations |
 
-### Cấu hình trong package.json
+### Package.json Configuration
 
 ```json
 {
@@ -721,7 +731,7 @@ npx vue-doctor check --cache
 
 ## VSCode Extension
 
-Cài đặt từ VSCode Marketplace: **Vue Doctor**
+Install from VSCode Marketplace: **Vue Doctor**
 
 ### Features
 
@@ -745,7 +755,7 @@ Cài đặt từ VSCode Marketplace: **Vue Doctor**
 
 ## Architecture Score
 
-Vue Doctor tính điểm kiến trúc từ 0-100:
+Vue Doctor calculates architecture scores from 0-100:
 
 | Score | Rating |
 |-------|--------|
@@ -766,7 +776,7 @@ Vue Doctor tính điểm kiến trúc từ 0-100:
 
 ## Cache System
 
-Vue Doctor tự động cache kết quả để tăng tốc subsequent runs.
+Vue Doctor automatically caches results to speed up subsequent runs.
 
 ### Cache Location
 
@@ -799,10 +809,10 @@ npm install
 ### Slow on large projects
 
 ```bash
-# Sử dụng cache
+# Use cache
 vue-doctor check --cache
 
-# Giới hạn scan
+# Limit scan
 vue-doctor check src/components
 ```
 
@@ -812,7 +822,7 @@ vue-doctor check src/components
 // vue-doctor.config.js
 export default {
   rules: {
-    'no-console': 'off',  // Tắt rule gây phiền
+    'no-console': 'off',  // Disable annoying rule
   },
 }
 ```
