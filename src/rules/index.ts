@@ -1,4 +1,5 @@
 import { noLargeComponentRule } from './vue/no-large-component.rule';
+import { noLargeAssetRule } from './performance/no-large-asset.rule';
 import { noWindowInSsrRule } from './nuxt/no-window-in-ssr.rule';
 import { noDocumentInSsrRule } from './nuxt/no-document-in-ssr.rule';
 import { noLocalStorageInSsrRule } from './nuxt/no-localstorage-in-ssr.rule';
@@ -41,6 +42,7 @@ import { featureLeakageRule } from './architecture/feature-leakage.rule';
 
 export const rules = [
     noLargeComponentRule,
+    noLargeAssetRule,
     noWindowInSsrRule,
     noDocumentInSsrRule,
     noLocalStorageInSsrRule,

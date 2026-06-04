@@ -241,6 +241,10 @@ vue-doctor metrics [options]
 # Options:
 #   --json            JSON output
 #   --trend           Hiển thị xu hướng
+#   --boundaries      Phân tích feature boundary violations
+#   --routes          Phân tích route complexity
+#   --shared          Phân tích shared modules
+#   --coupling        Phân tích feature coupling
 ```
 
 **Output:**
@@ -450,13 +454,48 @@ vue-doctor trend
 
 ---
 
+### `asset` - Phân tích Assets
+
+Phân tích kích thước static assets (images, SVGs, fonts).
+
+```bash
+vue-doctor asset [options]
+
+# Options:
+#   --json            JSON output
+#   --threshold <kb>  Ngưỡng size (KB), mặc định: 50
+#   --dirs <dirs>    Thư mục cần scan (comma-separated)
+```
+
+**Output:**
+
+```
+Asset Analysis
+════════════════════════════════════════════════════════════
+
+Summary:
+  Images:  12
+  Fonts:    3
+  Videos:   1
+  ──────────────────
+  Total:    16
+  Total Size: 245 KB
+
+⚠ Large Assets (>50KB): 2
+  128.5 KB  images/hero-banner.png
+  78.2 KB   images/product-360.webp
+```
+
+---
+
 ## Rules
 
-### Performance (6 rules)
+### Performance (7 rules)
 
 | Rule | Severity | Description |
 |------|----------|-------------|
 | `no-deep-watch` | warning | Tránh deep watch gây performance issues |
+| `no-large-asset` | warning | Asset (image/svg/font) quá lớn |
 | `page-complexity` | warning | Phát hiện page quá phức tạp |
 | `async-data-abuse` | warning | Quá nhiều async data calls |
 | `duplicate-fetch` | warning | Duplicate API calls |

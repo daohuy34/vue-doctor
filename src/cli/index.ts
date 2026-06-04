@@ -15,6 +15,7 @@ import { nuxtCommand } from './commands/nuxt';
 import { reportCommand } from './commands/report';
 import { smellCommand } from './commands/smell';
 import { initCommand } from './commands/init';
+import { assetCommand } from './commands/asset';
 
 const cli = cac('vue-doctor');
 
@@ -76,12 +77,13 @@ cli.command('metrics', 'Show architecture metrics and health scores')
     .option('--profile <name>', 'Rule profile: strict, recommended, minimal', {
         default: 'recommended',
     })
-    .option('--format <type>', 'Output format: text, json, html, boundaries, routes, shared', {
+    .option('--format <type>', 'Output format: text, json, html, boundaries, routes, shared, coupling', {
         default: 'text',
     })
     .option('--boundaries', 'Show feature boundary violations')
     .option('--routes', 'Show route complexity analysis')
     .option('--shared', 'Show shared module analysis')
+    .option('--coupling', 'Show feature coupling analysis')
     .action(async (options) => {
         await metricsCommand(options);
     });
@@ -139,6 +141,20 @@ cli.command('init', 'Initialize Vue Doctor in a project')
     .option('--ci', 'Generate GitHub Actions workflow')
     .action(async (options) => {
         await initCommand(options);
+    });
+
+cli.command('asset', 'Analyze static assets (images, SVGs, fonts)')
+    .option('--json', 'Output as JSON')
+    .option('--threshold <kb>', 'Maximum size in KB before warning', {
+        default: 50,
+    })
+    .option('--dirs <dirs>', 'Directories to scan (comma-separated)')
+    .action(async (options) => {
+        await assetCommand({
+            json: options.json,
+            threshold: options.threshold,
+            directories: options.dirs?.split(','),
+        });
     });
 
 cli.help();

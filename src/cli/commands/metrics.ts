@@ -16,6 +16,8 @@ import {
     formatBoundaryViolations,
     analyzeRouteComplexity,
     formatRouteComplexity,
+    calculateBoundaryCoupling,
+    formatCouplingAnalysis,
 } from '../../core/feature-boundary';
 import { loadConfig } from '../../core/config';
 import { getSharedModules } from '../../core/graph';
@@ -29,6 +31,7 @@ export async function metricsCommand(options: {
     boundaries?: boolean;
     routes?: boolean;
     shared?: boolean;
+    coupling?: boolean;
 }): Promise<void> {
     try {
         const projectPath = options.path ?? process.cwd();
@@ -123,6 +126,18 @@ export default {
                     console.log(`  ${fileName} - Fan-In: ${module.fanIn}`);
                 }
             }
+            return;
+        }
+
+        if (options.coupling || options.format === 'coupling') {
+            if (!config.boundaries || config.boundaries.length === 0) {
+                console.log('\n⚠ No boundaries configured.');
+                console.log('Add boundaries to vue-doctor.config.js to see coupling analysis.');
+                return;
+            }
+
+            const couplings = calculateBoundaryCoupling(graph, config.boundaries);
+            console.log('\n' + formatCouplingAnalysis(couplings));
             return;
         }
 

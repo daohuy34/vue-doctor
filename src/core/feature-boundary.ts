@@ -304,6 +304,95 @@ export function analyzeRouteComplexity(
 }
 
 /**
+ * Calculate coupling between two features based on boundary names
+ */
+export function calculateBoundaryCoupling(
+    graph: ProjectGraph,
+    boundaries: FeatureBoundary[],
+): { feature1: string; feature2: string; coupling: number }[] {
+    const couplings: { feature1: string; feature2: string; coupling: number }[] = [];
+    const boundaryNames = boundaries.map((b) => b.name);
+
+    // Calculate coupling for each pair
+    for (let i = 0; i < boundaryNames.length; i++) {
+        for (let j = i + 1; j < boundaryNames.length; j++) {
+            const feature1 = boundaryNames[i];
+            const feature2 = boundaryNames[j];
+            const coupling = calculateFeatureCouplingByBoundary(graph, boundaries, feature1, feature2);
+
+            if (coupling > 0) {
+                couplings.push({ feature1, feature2, coupling });
+            }
+        }
+    }
+
+    return couplings.sort((a, b) => b.coupling - a.coupling);
+}
+
+/**
+ * Calculate coupling between two boundaries
+ */
+function calculateFeatureCouplingByBoundary(
+    graph: ProjectGraph,
+    boundaries: FeatureBoundary[],
+    feature1: string,
+    feature2: string,
+): number {
+    let crossBoundaryImports = 0;
+
+    for (const edge of graph.edges) {
+        const fromBoundary = getFileBoundary(edge.from, boundaries);
+        const toBoundary = getFileBoundary(edge.to, boundaries);
+
+        if (!fromBoundary || !toBoundary) continue;
+
+        if (
+            (fromBoundary === feature1 && toBoundary === feature2) ||
+            (fromBoundary === feature2 && toBoundary === feature1)
+        ) {
+            crossBoundaryImports++;
+        }
+    }
+
+    return crossBoundaryImports;
+}
+
+/**
+ * Format coupling analysis for CLI output
+ */
+export function formatCouplingAnalysis(
+    couplings: { feature1: string; feature2: string; coupling: number }[],
+): string {
+    const lines: string[] = [];
+
+    lines.push('Feature Coupling Analysis');
+    lines.push('═'.repeat(60));
+
+    if (couplings.length === 0) {
+        lines.push('');
+        lines.push('No cross-boundary coupling detected.');
+        lines.push('');
+        return lines.join('\n');
+    }
+
+    lines.push('');
+    lines.push('Feature Pair              Coupling  Cross-Imports');
+    lines.push('─'.repeat(50));
+
+    for (const c of couplings.slice(0, 10)) {
+        const pair = `${c.feature1} ↔ ${c.feature2}`.padEnd(24);
+        const coupling = c.coupling.toString().padStart(8);
+        lines.push(`${pair} ${coupling}`);
+    }
+
+    lines.push('');
+    lines.push(`Total: ${couplings.length} coupling pair(s)`);
+    lines.push('');
+
+    return lines.join('\n');
+}
+
+/**
  * Format route complexity for CLI output
  */
 export function formatRouteComplexity(analysis: RouteComplexity[]): string {

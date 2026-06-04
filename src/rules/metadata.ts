@@ -11,6 +11,18 @@ export const ruleMetadata: RuleMetadata[] = [
     // ── Performance ────────────────────────────────────────────────────────
 
     {
+        name: 'no-large-asset',
+        description:
+            'Warn when static assets (images, SVGs, fonts) exceed the configured size threshold. ' +
+            'Large assets increase bundle size and slow down page load times. ' +
+            'Consider optimizing with imagemin, svgo, or using a CDN.',
+        severity: 'warning',
+        category: 'performance',
+        recommended: true,
+        docs: 'docs/rules/no-large-asset.md',
+    },
+
+    {
         name: 'no-deep-watch',
         description:
             'Avoid using deep watch as it traverses the entire object tree on every change ' +
