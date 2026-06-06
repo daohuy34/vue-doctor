@@ -16,6 +16,9 @@ import { reportCommand } from './commands/report';
 import { smellCommand } from './commands/smell';
 import { initCommand } from './commands/init';
 import { assetCommand } from './commands/asset';
+import { bundleCommand } from './commands/bundle';
+import { viewerCommand } from './commands/viewer';
+import { diffCommand } from './commands/diff';
 
 const cli = cac('vue-doctor');
 
@@ -155,6 +158,38 @@ cli.command('asset', 'Analyze static assets (images, SVGs, fonts)')
             threshold: options.threshold,
             directories: options.dirs?.split(','),
         });
+    });
+
+cli.command('bundle', 'Analyze bundle size and dependencies')
+    .option('--json', 'Output as JSON')
+    .option('--html', 'Generate interactive HTML report')
+    .option('--open', 'Open report in browser')
+    .option('--output <file>', 'Output file path')
+    .action(async (options) => {
+        await bundleCommand(options);
+    });
+
+cli.command('viewer', 'Start interactive graph viewer')
+    .option('--port <number>', 'Port to run viewer on', {
+        default: 3456,
+    })
+    .option('--open', 'Open browser automatically')
+    .option('--type <kind>', 'Filter by node type: page, component, store, composable, all', {
+        default: 'all',
+    })
+    .action(async (options) => {
+        await viewerCommand(options);
+    });
+
+cli.command('diff', 'Compare architecture metrics between commits/branches')
+    .option('--base <ref>', 'Git ref to compare with (branch, tag, commit)')
+    .option('--json', 'Output as JSON')
+    .option('--history', 'Compare with historical scan')
+    .option('--index <n>', 'Historical entry index (0 = oldest)', {
+        default: 0,
+    })
+    .action(async (options) => {
+        await diffCommand(options);
     });
 
 cli.help();
