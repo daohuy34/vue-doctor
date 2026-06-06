@@ -25,6 +25,19 @@ export interface ProjectMetrics {
         info: number;
         total: number;
     };
+    /** Scoring breakdown for transparency */
+    scoringBreakdown?: {
+        issuesScore: number;
+        dependencyScore: number;
+        maintainabilityScore: number;
+        componentHealthScore: number;
+        weights: {
+            issues: number;
+            dependency: number;
+            maintainability: number;
+            componentHealth: number;
+        };
+    };
 }
 
 export interface MetricsOptions {
@@ -115,22 +128,32 @@ export function calculateArchitectureScore(
     const { errors = 0, warnings = 0, info = 0 } = options.issues || {};
     const totalIssues = errors + warnings + info;
 
-    // Calculate issues-based score penalty
-    // More issues = lower score
+    // Calculate issues-based score penalty (improved formula)
+    // More issues = lower score, weighted by severity
     let issuesScore = 100;
     if (totalIssues > 0) {
-        // Deduct based on error/warning severity
-        issuesScore -= Math.min(40, errors * 2);      // 2 points per error, max 40
-        issuesScore -= Math.min(30, warnings * 0.5); // 0.5 points per warning, max 30
-        issuesScore -= Math.min(10, info * 0.2);     // 0.2 points per info, max 10
+        // Errors: serious issues that must be fixed (3 points each, max 60)
+        issuesScore -= Math.min(60, errors * 3);
+        // Warnings: important issues (0.5 points each, max 40)
+        issuesScore -= Math.min(40, warnings * 0.5);
+        // Info: minor suggestions (0.2 points each, max 10)
+        issuesScore -= Math.min(10, info * 0.2);
     }
 
-    // Weighted average for overall score
+    // Weighted average for overall score (improved weights)
+    // Issues have highest impact on architecture health
+    const issuesWeight = 0.40;  // Increased from 0.30
+    const dependencyWeight = 0.25;
+    const maintainabilityWeight = 0.20;  // Decreased from 0.25
+    const componentHealthWeight = 0.15;  // Decreased from 0.20
+
+    const avgComponentHealth = componentHealth.reduce((sum, c) => sum + c.score, 0) / Math.max(componentHealth.length, 1);
+
     const architectureScore = Math.round(
-        dependencyHealth.distributionScore * 0.25 +
-        maintainability.score * 0.25 +
-        issuesScore * 0.30 +  // Higher weight for issues
-        componentHealth.reduce((sum, c) => sum + c.score, 0) / Math.max(componentHealth.length, 1) * 0.20
+        dependencyHealth.distributionScore * dependencyWeight +
+        maintainability.score * maintainabilityWeight +
+        issuesScore * issuesWeight +
+        avgComponentHealth * componentHealthWeight
     );
 
     return {
@@ -144,6 +167,13 @@ export function calculateArchitectureScore(
             warnings,
             info,
             total: totalIssues,
+        },
+        scoringBreakdown: {
+            issuesScore,
+            dependencyScore: dependencyHealth.distributionScore,
+            maintainabilityScore: maintainability.score,
+            componentHealthScore: Math.round(avgComponentHealth),
+            weights: { issues: issuesWeight, dependency: dependencyWeight, maintainability: maintainabilityWeight, componentHealth: componentHealthWeight },
         },
     };
 }
@@ -402,6 +432,17 @@ export function formatMetrics(metrics: ProjectMetrics): string {
     lines.push('');
     lines.push(`  Overall Score: ${metrics.architectureScore}/100 ${getScoreEmoji(metrics.architectureScore)}`);
     lines.push('');
+
+    // Scoring breakdown (if available)
+    if (metrics.scoringBreakdown) {
+        const sb = metrics.scoringBreakdown;
+        lines.push('  Scoring Breakdown:');
+        lines.push(`    • Issues (${(sb.weights.issues * 100).toFixed(0)}%):        ${sb.issuesScore}/100`);
+        lines.push(`    • Dependency (${(sb.weights.dependency * 100).toFixed(0)}%):    ${sb.dependencyScore}/100`);
+        lines.push(`    • Maintainability (${(sb.weights.maintainability * 100).toFixed(0)}%): ${sb.maintainabilityScore}/100`);
+        lines.push(`    • Component Health (${(sb.weights.componentHealth * 100).toFixed(0)}%): ${sb.componentHealthScore}/100`);
+        lines.push('');
+    }
 
     // Issues summary
     if (metrics.totalIssues.total > 0) {
