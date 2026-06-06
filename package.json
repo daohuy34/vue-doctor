@@ -1,6 +1,6 @@
 {
   "name": "@daohuy34/vue-doctor",
-  "version": "2.9.1",
+  "version": "3.0.0",
   "type": "module",
   "bin": {
     "vue-doctor": "dist/index.js"
