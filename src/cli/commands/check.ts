@@ -5,6 +5,7 @@ import { loadConfig } from '../../core/config';
 import { runEngine } from '../../core/engine';
 import { reporters } from '../../reporters';
 import { getFailureExitCode, resolveFailOn } from '../check-utils';
+import { resolvePlugins } from '../../core/plugins';
 
 import { getChangedFiles, getFilesSinceRef } from '../../utils/git';
 import { getCachedScore, saveMetricsSnapshot, loadCache } from '../../core/cache';
@@ -18,7 +19,8 @@ export async function checkCommand(options: {
 }) {
     const config = await loadConfig();
 
-    // Cache-only mode: use cached results
+    const { runner } = await resolvePlugins(config.plugins ?? []);
+
     if (options.cacheOnly) {
         const cachedScore = getCachedScore();
 
@@ -73,21 +75,26 @@ export async function checkCommand(options: {
     }
 
     try {
+        await runner.runHook('before:analysis');
+
         const { issues, metrics } = await runEngine(targetFiles);
 
         spinner.text = `Analyzed ${metrics.files} files`;
         spinner.stop();
 
-        // Count issues by severity
-        const errors = issues.filter((i) => i.severity === 'error').length;
-        const warnings = issues.filter((i) => i.severity === 'warning').length;
-        const info = issues.filter((i) => i.severity === 'info').length;
+        const issuesWithPluginContext = await runner.runHook('after:analysis', {
+            issues,
+        });
 
-        // Save metrics snapshot for --cache-only mode
+        const reportIssues = issuesWithPluginContext.issues;
+
+        const errors = reportIssues.filter((i) => i.severity === 'error').length;
+        const warnings = reportIssues.filter((i) => i.severity === 'warning').length;
+        const info = reportIssues.filter((i) => i.severity === 'info').length;
+
         const cache = loadCache();
-        const totalIssues = issues.length;
+        const totalIssues = reportIssues.length;
 
-        // Estimate score based on issues
         let score = 100;
         score -= Math.min(40, errors * 2);
         score -= Math.min(30, warnings * 0.5);
@@ -105,7 +112,7 @@ export async function checkCommand(options: {
             reporters[options.reporter as keyof typeof reporters] ??
             reporters.stylish;
 
-        reporter(issues);
+        reporter(reportIssues);
 
         console.log('\nPerformance:');
 
@@ -118,7 +125,7 @@ export async function checkCommand(options: {
         console.log(`Time: ${metrics.duration}s`);
 
         const failOn = resolveFailOn(config, options.failOn);
-        const exitCode = getFailureExitCode(issues, failOn);
+        const exitCode = getFailureExitCode(reportIssues, failOn);
 
         process.exit(exitCode);
     } catch (error) {

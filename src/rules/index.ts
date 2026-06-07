@@ -1,4 +1,7 @@
 import { noLargeComponentRule } from './vue/no-large-component.rule';
+import { preferScriptSetupRule } from './vue/prefer-script-setup.rule';
+import { noInlineStylesRule } from './vue/no-inline-styles.rule';
+import { noComplexProvideInjectRule } from './vue/no-complex-provide-inject.rule';
 import { noLargeAssetRule } from './performance/no-large-asset.rule';
 import { noWindowInSsrRule } from './nuxt/no-window-in-ssr.rule';
 import { noDocumentInSsrRule } from './nuxt/no-document-in-ssr.rule';
@@ -42,6 +45,9 @@ import { featureLeakageRule } from './architecture/feature-leakage.rule';
 
 export const rules = [
     noLargeComponentRule,
+    preferScriptSetupRule,
+    noInlineStylesRule,
+    noComplexProvideInjectRule,
     noLargeAssetRule,
     noWindowInSsrRule,
     noDocumentInSsrRule,

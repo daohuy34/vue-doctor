@@ -231,6 +231,45 @@ export const ruleMetadata: RuleMetadata[] = [
     // ── Best Practices ─────────────────────────────────────────────────────
 
     {
+        name: 'prefer-script-setup',
+        description:
+            'Prefer <script setup> syntax for Vue 3 components. ' +
+            '<script setup> provides better performance, less boilerplate, ' +
+            'and enables compile-time optimizations. Use Options API only when ' +
+            'you need features not supported in Composition API.',
+        severity: 'info',
+        category: 'best-practice',
+        recommended: true,
+        docs: 'docs/rules/prefer-script-setup.md',
+    },
+
+    {
+        name: 'no-inline-styles',
+        description:
+            'Disallow inline style attributes in Vue templates. ' +
+            'Inline styles make components harder to maintain, prevent style reuse, ' +
+            'and create specificity conflicts. Use CSS classes or scoped styles instead. ' +
+            'Exception: Dynamic styles computed at runtime are allowed with proper justification.',
+        severity: 'warning',
+        category: 'best-practice',
+        recommended: false,
+        docs: 'docs/rules/no-inline-styles.md',
+    },
+
+    {
+        name: 'no-complex-provide-inject',
+        description:
+            'Detect overly complex provide/inject patterns. ' +
+            'Deep provide/inject chains make data flow difficult to trace and debug. ' +
+            'Consider using Pinia stores, composables, or a centralized state management solution. ' +
+            'Ideal: Provide at the component level, inject at one level deep.',
+        severity: 'warning',
+        category: 'best-practice',
+        recommended: false,
+        docs: 'docs/rules/no-complex-provide-inject.md',
+    },
+
+    {
         name: 'no-console',
         description:
             'Disallow console.log, console.warn, console.error and similar calls ' +

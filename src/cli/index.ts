@@ -19,8 +19,21 @@ import { assetCommand } from './commands/asset';
 import { bundleCommand } from './commands/bundle';
 import { viewerCommand } from './commands/viewer';
 import { diffCommand } from './commands/diff';
+import { pluginListCommand, pluginInfoCommand } from './commands/plugin';
 
 const cli = cac('vue-doctor');
+
+cli
+    .command('plugin list', 'List installed plugins')
+    .action(async () => {
+        await pluginListCommand();
+    });
+
+cli
+    .command('plugin info <name>', 'Show plugin details')
+    .action(async (name: string) => {
+        await pluginInfoCommand(name);
+    });
 
 cli.command('check', 'Run project analysis')
 

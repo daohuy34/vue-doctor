@@ -10,6 +10,7 @@ import { resolve, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 import type { RuleProfile } from './profiles';
 import type { Policy } from './policies';
+import type { VueDoctorPlugin } from '../types/plugin';
 import {
     getProfile,
     getDefaultProfile,
@@ -66,6 +67,8 @@ export interface VueDoctorConfig {
         formats?: string[];
         output?: string;
     };
+    /** Plugins - npm package names or local paths */
+    plugins?: (VueDoctorPlugin | string)[];
 }
 
 let cachedConfig: VueDoctorConfig | null = null;
