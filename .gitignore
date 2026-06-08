@@ -98,5 +98,7 @@ Desktop.ini
 # Playgrounds (test files)
 src/playground/
 
+examples/
+
 # Documentation
 docs/
