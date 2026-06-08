@@ -10,6 +10,7 @@ import { ruleMetadata } from '../rules/metadata';
 
 import { createHash } from '../utils/hash';
 import { createFingerprint } from '../utils/fingerprint';
+import { filterDisabledIssues } from '../utils/disable-comments';
 
 import type { Issue } from '../types/issue';
 import { loadBaseline } from './baseline';
@@ -186,7 +187,10 @@ export async function runEngine(targetFiles?: string[], options: { incremental?:
             ruleTimings
         );
 
-        const fileIssues = findings
+        // Filter out issues that are disabled by inline comments
+        const filteredFindings = filterDisabledIssues(findings, source);
+
+        const fileIssues = filteredFindings
             .map((issue) => {
                 const normalized = applyConfigOverrides(issue, config);
 
