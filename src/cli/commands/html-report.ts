@@ -20,6 +20,12 @@ import {
 } from '../../core/score-engine';
 import { analyzeFeatureBoundaries, analyzeRouteComplexity } from '../../core/feature-boundary';
 import { loadConfig } from '../../core/config';
+import {
+    generateGaugeChart,
+    generateDonutChart,
+    generateBarChart,
+    type ChartData,
+} from '../../reporters/charts';
 
 export interface HtmlReportOptions {
     output?: string;
@@ -183,12 +189,14 @@ function generateHtmlReport(data: ReportData): string {
         }
         .container { max-width: 1400px; margin: 0 auto; }
         h1 { color: #38bdf8; margin-bottom: 10px; }
-        h2 { color: #94a3b8; margin: 30px 0 15px; border-bottom: 1px solid #334155; padding-bottom: 10px; }
+        h2 { color: #f1f5f9; margin: 30px 0 15px; border-bottom: 1px solid #334155; padding-bottom: 10px; font-size: 1.25rem; }
         h3 { color: #e2e8f0; margin: 15px 0 10px; }
         .header { text-align: center; margin-bottom: 30px; }
         .timestamp { color: #64748b; font-size: 14px; }
 
         .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+        .grid-3 { grid-template-columns: repeat(3, 1fr); }
+        @media (max-width: 900px) { .grid-3 { grid-template-columns: 1fr; } }
         .card {
             background: #1e293b;
             border-radius: 12px;
@@ -197,10 +205,17 @@ function generateHtmlReport(data: ReportData): string {
         }
         .card-title { color: #94a3b8; font-size: 14px; text-transform: uppercase; margin-bottom: 10px; }
 
-        .score-display {
-            font-size: 64px;
-            font-weight: bold;
-            text-align: center;
+        /* Score Display with Gauge */
+        .score-display-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+        .score-display-wrapper svg { max-width: 200px; }
+        .score-label {
+            font-size: 1.25rem;
+            font-weight: 600;
         }
         .score-excellent { color: #22c55e; }
         .score-good { color: #eab308; }
@@ -209,15 +224,17 @@ function generateHtmlReport(data: ReportData): string {
 
         .category-scores { display: flex; flex-direction: column; gap: 15px; }
         .category-item { display: flex; align-items: center; gap: 15px; }
-        .category-label { width: 150px; color: #94a3b8; }
+        .category-label { width: 150px; color: #94a3b8; font-size: 0.875rem; }
         .category-bar { flex: 1; height: 24px; background: #334155; border-radius: 12px; overflow: hidden; }
         .category-fill { height: 100%; border-radius: 12px; transition: width 0.5s ease; }
-        .category-value { width: 60px; text-align: right; }
+        .category-value { width: 60px; text-align: right; font-weight: 600; }
 
         table { width: 100%; border-collapse: collapse; }
         th, td { padding: 12px; text-align: left; border-bottom: 1px solid #334155; }
-        th { color: #94a3b8; font-weight: 600; }
-        tr:hover { background: #1e293b; }
+        th { color: #94a3b8; font-weight: 600; cursor: pointer; }
+        th:hover { color: #e2e8f0; }
+        tr:hover { background: rgba(56, 189, 248, 0.05); }
+        tr.hidden { display: none; }
 
         .severity-badge {
             padding: 4px 8px;
@@ -225,10 +242,10 @@ function generateHtmlReport(data: ReportData): string {
             font-size: 12px;
             font-weight: 600;
         }
-        .severity-critical { background: #ef4444; color: white; }
-        .severity-high { background: #f97316; color: white; }
-        .severity-medium { background: #eab308; color: black; }
-        .severity-low { background: #22c556; color: white; }
+        .severity-critical { background: rgba(239, 68, 68, 0.2); color: #ef4444; }
+        .severity-high { background: rgba(249, 115, 22, 0.2); color: #f97316; }
+        .severity-medium { background: rgba(234, 179, 8, 0.2); color: #eab308; }
+        .severity-low { background: rgba(34, 197, 94, 0.2); color: #22c55e; }
 
         .type-badge {
             padding: 2px 8px;
@@ -239,7 +256,7 @@ function generateHtmlReport(data: ReportData): string {
         }
 
         .tab-container { margin-bottom: 20px; }
-        .tabs { display: flex; gap: 5px; border-bottom: 1px solid #334155; padding-bottom: 0; }
+        .tabs { display: flex; gap: 5px; border-bottom: 1px solid #334155; padding-bottom: 0; flex-wrap: wrap; }
         .tab {
             padding: 10px 20px;
             background: transparent;
@@ -248,6 +265,7 @@ function generateHtmlReport(data: ReportData): string {
             cursor: pointer;
             border-bottom: 2px solid transparent;
             margin-bottom: -1px;
+            font-size: 0.875rem;
         }
         .tab:hover { color: #e2e8f0; }
         .tab.active { color: #38bdf8; border-bottom-color: #38bdf8; }
@@ -260,6 +278,7 @@ function generateHtmlReport(data: ReportData): string {
             padding: 15px 25px;
             border-radius: 8px;
             text-align: center;
+            min-width: 100px;
         }
         .debt-value { font-size: 32px; font-weight: bold; color: #f97316; }
         .debt-label { color: #94a3b8; font-size: 14px; }
@@ -274,6 +293,46 @@ function generateHtmlReport(data: ReportData): string {
             overflow-x: auto;
         }
 
+        /* Chart Containers */
+        .chart-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .chart-card {
+            background: #334155;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+        }
+        .chart-card h4 {
+            color: #94a3b8;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+        }
+        .chart-card svg { max-width: 100%; height: auto; }
+        .chart-legend {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 10px;
+            font-size: 0.75rem;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .legend-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        /* History Chart */
         .history-chart {
             height: 200px;
             display: flex;
@@ -288,26 +347,90 @@ function generateHtmlReport(data: ReportData): string {
             min-height: 10px;
             transition: height 0.3s ease;
         }
+        .history-bar:hover { background: #22d3ee; }
 
-        .filter-bar { display: flex; gap: 10px; margin-bottom: 15px; }
+        /* Filter Bar */
+        .filter-bar { display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap; align-items: center; }
         .filter-btn {
             padding: 8px 16px;
             background: #334155;
-            border: none;
+            border: 1px solid #475569;
             border-radius: 6px;
             color: #94a3b8;
             cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.875rem;
         }
-        .filter-btn:hover { background: #475569; }
-        .filter-btn.active { background: #38bdf8; color: white; }
+        .filter-btn:hover { background: #475569; color: #e2e8f0; }
+        .filter-btn.active { background: #38bdf8; color: #0f172a; border-color: #38bdf8; }
+        .search-input {
+            padding: 8px 12px;
+            background: #334155;
+            border: 1px solid #475569;
+            border-radius: 6px;
+            color: #e2e8f0;
+            font-size: 0.875rem;
+            min-width: 200px;
+        }
+        .search-input:focus { outline: none; border-color: #38bdf8; }
+        .search-input::placeholder { color: #64748b; }
 
-        .nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        /* Summary Bar */
+        .summary-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 15px;
+            background: #334155;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-size: 0.875rem;
+            color: #94a3b8;
+        }
+        .summary-bar strong { color: #e2e8f0; }
+
+        /* Navigation */
+        .nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px; }
         .nav-brand { font-size: 24px; font-weight: bold; color: #38bdf8; }
-        .nav-links { display: flex; gap: 20px; }
-        .nav-links a { color: #94a3b8; text-decoration: none; }
+        .nav-links { display: flex; gap: 20px; flex-wrap: wrap; }
+        .nav-links a { color: #94a3b8; text-decoration: none; transition: color 0.2s; }
         .nav-links a:hover { color: #38bdf8; }
 
         .footer { text-align: center; padding: 30px; color: #64748b; font-size: 14px; }
+        .footer a { color: #38bdf8; text-decoration: none; }
+        .footer a:hover { text-decoration: underline; }
+
+        /* Trend Badge */
+        .trend-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        .trend-up { background: rgba(239, 68, 68, 0.2); color: #ef4444; }
+        .trend-down { background: rgba(34, 197, 94, 0.2); color: #22c55e; }
+        .trend-same { background: rgba(100, 116, 139, 0.2); color: #64748b; }
+
+        /* Delta Display */
+        .delta-display {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .delta-item {
+            text-align: center;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            min-width: 80px;
+        }
+        .delta-label { font-size: 0.625rem; color: #64748b; text-transform: uppercase; }
+        .delta-value { font-size: 1.25rem; font-weight: 700; }
     </style>
 </head>
 <body>
@@ -316,10 +439,11 @@ function generateHtmlReport(data: ReportData): string {
             <div class="nav-brand">🏥 Vue Doctor</div>
             <div class="nav-links">
                 <a href="#overview">Overview</a>
-                <a href="#graph">Graph</a>
+                <a href="#charts">Charts</a>
                 <a href="#hotspots">Hotspots</a>
                 <a href="#cycles">Cycles</a>
                 <a href="#debt">Debt</a>
+                <a href="#history">History</a>
             </div>
         </nav>
 
@@ -333,19 +457,41 @@ function generateHtmlReport(data: ReportData): string {
             <h2>📊 Architecture Score</h2>
             <div class="grid">
                 <div class="card">
-                    <div class="card-title">Overall Score</div>
-                    <div class="score-display ${getScoreClass(data.score.overall)}">
-                        ${data.score.overall}
+                    <div class="score-display-wrapper">
+                        ${generateGaugeChart(data.score.overall, { size: 200, strokeWidth: 20 })}
+                        <div class="score-label ${getScoreClass(data.score.overall)}">
+                            ${getScoreLabel(data.score.overall)}
+                        </div>
                     </div>
-                    <p style="text-align: center; color: #94a3b8;">
-                        ${getScoreLabel(data.score.overall)}
-                    </p>
+                    ${data.history.length > 1 ? generateScoreDelta(data.history) : ''}
                 </div>
                 <div class="card">
                     <div class="card-title">Category Scores</div>
                     <div class="category-scores">
                         ${generateCategoryBars(data.score)}
                     </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Charts Section -->
+        <section id="charts">
+            <h2>📈 Analysis Charts</h2>
+            <div class="chart-grid">
+                <div class="chart-card">
+                    <h4>Score Breakdown</h4>
+                    ${generateDonutChart(getScoreBreakdownData(data.score), { size: 200, strokeWidth: 24 })}
+                    <div class="chart-legend">
+                        ${generateScoreLegend(data.score)}
+                    </div>
+                </div>
+                <div class="chart-card">
+                    <h4>Component Distribution</h4>
+                    ${generateBarChart(getComponentTypeData(data.graph), { width: 280, height: 180, barColor: '#38bdf8' })}
+                </div>
+                <div class="chart-card">
+                    <h4>Debt Breakdown</h4>
+                    ${generateBarChart(getDebtData(data.debt), { width: 280, height: 180, barColor: '#f97316' })}
                 </div>
             </div>
         </section>
@@ -395,22 +541,31 @@ Floor: 0</div>
             <h2>🔥 Top Hotspots</h2>
             ${data.hotspots.length > 0 ? `
             <div class="card">
-                <table>
+                <div class="filter-bar">
+                    <input type="text" class="search-input" id="hotspot-search" placeholder="Search hotspots...">
+                    <button class="filter-btn active" data-filter="all">All</button>
+                    <button class="filter-btn" data-filter="critical">Critical</button>
+                    <button class="filter-btn" data-filter="high">High</button>
+                </div>
+                <div class="summary-bar">
+                    <span>Showing <strong id="hotspot-visible-count">${data.hotspots.length}</strong> of ${data.hotspots.length} hotspots</span>
+                </div>
+                <table id="hotspots-table">
                     <thead>
                         <tr>
-                            <th>Rank</th>
-                            <th>File</th>
-                            <th>Score</th>
-                            <th>Fan-In</th>
-                            <th>Fan-Out</th>
-                            <th>LOC</th>
+                            <th data-sort="rank">#</th>
+                            <th data-sort="name">File</th>
+                            <th data-sort="score">Score</th>
+                            <th data-sort="fanIn">Fan-In</th>
+                            <th data-sort="fanOut">Fan-Out</th>
+                            <th data-sort="loc">LOC</th>
                         </tr>
                     </thead>
                     <tbody>
                         ${data.hotspots.map(h => `
-                        <tr>
+                        <tr data-severity="${getHotspotSeverity(h.score)}" data-name="${h.node.name.toLowerCase()}">
                             <td>#${h.rank}</td>
-                            <td>${escapeHtml(h.node.name)}</td>
+                            <td style="font-family: monospace; font-size: 0.875rem;">${escapeHtml(h.node.name)}</td>
                             <td><span class="severity-badge severity-${getHotspotSeverity(h.score)}">${h.score.toFixed(0)}</span></td>
                             <td>${h.node.fanIn}</td>
                             <td>${h.node.fanOut}</td>
@@ -428,7 +583,17 @@ Floor: 0</div>
             <h2>🔄 Circular Dependencies</h2>
             ${data.cycles.length > 0 ? `
             <div class="card">
-                <table>
+                <div class="filter-bar">
+                    <input type="text" class="search-input" id="cycle-search" placeholder="Search cycles...">
+                    <button class="filter-btn active" data-filter="all">All</button>
+                    <button class="filter-btn" data-filter="critical">Critical</button>
+                    <button class="filter-btn" data-filter="high">High</button>
+                    <button class="filter-btn" data-filter="medium">Medium</button>
+                </div>
+                <div class="summary-bar">
+                    <span>Showing <strong id="cycle-visible-count">${data.cycles.length}</strong> of ${data.cycles.length} cycles</span>
+                </div>
+                <table id="cycles-table">
                     <thead>
                         <tr>
                             <th>Severity</th>
@@ -438,10 +603,12 @@ Floor: 0</div>
                     </thead>
                     <tbody>
                         ${data.cycles.map(c => `
-                        <tr>
+                        <tr data-severity="${c.severity}" data-path="${c.nodes.join(' ').toLowerCase()}">
                             <td><span class="severity-badge severity-${c.severity}">${c.severity.toUpperCase()}</span></td>
                             <td>${c.length}</td>
-                            <td>${c.nodes.map(n => escapeHtml(n.split('/').pop() || n)).join(' → ')}</td>
+                            <td style="font-family: monospace; font-size: 0.75rem; color: #94a3b8;">
+                                ${c.nodes.map((n, i) => `${i > 0 ? ' → ' : ''}${escapeHtml(n.split('/').pop() || n)}`).join('')}
+                            </td>
                         </tr>
                         `).join('')}
                     </tbody>
@@ -603,6 +770,107 @@ Floor: 0</div>
                 target?.scrollIntoView({ behavior: 'smooth' });
             });
         });
+
+        // Interactive filtering for hotspots
+        function setupTableFilter(tableId, searchId, countId, severityColumn, nameColumn) {
+            severityColumn = severityColumn || 'data-severity';
+            nameColumn = nameColumn || 'data-name';
+            const searchInput = document.getElementById(searchId);
+            const countEl = document.getElementById(countId);
+            const selector = '#' + tableId + ' .filter-btn[data-filter]';
+            const filterBtns = document.querySelectorAll(selector);
+            const table = document.getElementById(tableId);
+            const tbody = table && table.querySelector('tbody');
+            const rows = (tbody ? Array.from(tbody.querySelectorAll('tr')) : []) as HTMLElement[];
+
+            let currentFilter = 'all';
+            let searchTerm = '';
+
+            function updateVisibility() {
+                let visible = 0;
+                rows.forEach(row => {
+                    const severity = row.getAttribute(severityColumn) || '';
+                    const name = row.getAttribute(nameColumn) || '';
+                    const matchesFilter = currentFilter === 'all' || severity === currentFilter;
+                    const matchesSearch = searchTerm === '' || name.includes(searchTerm) || row.textContent.toLowerCase().includes(searchTerm);
+
+                    if (matchesFilter && matchesSearch) {
+                        row.classList.remove('hidden');
+                        visible++;
+                    } else {
+                        row.classList.add('hidden');
+                    }
+                });
+                if (countEl) countEl.textContent = visible;
+            }
+
+            searchInput?.addEventListener('input', (e) => {
+                searchTerm = e.target.value.toLowerCase();
+                updateVisibility();
+            });
+
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    filterBtns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    currentFilter = btn.dataset.filter;
+                    updateVisibility();
+                });
+            });
+        }
+
+        // Setup table filters
+        setupTableFilter('hotspots-table', 'hotspot-search', 'hotspot-visible-count');
+        setupTableFilter('cycles-table', 'cycle-search', 'cycle-visible-count');
+
+        // Table sorting
+        document.querySelectorAll('th[data-sort]').forEach(th => {
+            th.addEventListener('click', () => {
+                const column = th.dataset.sort;
+                const isDesc = th.classList.contains('sorted');
+                const table = th.closest('table');
+                const tbody = table?.querySelector('tbody');
+                const rows = Array.from(tbody?.querySelectorAll('tr:not(.hidden)') || []);
+
+                document.querySelectorAll('th[data-sort]').forEach(h => {
+                    h.classList.remove('sorted', 'desc');
+                });
+
+                if (!isDesc) {
+                    th.classList.add('sorted');
+                } else {
+                    th.classList.add('sorted', 'desc');
+                }
+
+                rows.sort((a, b) => {
+                    let aVal, bVal;
+                    const idx = Array.from(th.parentNode.children).indexOf(th) + 1;
+                    const aCell = a.querySelectorAll('td')[idx - 1];
+                    const bCell = b.querySelectorAll('td')[idx - 1];
+
+                    if (column === 'rank') {
+                        aVal = parseInt(aCell?.textContent?.replace('#', '') || '0');
+                        bVal = parseInt(bCell?.textContent?.replace('#', '') || '0');
+                    } else if (column === 'score') {
+                        aVal = parseFloat(aCell?.textContent || '0');
+                        bVal = parseFloat(bCell?.textContent || '0');
+                    } else if (column === 'fanIn' || column === 'fanOut' || column === 'loc') {
+                        aVal = parseInt(aCell?.textContent || '0');
+                        bVal = parseInt(bCell?.textContent || '0');
+                    } else {
+                        aVal = aCell?.textContent || '';
+                        bVal = bCell?.textContent || '';
+                    }
+
+                    if (typeof aVal === 'number') {
+                        return isDesc ? bVal - aVal : aVal - bVal;
+                    }
+                    return isDesc ? bVal.localeCompare(aVal) : aVal.localeCompare(bVal);
+                });
+
+                rows.forEach(row => tbody?.appendChild(row));
+            });
+        });
     </script>
 </body>
 </html>`;
@@ -657,4 +925,91 @@ function escapeHtml(text: string): string {
         "'": '&#39;',
     };
     return text.replace(/[&<>"']/g, (char) => htmlEscapes[char] || char);
+}
+
+// Chart data generators
+function getScoreBreakdownData(score: ArchitectureScore): ChartData[] {
+    return [
+        { label: 'Architecture', value: score.architecture, color: '#38bdf8' },
+        { label: 'Maintainability', value: score.maintainability, color: '#a855f7' },
+        { label: 'Performance', value: score.performance, color: '#22c55e' },
+        { label: 'SSR Safety', value: score.ssrSafety, color: '#f97316' },
+    ];
+}
+
+function generateScoreLegend(score: ArchitectureScore): string {
+    const items = [
+        { label: 'Architecture', value: score.architecture, color: '#38bdf8' },
+        { label: 'Maintainability', value: score.maintainability, color: '#a855f7' },
+        { label: 'Performance', value: score.performance, color: '#22c55e' },
+        { label: 'SSR Safety', value: score.ssrSafety, color: '#f97316' },
+    ];
+
+    return items.map(item => `
+        <div class="legend-item">
+            <div class="legend-dot" style="background: ${item.color}"></div>
+            <span>${item.label}: ${item.value}</span>
+        </div>
+    `).join('');
+}
+
+function getComponentTypeData(graph: { nodes: number; edges: number }): ChartData[] {
+    return [
+        { label: 'Nodes', value: graph.nodes, color: '#38bdf8' },
+        { label: 'Edges', value: graph.edges, color: '#a855f7' },
+    ];
+}
+
+function getDebtData(debt: { total: number; breakdown: Record<string, number> }): ChartData[] {
+    const colors: Record<string, string> = {
+        architecture: '#38bdf8',
+        code: '#a855f7',
+        performance: '#22c55e',
+        ssr: '#f97316',
+    };
+
+    return Object.entries(debt.breakdown)
+        .filter(([_, value]) => value > 0)
+        .map(([key, value]) => ({
+            label: key.charAt(0).toUpperCase() + key.slice(1),
+            value: value as number,
+            color: colors[key] || '#64748b',
+        }));
+}
+
+function generateScoreDelta(history: { date: string; overall: number }[]): string {
+    if (history.length < 2) return '';
+
+    const latest = history[history.length - 1].overall;
+    const previous = history[history.length - 2].overall;
+    const delta = latest - previous;
+
+    let trendClass = 'trend-same';
+    let arrow = '→';
+    if (delta > 0) {
+        trendClass = 'trend-down';
+        arrow = '↑';
+    } else if (delta < 0) {
+        trendClass = 'trend-up';
+        arrow = '↓';
+    }
+
+    return `
+        <div class="delta-display">
+            <div class="delta-item">
+                <div class="delta-label">Previous</div>
+                <div class="delta-value" style="color: #94a3b8;">${previous}</div>
+            </div>
+            <div class="delta-item">
+                <div class="delta-label">Current</div>
+                <div class="delta-value">${latest}</div>
+            </div>
+            <div class="delta-item">
+                <div class="delta-label">Change</div>
+                <div class="delta-value ${delta > 0 ? 'score-excellent' : delta < 0 ? 'score-poor' : ''}">
+                    ${arrow} ${Math.abs(delta)}
+                </div>
+            </div>
+        </div>
+    `;
 }
